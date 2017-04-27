@@ -1,0 +1,10 @@
+bin\XmlDocumentSender.exe
+bin\XmlDocumentSender.pdb
+bin\XmlDocumentSender.xml
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\XmlDocumentSender.Form1.resources
+obj\Debug\XmlDocumentSender.Form2.resources
+obj\Debug\XmlDocumentSender.vbproj.GenerateResource.Cache
+obj\Debug\XmlDocumentSender.exe
+obj\Debug\XmlDocumentSender.xml
+obj\Debug\XmlDocumentSender.pdb

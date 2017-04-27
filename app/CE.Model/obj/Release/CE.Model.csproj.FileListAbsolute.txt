@@ -1,0 +1,5 @@
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\bin\Release\CE.Model.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\bin\Release\CE.Model.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Release\CE.Model.csprojResolveAssemblyReference.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Release\CE.Model.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Release\CE.Model.pdb

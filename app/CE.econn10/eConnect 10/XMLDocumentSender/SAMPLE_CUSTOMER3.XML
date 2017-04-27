@@ -1,0 +1,26 @@
+﻿<!-- Customer Create -->
+<eConnect xmlns:dt="urn:schemas-microsoft-com:datatypes">
+    <RMCustomerMasterType>
+		<taUpdateCreateCustomerRcd>
+           <CUSTNMBR>005649686</CUSTNMBR>
+           <CUSTNAME><![CDATA[El Palacio de Hierro S.A. de C.V. PCD Teran TBWA S]]></CUSTNAME>
+           <STMTNAME><![CDATA[El Palacio de Hierro S.A. de C.V. PCD Teran TBWA S]]></STMTNAME>
+           <SHRTNAME><![CDATA[Por Conducto de Terán TBWA S.A. de C.V.]]></SHRTNAME>
+           <ADRSCODE>MAIN</ADRSCODE>
+           <CNTCPRSN><![CDATA[Arizmendi Marlene]]></CNTCPRSN>
+           <ADDRESS1><![CDATA[Durango # 230]]></ADDRESS1>
+           <ADDRESS2><![CDATA[Col. Roma Deleg. Cuauhtemoc Proveedor: 041003158]]></ADDRESS2>
+           <CITY><![CDATA[D.F.]]></CITY>
+           <STATE><![CDATA[México]]></STATE>
+           <ZIPCODE><![CDATA[C.P. 06700]]></ZIPCODE>
+           <COUNTRY><![CDATA[MX]]></COUNTRY>
+           <PHNUMBR1><![CDATA[59 80 31 01]]></PHNUMBR1>
+           <FAX></FAX>
+           <PRBTADCD>MAIN</PRBTADCD>
+           <PRSTADCD>MAIN</PRSTADCD>
+           <STADDRCD>MAIN</STADDRCD>
+           <KPCALHST>1</KPCALHST>
+           <UpdateIfExists>1</UpdateIfExists>
+		</taUpdateCreateCustomerRcd>
+	</RMCustomerMasterType>
+</eConnect>

@@ -1,0 +1,20 @@
+--ACA_IETU00400
+--Campos:
+--------------------------
+# DOCTYPE
+# VCHRNMBR
+MexFolioFiscal
+ACA_Gasto
+ACA_IVA
+
+
+
+select * --into tmp_ACA_IETU00400_150225
+from ACA_IETU00400
+
+select *
+from ACA_IETU40000
+
+SP_COLUMNS ACA_IETU00400
+SP_STATISTICS ACA_IETU00400
+

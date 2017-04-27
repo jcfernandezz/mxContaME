@@ -1,0 +1,12 @@
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.Business.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.Business.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.econn10.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.Model.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\Microsoft.Dynamics.GP.eConnect.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\Microsoft.Dynamics.GP.eConnect.Serialization.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\Microsoft.Dynamics.GP.eConnect.MiscRoutines.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.econn10.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.Model.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.csprojResolveAssemblyReference.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.pdb

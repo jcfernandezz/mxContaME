@@ -1,0 +1,7 @@
+bin\eConnect_VB_ConsoleApplicationSales.exe
+bin\eConnect_VB_ConsoleApplicationSales.pdb
+bin\eConnect_VB_ConsoleApplicationSales.xml
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\eConnect_VB_ConsoleApplicationSales.exe
+obj\Debug\eConnect_VB_ConsoleApplicationSales.xml
+obj\Debug\eConnect_VB_ConsoleApplicationSales.pdb
