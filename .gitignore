@@ -4,3 +4,4 @@
 *.exe
 *.tlog
 *.force
+*.config
