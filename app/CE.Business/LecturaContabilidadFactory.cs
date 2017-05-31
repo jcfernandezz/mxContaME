@@ -178,6 +178,35 @@ namespace CE.Business
             }
         }
 
+        void validarXml(string docXml, string esquemaXml)
+        {
+            XmlSchemaSet schemas = new XmlSchemaSet();
+            schemas.Add(null, esquemaXml);
+
+            //Console.WriteLine("Attempting to validate");
+            XDocument xDocContable = XDocument.Parse(docXml);
+            //bool errors = false;
+            xDocContable.Validate(schemas, (o, e) =>
+            {
+                ErroresValidarXml += e.Message + " " +o.ToString() + Environment.NewLine;
+                //Console.WriteLine("msj {0} nodo {1}", e.Message, o.ToString());
+                //errors = true;
+            });
+            //Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Genera el xml a partir de los parámetros archivox, valida y lo guarda.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="directorio"></param>
+        /// <param name="archivo1"></param>
+        /// <param name="archivo2"></param>
+        /// <param name="archivo3"></param>
+        /// <param name="archivo4"></param>
+        /// <param name="archivo5"></param>
+        /// <param name="directorioXSD"></param>
+        /// <returns></returns>
         public List<XmlExportado> SaveFiles(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
         {
             string archivo = "";
@@ -261,35 +290,41 @@ namespace CE.Business
 
                 XmlExportado xmle = new XmlExportado();
                 xmle.DcemVwContabilidad = item;
-                
-                try
-                {
-                    // Declare local objects
-                    XmlTextReader tr = null;
-                    XmlSchemaCollection xsc = null;
-                    XmlValidatingReader vr = null;
+                xmle.archivo = archivo;
 
-                    // Text reader object
-                    tr = new XmlTextReader(archivoXSD);
-                    xsc = new XmlSchemaCollection();
-                    xsc.Add(null, tr);
+                // Guarda xml
+                System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
+                InsertDatosExportados(item, (Int16)version);
 
-                    // XML validator object
+                validarXml(item.catalogo, archivoXSD);
 
-                    vr = new XmlValidatingReader(item.catalogo, XmlNodeType.Document, null);
+                //try
+                //{
+                    //// Declare local objects
+                    //XmlTextReader tr = null;
+                    //XmlSchemaCollection xsc = null;
+                    //XmlValidatingReader vr = null;
 
-                    vr.Schemas.Add(xsc);
+                    //// Text reader object
+                    //tr = new XmlTextReader(archivoXSD);
+                    //xsc = new XmlSchemaCollection();
+                    //xsc.Add(null, tr);
 
-                    // Add validation event handler
+                    //// XML validator object
+                    //vr = new XmlValidatingReader(item.catalogo, XmlNodeType.Document, null);
 
-                    vr.ValidationType = ValidationType.Schema;
-                    vr.ValidationEventHandler += new ValidationEventHandler(vr_ValidationEventHandler);
+                    //vr.Schemas.Add(xsc);
 
-                    // Validate XML data
+                    //// Add validation event handler
+                    //vr.ValidationType = ValidationType.Schema;
+                    //vr.ValidationEventHandler += new ValidationEventHandler(vr_ValidationEventHandler);
 
-                    while (vr.Read()) ;
-
-                    vr.Close();
+                    //// Validate XML data
+                    //while (vr.Read())
+                    //{
+                    //    ErroresValidarXml += vr.Value;
+                    //};
+                    //vr.Close();
 
                     // Raise exception, if XML validation fails
                     xmle.error = false;
@@ -298,21 +333,15 @@ namespace CE.Business
                         xmle.error = true;
                         xmle.mensaje = ErroresValidarXml;
                     }
-                    else
-                    {
-                        // XML Validation succeeded
-                        System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
-                        InsertDatosExportados(item, (Int16)version);
-                    }
 
                     xmls.Add(xmle);
-                }
-                catch (Exception error)
-                {
-                    // XML Validation failed
-                    Console.WriteLine("XML validation failed." + "\r\n" +
-                    "Error Message: " + error.Message);
-                }
+                //}
+                //catch (Exception error)
+                //{
+                //    // XML Validation failed
+                //    Console.WriteLine("XML validation failed." + "\r\n" +
+                //    "Error Message: " + error.Message);
+                //}
             }
 
             return xmls;
@@ -320,9 +349,11 @@ namespace CE.Business
 
         private void vr_ValidationEventHandler(object sender, ValidationEventArgs e)
         {
-            ErroresValidarXml += e.Message + Environment.NewLine;
-        }
+            
+            ErroresValidarXml += e.Message + " "  + Environment.NewLine;
 
+        }
+        
         private int GetVersionXML(DcemVwContabilidad item)
         {
             string sql = "select coalesce(max([version]), 0) as v from DcemContabilidadExportados where year1 = @year1 and periodid = @periodid and tipodoc = @tipodoc";

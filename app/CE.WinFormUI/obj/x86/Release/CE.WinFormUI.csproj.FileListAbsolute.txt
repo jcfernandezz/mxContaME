@@ -8,8 +8,6 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.WinFormUI.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.Business.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.Model.dll
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\Microsoft.Dynamics.GP.eConnect.dll
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\Microsoft.Dynamics.GP.eConnect.Serialization.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.econn10.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\Microsoft.Dynamics.GP.eConnect.MiscRoutines.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.Business.pdb
@@ -21,3 +19,4 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Rel
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.csproj.GenerateResource.Cache
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.exe
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.csproj.CE.WinFormUI.exe.config

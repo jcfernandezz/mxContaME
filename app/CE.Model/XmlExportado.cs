@@ -10,5 +10,6 @@ namespace CE.Model
         public DcemVwContabilidad DcemVwContabilidad { get; set; }
         public string mensaje { get; set; }
         public bool error { get; set; }
+        public string archivo { get; set; }
     }
 }

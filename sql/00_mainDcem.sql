@@ -6,7 +6,7 @@
 --use [compañía]
 
 PRINT 'Creando objetos para contabilidad electrónica...'
-:setvar workpath C:\jcTii\Desarrollo\MEX_ContaMediosElectr\E_Implementation\MexContabilidadelectronica\trunk\sql
+:setvar workpath C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql
 
 --Objetos base 
 :r C:\jcTii\GPRelational\pmVwPmAplicados.view.sql

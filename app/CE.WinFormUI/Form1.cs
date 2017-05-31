@@ -322,12 +322,17 @@ namespace CE.WinFormUI
                 string errores = "";
                 foreach (var xmle in xmls.Where(x => x.error))
                 {
-                    errores += "mes:" + xmle.DcemVwContabilidad.periodid.ToString() + " - año: " + xmle.DcemVwContabilidad.year1.ToString() + " - tipo: "+ xmle.DcemVwContabilidad.tipodoc + "..."+ xmle.mensaje + Environment.NewLine;
-                    errores += "-----------------------------------------" + Environment.NewLine;
+                    errores += " Año: " + xmle.DcemVwContabilidad.year1.ToString() + " Mes: " + xmle.DcemVwContabilidad.periodid.ToString() + " Tipo: " + xmle.DcemVwContabilidad.tipodoc + Environment.NewLine + xmle.mensaje + Environment.NewLine;
+                    errores += "-----------------------------------------------------------------------" + Environment.NewLine;
                 }
-
-                lblProcesos.Text += xmls.Where(x => x.error == false).Count().ToString() + " Archivo(s) exportado(s) en " + directorio + Environment.NewLine;
                 lblError.Text = errores;
+
+                lblProcesos.Text = "Carpeta de trabajo: " + directorio + Environment.NewLine;
+                foreach (var xmle in xmls)
+                {
+                    lblProcesos.Text += " Año: " + xmle.DcemVwContabilidad.year1.ToString() + "Mes:" + xmle.DcemVwContabilidad.periodid.ToString() + " Tipo: " + xmle.DcemVwContabilidad.tipodoc + " Archivo: " + xmle.archivo + Environment.NewLine;
+                    lblProcesos.Refresh();
+                }
 
                 foreach (DataGridViewRow row in gridVista.Rows)
                 {
