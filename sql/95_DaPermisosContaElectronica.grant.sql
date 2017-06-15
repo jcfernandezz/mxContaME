@@ -16,6 +16,7 @@ grant execute on dbo.DcemFcnBalance to rol_contaelectr;
 grant execute on dbo.DcemFcnPolizas to rol_contaelectr;
 grant execute on dbo.DCEMFCNAUXILIARFOLIOS to rol_contaelectr;
 grant execute on dbo.DCEMFCNAUXILIARCTAS to rol_contaelectr;
+--grant execute on dcem.dcemCorrigePoliza to rol_contaelectr;  --es el owner
 grant select on dbo.DcemVwContabilidad to rol_contaelectr;
 grant select on dbo.vwPopPmDocumentosDeCompraLoteAbieHist to rol_contaelectr;
 

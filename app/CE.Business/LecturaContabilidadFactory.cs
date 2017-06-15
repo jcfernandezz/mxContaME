@@ -100,6 +100,40 @@ namespace CE.Business
             }
         }
 
+        /// <summary>
+        /// Ejecuta un sp que corrige los docs marcados con error
+        /// </summary>
+        /// <param name="tipo"></param>
+        public void corregirDocsConError(string tipo)
+        {
+            string sprocedure = "";
+            switch (tipo)
+            {
+                case "Pólizas":
+                    sprocedure = "dcem.dcemCorrigePoliza";
+                    break;
+            }
+
+            if (!sprocedure.Equals(""))
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = sprocedure;
+                    cmd.ExecuteNonQuery();
+                }
+
+        }
+
+        /// <summary>
+        /// Obtiene el xml del periodo desde la bd. El tipo indica el tipo de xml.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="perdiodo"></param>
+        /// <param name="tipo">Tipo de xml</param>
+        /// <returns></returns>
         public string GetXML2(int year, int perdiodo, string tipo)
         {
             string tabla = "";
@@ -178,6 +212,27 @@ namespace CE.Business
             }
         }
 
+        void validarUnaPolizaPorVez(string docXml, string esquemaXml)
+        {
+            XmlSchemaSet schemas = new XmlSchemaSet();
+            schemas.Add(null, esquemaXml);
+            XNamespace ns = "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
+            
+            XDocument xDocContable = XDocument.Parse(docXml);
+            //var x = xDocContable.RemoveNodes
+            foreach (XElement ele in xDocContable.Elements(ns + "Polizas").Elements())
+            {
+                var xdoc = new XDocument(new XElement(ele));
+                xdoc.Validate(schemas, (o, e) =>
+                {
+                    ErroresValidarXml += e.Message + " " + o.ToString() + Environment.NewLine;
+                    //Console.WriteLine("msj {0} nodo {1}", e.Message, o.ToString());
+                    //errors = true;
+                });
+            }
+
+        }
+
         void validarXml(string docXml, string esquemaXml)
         {
             XmlSchemaSet schemas = new XmlSchemaSet();
@@ -251,7 +306,8 @@ namespace CE.Business
 
                 string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
                 xml += Environment.NewLine;
-                
+
+                this.corregirDocsConError(item.tipodoc);
                 item.catalogo = this.GetXML2(item.year1, item.periodid, item.tipodoc);
 
                 //xml += item.catalogo;
@@ -296,52 +352,20 @@ namespace CE.Business
                 System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
                 InsertDatosExportados(item, (Int16)version);
 
+                //if(item.tipodoc.Equals("Pólizas"))
+                //        validarUnaPolizaPorVez(item.catalogo, archivoXSD);
+                //else
                 validarXml(item.catalogo, archivoXSD);
 
-                //try
-                //{
-                    //// Declare local objects
-                    //XmlTextReader tr = null;
-                    //XmlSchemaCollection xsc = null;
-                    //XmlValidatingReader vr = null;
-
-                    //// Text reader object
-                    //tr = new XmlTextReader(archivoXSD);
-                    //xsc = new XmlSchemaCollection();
-                    //xsc.Add(null, tr);
-
-                    //// XML validator object
-                    //vr = new XmlValidatingReader(item.catalogo, XmlNodeType.Document, null);
-
-                    //vr.Schemas.Add(xsc);
-
-                    //// Add validation event handler
-                    //vr.ValidationType = ValidationType.Schema;
-                    //vr.ValidationEventHandler += new ValidationEventHandler(vr_ValidationEventHandler);
-
-                    //// Validate XML data
-                    //while (vr.Read())
-                    //{
-                    //    ErroresValidarXml += vr.Value;
-                    //};
-                    //vr.Close();
-
-                    // Raise exception, if XML validation fails
-                    xmle.error = false;
-                    if (ErroresValidarXml != "")
+                // Raise exception, if XML validation fails
+                xmle.error = false;
+                if (ErroresValidarXml != "")
                     {
                         xmle.error = true;
                         xmle.mensaje = ErroresValidarXml;
                     }
 
-                    xmls.Add(xmle);
-                //}
-                //catch (Exception error)
-                //{
-                //    // XML Validation failed
-                //    Console.WriteLine("XML validation failed." + "\r\n" +
-                //    "Error Message: " + error.Message);
-                //}
+                xmls.Add(xmle);
             }
 
             return xmls;

@@ -1,17 +1,28 @@
 use MTP1
 
-sp_columns gl20000
-sp_statistics gl20000
+select [dbo].[DcemFcnPolizas](1, 2017)
 
-create schema dcem authorization rol_contaelectr;
+--use mtp1
+--select jrnentry, trxdate, refrence
+--		from dbo.dcemvwtransaccion
+--		where datediff(day, '6/10/17', trxdate) >= 0
+--		and datediff(day, '6/12/17', trxdate) <= 0
+--		--and jrnentry between 92000 and 92300
+--		GROUP BY JRNENTRY, TRXDATE, refrence
 
-create table dcem.dcemPoliza (
-JRNENTRY	int	not null ,
-TRXDATE	datetime not null ,
-REFRENCE char(31) null,
-nodoTransaccion xml null
-PRIMARY KEY (JRNENTRY, TRXDATE)
-);
+	--select t.jrnentry, t.trxdate, t.refrence --, dbo.dcemfcntransaccion(0, 0, 0, t.jrnentry, t.TRXDATE)
+	--from dbo.dcemvwtransaccion t
+	--where not exists (
+	--	select p.jrnentry 
+	--	from dcem.dcemPoliza p
+	--	where p.jrnentry = t.jrnentry
+	--	and datediff(day, p.trxdate, t.trxdate) = 0
+	--)
+	--and datediff(day, '5/13/17', trxdate) >= 0
+	--and datediff(day, '6/14/17', trxdate) <= 0
+	--GROUP BY t.JRNENTRY, t.TRXDATE, t.refrence
+
+
 ------------------------------------------------------------------------------
 
 
@@ -36,8 +47,10 @@ WHEN NOT MATCHED BY TARGET
 COMMIT TRAN;
 
 -------------------------------------------------------------------------------------
-SELECT *
+SELECT YEAR(trxdate), MONTH(trxdate), count(*)
 FROM dcem.dcemPoliza 
+group by YEAR(trxdate), MONTH(trxdate)
+order by 1, 2
 
 INSERT into dcem.dcemPoliza(jrnentry, trxdate, refrence, nodoTransaccion) 
 	select t.jrnentry, t.trxdate, t.refrence, dbo.dcemfcntransaccion(0, 0, 0, t.jrnentry, 0)

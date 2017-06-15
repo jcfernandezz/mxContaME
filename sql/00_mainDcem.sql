@@ -109,6 +109,8 @@ PRINT 'Creando objetos para contabilidad electrónica...'
 :On Error exit
 :r $(workpath)\90_DcemVwContabilidad.view.sql
 :On Error exit
+:r $(workpath)\91_dcemCorrigePoliza.sprocedure.sql
+:On Error exit
 :r $(workpath)\92_guardaContaElectronica.sprocedure.sql
 :On Error exit
 :r $(workpath)\95_DaPermisosContaElectronica.grant.sql
