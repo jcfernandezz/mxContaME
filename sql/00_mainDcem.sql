@@ -21,6 +21,8 @@ PRINT 'Creando objetos para contabilidad electrónica...'
 :On Error exit
 
 --Objetos DCEM
+:r $(workpath)\01_dcemPoliza.table.sql
+:On Error exit
 :r $(workpath)\02_dcemFnParametros.function.sql
 :On Error exit
 :r $(workpath)\07_dcemFnGetSegmento2.sql
@@ -83,6 +85,8 @@ PRINT 'Creando objetos para contabilidad electrónica...'
 :On Error exit
 :r $(workpath)\79_DcemFcnTransaccion.function.sql
 :On Error exit
+:r $(workpath)\80_DcemFcnGetPolizaDesdeTabla.sql
+:On Error exit
 :r $(workpath)\80_dcemFcnPoliza.function.sql
 :On Error exit
 :r $(workpath)\81_dcemFcnPolizas.function.sql
@@ -104,6 +108,8 @@ PRINT 'Creando objetos para contabilidad electrónica...'
 :r $(workpath)\89_DcemFcnAuxiliarCtas.function.sql
 :On Error exit
 :r $(workpath)\90_DcemVwContabilidad.view.sql
+:On Error exit
+:r $(workpath)\92_guardaContaElectronica.sprocedure.sql
 :On Error exit
 :r $(workpath)\95_DaPermisosContaElectronica.grant.sql
 :On Error exit
