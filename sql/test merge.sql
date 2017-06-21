@@ -1,5 +1,9 @@
 use MTP1
 
+select count(*)
+from dcem.dcemPoliza
+
+
 select [dbo].[DcemFcnPolizas](1, 2017)
 
 --use mtp1

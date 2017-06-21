@@ -23,6 +23,7 @@ namespace CE.Business
         private string connectionString = "";
         private string _pre = "";
         private string ErroresValidarXml = "";
+        private List<string> l_ErroresValidarXml = null;
 
         public LecturaContabilidadFactory(string pre)
         {
@@ -217,18 +218,25 @@ namespace CE.Business
             XmlSchemaSet schemas = new XmlSchemaSet();
             schemas.Add(null, esquemaXml);
             XNamespace ns = "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
-            
+
+            XDocument xDocAValidar = new XDocument();
+            xDocAValidar = XDocument.Parse(docXml);
+            xDocAValidar.Root.Elements(ns + "Poliza").Remove();
+
             XDocument xDocContable = XDocument.Parse(docXml);
-            //var x = xDocContable.RemoveNodes
+            l_ErroresValidarXml = new List<string>();
+
             foreach (XElement ele in xDocContable.Elements(ns + "Polizas").Elements())
             {
-                var xdoc = new XDocument(new XElement(ele));
-                xdoc.Validate(schemas, (o, e) =>
+                xDocAValidar.Root.Add(new XElement(ele));
+                
+                xDocAValidar.Validate(schemas, (o, e) =>
                 {
-                    ErroresValidarXml += e.Message + " " + o.ToString() + Environment.NewLine;
-                    //Console.WriteLine("msj {0} nodo {1}", e.Message, o.ToString());
-                    //errors = true;
+                    ErroresValidarXml += "ed: "+ ele.Attribute("NumUnIdenPol").Value.ToString() + " "+ e.Message + " " + o.ToString() + Environment.NewLine;
+                    l_ErroresValidarXml.Add(ele.Attribute("NumUnIdenPol").Value.ToString());
                 });
+
+                xDocAValidar.Root.Elements(ns + "Poliza").Remove();
             }
 
         }
@@ -289,6 +297,7 @@ namespace CE.Business
                     case "Pólizas":
                         archivo = archivo3;
                         archivoXSD += "PolizasPeriodo_1_1.xsd";
+                        this.corregirDocsConError(item.tipodoc);
                         break;
                     case "Auxiliar Cuentas":
                         archivo = archivo4;
@@ -301,13 +310,11 @@ namespace CE.Business
                 }
 
                 int version = GetVersionXML(item);
-
                 archivo = System.IO.Path.GetFileNameWithoutExtension(archivo) + "_" + version + System.IO.Path.GetExtension(archivo);
 
                 string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
                 xml += Environment.NewLine;
-
-                this.corregirDocsConError(item.tipodoc);
+                
                 item.catalogo = this.GetXML2(item.year1, item.periodid, item.tipodoc);
 
                 //xml += item.catalogo;
@@ -339,7 +346,6 @@ namespace CE.Business
                     attr.Value = item.NumTramite;
                     root.Attributes.Append(attr);
                 }
-
                 
                 item.catalogo = xmlDoc.InnerXml;
                 xml += item.catalogo;
@@ -354,6 +360,7 @@ namespace CE.Business
 
                 //if(item.tipodoc.Equals("Pólizas"))
                 //        validarUnaPolizaPorVez(item.catalogo, archivoXSD);
+                //        marcarPolizasConError();
                 //else
                 validarXml(item.catalogo, archivoXSD);
 
