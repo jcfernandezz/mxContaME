@@ -16,7 +16,7 @@ GO
 --	3. validar cada asiento
 --  4. actualizar la tabla dcempoliza. Marcar los asientos con error
 --
-alter PROCEDURE dcem.dcemCorrigePoliza
+create PROCEDURE dcem.dcemCorrigePoliza
 AS
 	update dcem.dcempoliza 
 	set nodoTransaccion =  dbo.dcemfcntransaccion(0, 0, 0, jrnentry, TRXDATE), err = 0

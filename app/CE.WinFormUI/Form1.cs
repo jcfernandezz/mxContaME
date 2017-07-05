@@ -317,7 +317,7 @@ namespace CE.WinFormUI
 
             try
             {
-                List<XmlExportado> xmls = oL.SaveFiles(l, directorio, archivo1, archivo2, archivo3, archivo4, archivo5, Application.StartupPath + "\\xsd\\");
+                List<XmlExportado> xmls = oL.ProcesarArchivos(l, directorio, archivo1, archivo2, archivo3, archivo4, archivo5, Application.StartupPath + "\\xsd\\");
 
                 string errores = "";
                 foreach (var xmle in xmls.Where(x => x.error))

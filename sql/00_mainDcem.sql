@@ -2,8 +2,17 @@
 --Requisitos. 
 --23/4/15 jcf Creación
 --28/1/16 jcf Corrige objetos base para usar alter
+--29/1/16 jcf Corrección a instalar en producción MTP
+	--configurar parámetro
+	--vwPmTransaccionesTodas
+	--08_dcemFnGetDatosBancoDelProveedor.function.sql
+	--09_dcemFnGetDatosBancarios.function.sql
+	--18_dcemFnGetPMtrx.function.sql
+--5/7/17 jcf Instalación de optimización de generación de pólizas en las 6 compañías de MTP
 --
---use [compañía]
+-------------------------------------------------------------------------------
+--use mtp7
+--go 
 
 PRINT 'Creando objetos para contabilidad electrónica...'
 :setvar workpath C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql
@@ -111,7 +120,9 @@ PRINT 'Creando objetos para contabilidad electrónica...'
 :On Error exit
 :r $(workpath)\91_dcemCorrigePoliza.sprocedure.sql
 :On Error exit
-:r $(workpath)\92_guardaContaElectronica.sprocedure.sql
+:r $(workpath)\91_dcemMarcarPolizasConError.sprocedure.sql
+:On Error exit
+:r $(workpath)\92_PreprocesaArchivosDeContaElectronica.sprocedure.sql
 :On Error exit
 :r $(workpath)\95_DaPermisosContaElectronica.grant.sql
 :On Error exit
@@ -121,11 +132,4 @@ PRINT 'Objetos creados satisfactoriamente.'
 print '*** ATENCIÓN: Verificar que la tabla dcemContabilidadExportados está creada!!!!! ***'
 GO
 -------------------------------------------------------------------------------------------
-
---29/1/16 jcf Corrección a instalar en producción MTP
---configurar parámetro
---vwPmTransaccionesTodas
---08_dcemFnGetDatosBancoDelProveedor.function.sql
---09_dcemFnGetDatosBancarios.function.sql
---18_dcemFnGetPMtrx.function.sql
 

@@ -8,7 +8,7 @@ IF EXISTS (
 GO
 ------------------------------------------------------------------------------------------------------
 --Propósito. Acelerar la generación de archivos xml para contabilidad electrónica
---Requisito. Este sp debe ejecutarse en un job todos los días
+--Requisito. Este sp debe ejecutarse en un job todos los días en cada compañía
 --14/6/17 jcf Guarda pólizas xml
 -- modificar la aplicación:
 --	1. update dcempoliza set nodoTransaccion = dbo.dcemfcntransaccion(...) where error = 1
@@ -57,6 +57,11 @@ AS
 	----OUTPUT $action, inserted.*, deleted.*;
 	--COMMIT TRAN;
 GO
+
+IF (@@Error = 0) PRINT 'Creación exitosa de: dcem.PreprocesaArchivosDeContaElectronica'
+ELSE PRINT 'Error en la creación de: dcem.PreprocesaArchivosDeContaElectronica'
+GO
+
 ----------------------------------------------------------------------------------------------------
 -- =============================================
 -- test

@@ -104,26 +104,45 @@ namespace CE.Business
         /// <summary>
         /// Ejecuta un sp que corrige los docs marcados con error
         /// </summary>
-        /// <param name="tipo"></param>
-        public void corregirDocsConError(string tipo)
+        /// <param name="sp">Nombre del stored procedure</param>
+        public void corregirDocsConError(string sp)
         {
-            string sprocedure = "";
-            switch (tipo)
-            {
-                case "Pólizas":
-                    sprocedure = "dcem.dcemCorrigePoliza";
-                    break;
-            }
-
-            if (!sprocedure.Equals(""))
+            if (!sp.Equals(""))
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = sprocedure;
+                    cmd.CommandTimeout = 3600;
+                    cmd.CommandText = sp;
                     cmd.ExecuteNonQuery();
+                }
+
+        }
+        /// <summary>
+        /// Ejecuta un sp que corrige los docs marcados con error
+        /// </summary>
+        /// <param name="tipo"></param>
+        public void marcarDocsConError(string sp, int year)
+        {
+            if (!sp.Equals(""))
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = sp;
+                    SqlParameter param = new SqlParameter();
+                    cmd.Parameters.Add(param);
+
+                    foreach (string je in l_ErroresValidarXml)
+                    {
+                        param.ParameterName = "@jrnentry";
+                        param.Value = je;
+                        cmd.ExecuteNonQuery();
+                    }
                 }
 
         }
@@ -270,7 +289,7 @@ namespace CE.Business
         /// <param name="archivo5"></param>
         /// <param name="directorioXSD"></param>
         /// <returns></returns>
-        public List<XmlExportado> SaveFiles(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
+        public List<XmlExportado> ProcesarArchivos(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
         {
             string archivo = "";
             
@@ -297,7 +316,7 @@ namespace CE.Business
                     case "Pólizas":
                         archivo = archivo3;
                         archivoXSD += "PolizasPeriodo_1_1.xsd";
-                        this.corregirDocsConError(item.tipodoc);
+                        this.corregirDocsConError("dcem.dcemCorrigePoliza");
                         break;
                     case "Auxiliar Cuentas":
                         archivo = archivo4;
@@ -358,11 +377,13 @@ namespace CE.Business
                 System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
                 InsertDatosExportados(item, (Int16)version);
 
-                //if(item.tipodoc.Equals("Pólizas"))
-                //        validarUnaPolizaPorVez(item.catalogo, archivoXSD);
-                //        marcarPolizasConError();
-                //else
-                validarXml(item.catalogo, archivoXSD);
+                if (item.tipodoc.Equals("Pólizas"))
+                {
+                    validarUnaPolizaPorVez(item.catalogo, archivoXSD);
+                    marcarDocsConError("dcem.dcemMarcarPolizasConError", item.year1);
+                }
+                else
+                    validarXml(item.catalogo, archivoXSD);
 
                 // Raise exception, if XML validation fails
                 xmle.error = false;
