@@ -155,7 +155,7 @@
             // 
             this.versión10ToolStripMenuItem.Name = "versión10ToolStripMenuItem";
             this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.versión10ToolStripMenuItem.Text = "Versión 2.9.2";
+            this.versión10ToolStripMenuItem.Text = "Versión 3.0.0";
             // 
             // tableLayoutPanel1
             // 

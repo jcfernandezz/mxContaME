@@ -23,6 +23,7 @@ namespace CE.Business
         private string connectionString = "";
         private string _pre = "";
         private string ErroresValidarXml = "";
+        private List<string> l_ErroresValidarXml = null;
 
         public LecturaContabilidadFactory(string pre)
         {
@@ -100,6 +101,59 @@ namespace CE.Business
             }
         }
 
+        /// <summary>
+        /// Ejecuta un sp que corrige los docs marcados con error
+        /// </summary>
+        /// <param name="sp">Nombre del stored procedure</param>
+        public void corregirDocsConError(string sp)
+        {
+            if (!sp.Equals(""))
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 3600;
+                    cmd.CommandText = sp;
+                    cmd.ExecuteNonQuery();
+                }
+
+        }
+        /// <summary>
+        /// Ejecuta un sp que corrige los docs marcados con error
+        /// </summary>
+        /// <param name="tipo"></param>
+        public void marcarDocsConError(string sp, int year)
+        {
+            if (!sp.Equals(""))
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = sp;
+                    SqlParameter param = new SqlParameter();
+                    cmd.Parameters.Add(param);
+
+                    foreach (string je in l_ErroresValidarXml)
+                    {
+                        param.ParameterName = "@jrnentry";
+                        param.Value = je;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+        }
+
+        /// <summary>
+        /// Obtiene el xml del periodo desde la bd. El tipo indica el tipo de xml.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="perdiodo"></param>
+        /// <param name="tipo">Tipo de xml</param>
+        /// <returns></returns>
         public string GetXML2(int year, int perdiodo, string tipo)
         {
             string tabla = "";
@@ -178,6 +232,34 @@ namespace CE.Business
             }
         }
 
+        void validarUnaPolizaPorVez(string docXml, string esquemaXml)
+        {
+            XmlSchemaSet schemas = new XmlSchemaSet();
+            schemas.Add(null, esquemaXml);
+            XNamespace ns = "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
+
+            XDocument xDocAValidar = new XDocument();
+            xDocAValidar = XDocument.Parse(docXml);
+            xDocAValidar.Root.Elements(ns + "Poliza").Remove();
+
+            XDocument xDocContable = XDocument.Parse(docXml);
+            l_ErroresValidarXml = new List<string>();
+
+            foreach (XElement ele in xDocContable.Elements(ns + "Polizas").Elements())
+            {
+                xDocAValidar.Root.Add(new XElement(ele));
+                
+                xDocAValidar.Validate(schemas, (o, e) =>
+                {
+                    ErroresValidarXml += "ed: "+ ele.Attribute("NumUnIdenPol").Value.ToString() + " "+ e.Message + " " + o.ToString() + Environment.NewLine;
+                    l_ErroresValidarXml.Add(ele.Attribute("NumUnIdenPol").Value.ToString());
+                });
+
+                xDocAValidar.Root.Elements(ns + "Poliza").Remove();
+            }
+
+        }
+
         void validarXml(string docXml, string esquemaXml)
         {
             XmlSchemaSet schemas = new XmlSchemaSet();
@@ -207,7 +289,7 @@ namespace CE.Business
         /// <param name="archivo5"></param>
         /// <param name="directorioXSD"></param>
         /// <returns></returns>
-        public List<XmlExportado> SaveFiles(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
+        public List<XmlExportado> ProcesarArchivos(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
         {
             string archivo = "";
             
@@ -234,6 +316,7 @@ namespace CE.Business
                     case "Pólizas":
                         archivo = archivo3;
                         archivoXSD += "PolizasPeriodo_1_1.xsd";
+                        this.corregirDocsConError("dcem.dcemCorrigePoliza");
                         break;
                     case "Auxiliar Cuentas":
                         archivo = archivo4;
@@ -246,7 +329,6 @@ namespace CE.Business
                 }
 
                 int version = GetVersionXML(item);
-
                 archivo = System.IO.Path.GetFileNameWithoutExtension(archivo) + "_" + version + System.IO.Path.GetExtension(archivo);
 
                 string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -283,7 +365,6 @@ namespace CE.Business
                     attr.Value = item.NumTramite;
                     root.Attributes.Append(attr);
                 }
-
                 
                 item.catalogo = xmlDoc.InnerXml;
                 xml += item.catalogo;
@@ -296,52 +377,23 @@ namespace CE.Business
                 System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
                 InsertDatosExportados(item, (Int16)version);
 
-                validarXml(item.catalogo, archivoXSD);
+                if (item.tipodoc.Equals("Pólizas"))
+                {
+                    validarUnaPolizaPorVez(item.catalogo, archivoXSD);
+                    marcarDocsConError("dcem.dcemMarcarPolizasConError", item.year1);
+                }
+                else
+                    validarXml(item.catalogo, archivoXSD);
 
-                //try
-                //{
-                    //// Declare local objects
-                    //XmlTextReader tr = null;
-                    //XmlSchemaCollection xsc = null;
-                    //XmlValidatingReader vr = null;
-
-                    //// Text reader object
-                    //tr = new XmlTextReader(archivoXSD);
-                    //xsc = new XmlSchemaCollection();
-                    //xsc.Add(null, tr);
-
-                    //// XML validator object
-                    //vr = new XmlValidatingReader(item.catalogo, XmlNodeType.Document, null);
-
-                    //vr.Schemas.Add(xsc);
-
-                    //// Add validation event handler
-                    //vr.ValidationType = ValidationType.Schema;
-                    //vr.ValidationEventHandler += new ValidationEventHandler(vr_ValidationEventHandler);
-
-                    //// Validate XML data
-                    //while (vr.Read())
-                    //{
-                    //    ErroresValidarXml += vr.Value;
-                    //};
-                    //vr.Close();
-
-                    // Raise exception, if XML validation fails
-                    xmle.error = false;
-                    if (ErroresValidarXml != "")
+                // Raise exception, if XML validation fails
+                xmle.error = false;
+                if (ErroresValidarXml != "")
                     {
                         xmle.error = true;
                         xmle.mensaje = ErroresValidarXml;
                     }
 
-                    xmls.Add(xmle);
-                //}
-                //catch (Exception error)
-                //{
-                //    // XML Validation failed
-                //    Console.WriteLine("XML validation failed." + "\r\n" +
-                //    "Error Message: " + error.Message);
-                //}
+                xmls.Add(xmle);
             }
 
             return xmls;
