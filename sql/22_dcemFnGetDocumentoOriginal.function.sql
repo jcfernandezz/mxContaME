@@ -48,7 +48,7 @@ return
 		dbo.dcemFnGetSegmentoX(rtrim(pt.comment1), 2) banDesExt, 
 
 		upper(pt.country) country, upper(pt.ccode) ccode, mn.ISOCURRC, pt.xchgrate,
-		'' MexFolioFiscal
+		null MexFolioFiscal
 	from vwPmTransaccionesTodas pt			--[doctype, vchrnmbr]
 		inner join dbo.tii_vwPmAplicadas ap
 			on ap.vchrnmbr = pt.vchrnmbr
@@ -106,7 +106,7 @@ return
 		rm.country, rm.ccode, rm.ISOCURRC, rm.xchgrate,
 		rtrim(ff.foliofiscal)
 	from dbo.dcemFnGetRMtrx(@VCHRNMBR, @DOCTYPE) rm
-		outer apply dbo.DcemFcnGetFolioFiscalDeFacturaSOP (@VCHRNMBR, @DOCTYPE) ff      
+		outer apply dbo.DcemFnGetFolioFiscalDeDocumento (@VCHRNMBR, @DOCTYPE) ff      
 	where @SOURCEDOC in ('CRJ', 'RMJ', 'SJ')
 	--and rm.RMDTYPAL = 9
 
@@ -139,7 +139,7 @@ return
 		cia.cmpnynam, rtrim(cia.taxregtn) taxregtn,
 		bd.codBancoSat, bd.bnkactnm, bd.nomBancoExt,
 		'MEXICO', 'MX', mn.ISOCURRC, tb.xchgrate,
-		'' foliofiscal
+		NULL foliofiscal
 	from cm20600 tf
 		inner join cm20200 tb
 			on tb.cmtrxnum = tf.cmxfrnum

@@ -11,7 +11,7 @@ as
 --14/01/15 jcf Creación 
 --19/02/15 jcf Agrega isocurrc, xchgrate, ororgtrx, bancoOriCountry, bancoDesCountry. Modifica codMetodoPago
 --25/02/15 jcf Incluye caso de banco extranjero
---8/4/15 jcf Agrega ccode
+--08/04/15 jcf Agrega ccode
 --
 return
 ( 
@@ -35,7 +35,7 @@ return
 		--
 		
 		upper(mad.country) country, upper(mad.ccode) ccode, mn.ISOCURRC, pt.xchgrate
-	from vwRmTransaccionesTodas pt			--[doctype, vchrnmbr]
+	from dbo.vwRmTransaccionesTodas pt			--[doctype, vchrnmbr]
 		outer apply dbo.dcemFnGetMcp(pt.DOCNUMBR, pt.bchsourc) bd
 		outer apply dbo.dcemFnGetMetodosPagoRM(pt.cshrctyp) mp
 		outer apply dbo.dcemFnGetDatosBancarios(pt.mscschid) cb
