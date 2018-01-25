@@ -19,6 +19,7 @@ grant execute on dbo.DCEMFCNAUXILIARCTAS to rol_contaelectr;
 --grant execute on dcem.dcemCorrigePoliza to rol_contaelectr;  --es el owner
 grant select on dbo.DcemVwContabilidad to rol_contaelectr;
 grant select on dbo.vwPopPmDocumentosDeCompraLoteAbieHist to rol_contaelectr;
+grant execute on [dbo].[DcemFcnTransaccion] to rol_contaelectr;
 
 grant select, update, insert on dbo.pm00200 to rol_contaelectr;
 grant select, update, insert on dbo.pm10000 to rol_contaelectr;
