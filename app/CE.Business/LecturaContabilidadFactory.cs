@@ -24,6 +24,20 @@ namespace CE.Business
         private string _pre = "";
         private string ErroresValidarXml = "";
         private List<string> l_ErroresValidarXml = null;
+        private List<ParametrosDeArchivo> _lParametros = new List<ParametrosDeArchivo>();
+
+        public List<ParametrosDeArchivo> LParametros
+        {
+            get
+            {
+                return _lParametros;
+            }
+
+            set
+            {
+                _lParametros = value;
+            }
+        }
 
         public LecturaContabilidadFactory(string pre)
         {

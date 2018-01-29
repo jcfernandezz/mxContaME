@@ -16,6 +16,7 @@ namespace CE.WinFormUI
 {
     public partial class Form1 : Form
     {
+        private List<ParametrosDeArchivo> lParametros = new List<ParametrosDeArchivo>();
         public Form1()
         {
             InitializeComponent();
@@ -85,6 +86,18 @@ namespace CE.WinFormUI
             cmbEmpresas.SelectedIndexChanged += new EventHandler(cmbEmpresas_SelectedIndexChanged);
 
             cargarVista();
+
+            string archivo1 = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivo1"].ToString();
+            string archivo2 = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivo2"].ToString();
+            string archivo3 = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivo3"].ToString();
+            string archivo4 = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivo4"].ToString();
+            string archivo5 = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivo5"].ToString();
+
+            lParametros.Add(new ParametrosDeArchivo() { Tipo= "Catálogo", Archivo=archivo1, FuncionSql= "DCEMFCNCATALOGOXML", NameSpace= "http://www.sat.gob.mx/esquemas/ContabilidadE/1_3/CatalogoCuentas", Esquema= "CatalogoCuentas_1_3.xsd" });
+            lParametros.Add(new ParametrosDeArchivo() { Tipo = "Balanza", Archivo = archivo2, FuncionSql = "DCEMFCNBALANCE", NameSpace= "http://www.sat.gob.mx/esquemas/ContabilidadE/1_3/BalanzaComprobacion", Esquema = "BalanzaComprobacion_1_3.xsd" });
+            lParametros.Add(new ParametrosDeArchivo() { Tipo = "Pólizas", Archivo = archivo3, FuncionSql = "DCEMFCNPOLIZAS", NameSpace= "http://www.sat.gob.mx/esquemas/ContabilidadE/1_3/PolizasPeriodo", Esquema = "PolizasPeriodo_1_3.xsd" });
+            lParametros.Add(new ParametrosDeArchivo() { Tipo = "Auxiliar Cuentas", Archivo = archivo4, FuncionSql = "DCEMFCNAUXILIARCTAS", NameSpace= "http://www.sat.gob.mx/esquemas/ContabilidadE/1_3/AuxiliarCtas", Esquema = "AuxiliarCtas_1_3.xsd" });
+            lParametros.Add(new ParametrosDeArchivo() { Tipo = "Auxiliar folios", Archivo = archivo5, FuncionSql = "DCEMFCNAUXILIARFOLIOS", NameSpace= "http://www.sat.gob.mx/esquemas/ContabilidadE/1_3/AuxiliarFolios", Esquema = "AuxiliarFolios_1_3.xsd" });
         }
 
         private void cargarVista()
@@ -234,6 +247,7 @@ namespace CE.WinFormUI
             lblProcesos.Text = "";
 
             LecturaContabilidadFactory oL = new LecturaContabilidadFactory(companySelected());
+            oL.LParametros = lParametros;
 
             string directorio = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_directorio"].ToString();
             string archivo1 = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivo1"].ToString();

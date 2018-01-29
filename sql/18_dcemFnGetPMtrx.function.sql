@@ -13,8 +13,9 @@ as
 --18/12/14 jcf Creación 
 --19/02/15 jcf Agrega pt.isocurrc, pt.xchgrate. Modifica docamnt, codMetodoPago
 --25/02/15 jcf Caso de banco extranjero
---7/4/15 jcf Agrega ccode, modifica nombre docnumbr, corrige docdate, beneficiarioSat
---29/1/16 jcf Agrega datos del banco destino de acuerdo a parámetro configurado
+--07/04/15 jcf Agrega ccode, modifica nombre docnumbr, corrige docdate, beneficiarioSat
+--29/01/16 jcf Agrega datos del banco destino de acuerdo a parámetro configurado
+--26/01/18 jcf Ajusta parámetros de dcemFnGetMetodosPagoPM
 --
 return
 ( 	--Documentos PM: factura, misceláneos, pagos, anulación de facturas, cheques computarizados
@@ -39,32 +40,19 @@ return
 		end beneficiarioSat,
 		pt.txrgnnum, 
 		
-		case when pa.param1 = '01' then dbo.dcemFnGetSegmentoX(pt.comment1, 1) 
-			 when pa.param1 = '02' then eft.codBanco 
-			 else '' 
-		end bancoDestinoSat, 
-		case when pa.param1 = '01' then pt.comment2 
-			 when pa.param1 = '02' then eft.intlBankAcctNum 
-			 else '' 
-		end ctaDestinoSat, 
-		case when pa.param1 = '01' then dbo.dcemFnGetSegmentoX(rtrim(pt.comment1), 2) 
-			 when pa.param1 = '02' then eft.bankname 
-			 else '' 
-		end banDesExt, 
+		bancoSat bancoDestinoSat, 
+		cuentaSat ctaDestinoSat, 
+		nomBancoExtranjero banDesExt, 
 
 		upper(pt.country) country, 
-		case when pa.param1 = '01' then upper(pt.ccode) 
-			 when pa.param1 = '02' then upper(eft.custVendCountryCode)
-			 else '' 
-		end ccode, 
+		pt.ccode, 
 		
 		mn.ISOCURRC, pt.xchgrate
 	from vwPmTransaccionesTodas pt			--[doctype, vchrnmbr]
 		outer apply dbo.dcemFnGetMcp(pt.VCHRNMBR, pt.bchsourc) bd
-		outer apply dbo.dcemFnGetMetodosPagoPM(pt.pyenttyp) mp
+		outer apply dbo.dcemFnGetMetodosPagoPM(pt.chekbkid, pt.pyenttyp, pt.cardname) mp  
 		outer apply dbo.dcemFnGetDatosBancarios(pt.chekbkid) cb
-		outer apply dbo.dcemFnParametros('P_DATOSBANCO', '-', '-', '-', '-', '-') pa
-		outer apply dbo.dcemFnGetDatosBancoDelProveedor(pt.vendorid, pt.vaddcdpr, 4) eft
+		outer apply dbo.dcemFnGetDatosBancoDelProveedor(pt.vendorid, pt.vaddcdpr, 4, pt.comment1, pt.comment2) eft
 		left join DYNAMICS..MC40200 mn
 			on mn.curncyid = pt.curncyid
 	where pt.VCHRNMBR = @VCHRNMBR

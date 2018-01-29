@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="DcemVwContabilidad.cs" />
+    <Compile Include="ParametrosDeArchivo.cs" />
     <Compile Include="XmlExportado.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
