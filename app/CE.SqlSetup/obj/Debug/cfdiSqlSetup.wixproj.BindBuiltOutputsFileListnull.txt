@@ -1,0 +1,2 @@
+C:\jcTii\Desarrollo\MEX_Factura_digital_cfdi\mx01\App\cfdiSqlSetup\bin\Debug\cfdiSqlSetup.msi
+C:\jcTii\Desarrollo\MEX_Factura_digital_cfdi\mx01\App\cfdiSqlSetup\bin\Debug\cfdiSqlSetup.wixpdb

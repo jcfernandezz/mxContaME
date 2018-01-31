@@ -37,7 +37,7 @@ return
 		--case when len(rtrim(isnull(mad.USERDEF1, ''))) < 4 then 'no identificado' else rtrim(mad.USERDEF1) end ctaOrigenSat,
 		--pt.bankname banOriExt,
 		
-		upper(mad.country) country, upper(mad.ccode) ccode, mn.ISOCURRC, pt.xchgrate
+		upper(mad.country) country, upper(mad.ccode) ccode, mn.ISOCURRC, pt.xchgrate, pt.bchsourc
 	from dbo.vwRmTransaccionesTodas pt			--[doctype, vchrnmbr]
 		outer apply dbo.dcemFnGetMcp(pt.DOCNUMBR, pt.bchsourc) bd
 		outer apply dbo.dcemFnGetMetodosPagoRM(pt.MSCSCHID, pt.cshrctyp, pt.FRTSCHID) mp	

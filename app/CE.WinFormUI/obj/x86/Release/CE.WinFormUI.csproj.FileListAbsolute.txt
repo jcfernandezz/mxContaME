@@ -1,9 +1,9 @@
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.WinFormUI.exe.config
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\xsd\AuxiliarCtas_1_1.xsd
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\xsd\AuxiliarFolios_1_2.xsd
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\xsd\BalanzaComprobacion_1_1.xsd
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\xsd\CatalogoCuentas_1_1.xsd
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\xsd\PolizasPeriodo_1_1.xsd
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.WinFormUI.exe.config
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.WinFormUI.exe
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.WinFormUI.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.Business.dll
@@ -14,9 +14,9 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.Model.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Release\CE.econn10.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.csprojResolveAssemblyReference.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.csproj.CE.WinFormUI.exe.config
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.Form1.resources
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.Properties.Resources.resources
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.csproj.GenerateResource.Cache
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.exe
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.pdb
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Release\CE.WinFormUI.csproj.CE.WinFormUI.exe.config

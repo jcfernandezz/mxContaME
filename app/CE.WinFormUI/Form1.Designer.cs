@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,7 +38,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.grid = new System.Windows.Forms.DataGridView();
             this.gridVista = new System.Windows.Forms.DataGridView();
@@ -49,8 +49,6 @@
             this.NumOrden = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumTramite = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnMostrarContenido = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.cmbAno = new System.Windows.Forms.ComboBox();
             this.cmbTipoDoc = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -68,28 +66,37 @@
             this.dataGridView8 = new System.Windows.Forms.DataGridView();
             this.dataGridView9 = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.bntSeleccionarArchivos = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radPOP = new System.Windows.Forms.RadioButton();
             this.radPM = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnProcesarFacturas = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.lblError = new System.Windows.Forms.TextBox();
             this.lblProcesos = new System.Windows.Forms.TextBox();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
-            this.bindingSource3 = new System.Windows.Forms.BindingSource(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.cmbEmpresas = new System.Windows.Forms.ComboBox();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.lblFecha = new System.Windows.Forms.Label();
+            this.toolStripAccionesXML = new System.Windows.Forms.ToolStrip();
+            this.toolStripAccionesXMLOtros = new System.Windows.Forms.ToolStrip();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.tsBtnMostrarContenido = new System.Windows.Forms.ToolStripButton();
+            this.tsButtonGenerar = new System.Windows.Forms.ToolStripButton();
+            this.tsButtonImportarArchivos = new System.Windows.Forms.ToolStripButton();
+            this.tsButtonSeleccionarArchivo = new System.Windows.Forms.ToolStripButton();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSource3 = new System.Windows.Forms.BindingSource(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridVista)).BeginInit();
@@ -111,10 +118,15 @@
             this.panel3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.toolStripAccionesXML.SuspendLayout();
+            this.toolStripAccionesXMLOtros.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
+            this.toolStrip3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource3)).BeginInit();
-            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -124,7 +136,7 @@
             this.acercaDeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(956, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1058, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -154,8 +166,8 @@
             // versión10ToolStripMenuItem
             // 
             this.versión10ToolStripMenuItem.Name = "versión10ToolStripMenuItem";
-            this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
-            this.versión10ToolStripMenuItem.Text = "Versión 3.0.0";
+            this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v.4.0.0";
             // 
             // tableLayoutPanel1
             // 
@@ -170,41 +182,37 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.05264F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.94737F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(956, 601);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1058, 665);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // tabControl1
             // 
-            this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Left;
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.tabControl1.ItemSize = new System.Drawing.Size(135, 40);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(950, 421);
+            this.tabControl1.Size = new System.Drawing.Size(1052, 466);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.panel2);
+            this.tabPage1.Controls.Add(this.tableLayoutPanel4);
+            this.tabPage1.Controls.Add(this.panel5);
             this.tabPage1.Controls.Add(this.panel1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 4);
+            this.tabPage1.Location = new System.Drawing.Point(44, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(942, 395);
+            this.tabPage1.Size = new System.Drawing.Size(1004, 458);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Exportar XML";
+            this.tabPage1.Text = "EXPORTAR XML";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.tableLayoutPanel4);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(3, 88);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(936, 304);
-            this.panel2.TabIndex = 17;
             // 
             // tableLayoutPanel4
             // 
@@ -214,22 +222,22 @@
             this.tableLayoutPanel4.Controls.Add(this.grid, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.gridVista, 0, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 119);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.59073F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.40926F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(936, 304);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(998, 336);
             this.tableLayoutPanel4.TabIndex = 15;
             // 
             // grid
             // 
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grid.Location = new System.Drawing.Point(310, 3);
+            this.grid.Location = new System.Drawing.Point(331, 3);
             this.grid.Name = "grid";
             this.grid.ReadOnly = true;
-            this.grid.Size = new System.Drawing.Size(623, 298);
+            this.grid.Size = new System.Drawing.Size(664, 330);
             this.grid.TabIndex = 13;
             // 
             // gridVista
@@ -249,7 +257,7 @@
             this.gridVista.Name = "gridVista";
             this.gridVista.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridVista.ShowEditingIcon = false;
-            this.gridVista.Size = new System.Drawing.Size(301, 298);
+            this.gridVista.Size = new System.Drawing.Size(322, 330);
             this.gridVista.TabIndex = 14;
             this.gridVista.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridVista_CellFormatting);
             this.gridVista.SelectionChanged += new System.EventHandler(this.gridVista_SelectionChanged);
@@ -304,44 +312,20 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnMostrarContenido);
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.cmbAno);
-            this.panel1.Controls.Add(this.cmbTipoDoc);
+            this.panel1.Controls.Add(this.toolStrip1);
+            this.panel1.Controls.Add(this.toolStripAccionesXMLOtros);
+            this.panel1.Controls.Add(this.toolStripAccionesXML);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(936, 85);
+            this.panel1.Size = new System.Drawing.Size(998, 87);
             this.panel1.TabIndex = 16;
-            // 
-            // btnMostrarContenido
-            // 
-            this.btnMostrarContenido.BackColor = System.Drawing.Color.Transparent;
-            this.btnMostrarContenido.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMostrarContenido.Location = new System.Drawing.Point(130, 7);
-            this.btnMostrarContenido.Name = "btnMostrarContenido";
-            this.btnMostrarContenido.Size = new System.Drawing.Size(105, 38);
-            this.btnMostrarContenido.TabIndex = 13;
-            this.btnMostrarContenido.Text = "Mostrar Contenido";
-            this.btnMostrarContenido.UseVisualStyleBackColor = false;
-            this.btnMostrarContenido.Click += new System.EventHandler(this.btnMostrarContenido_Click);
-            // 
-            // button1
-            // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(3, 7);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 38);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Procesar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnProcesar_Click);
             // 
             // cmbAno
             // 
             this.cmbAno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAno.FormattingEnabled = true;
-            this.cmbAno.Location = new System.Drawing.Point(130, 52);
+            this.cmbAno.Location = new System.Drawing.Point(210, 3);
             this.cmbAno.Name = "cmbAno";
             this.cmbAno.Size = new System.Drawing.Size(82, 21);
             this.cmbAno.TabIndex = 11;
@@ -350,7 +334,7 @@
             // 
             this.cmbTipoDoc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoDoc.FormattingEnabled = true;
-            this.cmbTipoDoc.Location = new System.Drawing.Point(3, 52);
+            this.cmbTipoDoc.Location = new System.Drawing.Point(53, 3);
             this.cmbTipoDoc.Name = "cmbTipoDoc";
             this.cmbTipoDoc.Size = new System.Drawing.Size(121, 21);
             this.cmbTipoDoc.TabIndex = 12;
@@ -359,21 +343,21 @@
             // 
             this.tabPage2.Controls.Add(this.panel4);
             this.tabPage2.Controls.Add(this.panel3);
-            this.tabPage2.Location = new System.Drawing.Point(4, 4);
+            this.tabPage2.Location = new System.Drawing.Point(44, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(942, 395);
+            this.tabPage2.Size = new System.Drawing.Size(902, 439);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Importar facturas electrónicas";
+            this.tabPage2.Text = "IMPORTAR FACTURAS";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // panel4
             // 
             this.panel4.Controls.Add(this.tableLayoutPanel5);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(3, 88);
+            this.panel4.Location = new System.Drawing.Point(3, 82);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(936, 304);
+            this.panel4.Size = new System.Drawing.Size(896, 354);
             this.panel4.TabIndex = 17;
             // 
             // tableLayoutPanel5
@@ -389,7 +373,7 @@
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(936, 304);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(896, 354);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // gridFiles
@@ -400,7 +384,7 @@
             this.gridFiles.MultiSelect = false;
             this.gridFiles.Name = "gridFiles";
             this.gridFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridFiles.Size = new System.Drawing.Size(393, 298);
+            this.gridFiles.Size = new System.Drawing.Size(376, 348);
             this.gridFiles.TabIndex = 9;
             this.gridFiles.SelectionChanged += new System.EventHandler(this.gridFiles_SelectionChanged);
             // 
@@ -417,9 +401,9 @@
             this.flowLayoutPanel1.Controls.Add(this.dataGridView8);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView9);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(402, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(385, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(531, 298);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(508, 348);
             this.flowLayoutPanel1.TabIndex = 10;
             // 
             // dataGridView1
@@ -512,32 +496,21 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.bntSeleccionarArchivos);
+            this.panel3.Controls.Add(this.toolStrip3);
+            this.panel3.Controls.Add(this.toolStrip2);
             this.panel3.Controls.Add(this.groupBox1);
             this.panel3.Controls.Add(this.label1);
-            this.panel3.Controls.Add(this.btnProcesarFacturas);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(3, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(936, 85);
+            this.panel3.Size = new System.Drawing.Size(896, 79);
             this.panel3.TabIndex = 16;
-            // 
-            // bntSeleccionarArchivos
-            // 
-            this.bntSeleccionarArchivos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bntSeleccionarArchivos.Location = new System.Drawing.Point(3, 10);
-            this.bntSeleccionarArchivos.Name = "bntSeleccionarArchivos";
-            this.bntSeleccionarArchivos.Size = new System.Drawing.Size(120, 38);
-            this.bntSeleccionarArchivos.TabIndex = 8;
-            this.bntSeleccionarArchivos.Text = "Seleccionar archivos";
-            this.bntSeleccionarArchivos.UseVisualStyleBackColor = true;
-            this.bntSeleccionarArchivos.Click += new System.EventHandler(this.bntSeleccionarArchivos_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.radPOP);
             this.groupBox1.Controls.Add(this.radPM);
-            this.groupBox1.Location = new System.Drawing.Point(316, 11);
+            this.groupBox1.Location = new System.Drawing.Point(233, 19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(104, 40);
             this.groupBox1.TabIndex = 15;
@@ -569,22 +542,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(483, 20);
+            this.label1.Location = new System.Drawing.Point(576, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 11;
             this.label1.Text = "Previsualizar comprobante";
-            // 
-            // btnProcesarFacturas
-            // 
-            this.btnProcesarFacturas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnProcesarFacturas.Location = new System.Drawing.Point(145, 9);
-            this.btnProcesarFacturas.Name = "btnProcesarFacturas";
-            this.btnProcesarFacturas.Size = new System.Drawing.Size(75, 39);
-            this.btnProcesarFacturas.TabIndex = 12;
-            this.btnProcesarFacturas.Text = "Procesar";
-            this.btnProcesarFacturas.UseVisualStyleBackColor = true;
-            this.btnProcesarFacturas.Click += new System.EventHandler(this.btnProcesarFacturas_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -594,12 +556,12 @@
             this.tableLayoutPanel2.Controls.Add(this.lblError, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblProcesos, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 430);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 475);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 168F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(950, 168);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 179F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1052, 187);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // lblError
@@ -611,19 +573,19 @@
             this.lblError.Name = "lblError";
             this.lblError.ReadOnly = true;
             this.lblError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.lblError.Size = new System.Drawing.Size(469, 162);
+            this.lblError.Size = new System.Drawing.Size(520, 181);
             this.lblError.TabIndex = 0;
             // 
             // lblProcesos
             // 
             this.lblProcesos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.lblProcesos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblProcesos.Location = new System.Drawing.Point(478, 3);
+            this.lblProcesos.Location = new System.Drawing.Point(529, 3);
             this.lblProcesos.Multiline = true;
             this.lblProcesos.Name = "lblProcesos";
             this.lblProcesos.ReadOnly = true;
             this.lblProcesos.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.lblProcesos.Size = new System.Drawing.Size(469, 162);
+            this.lblProcesos.Size = new System.Drawing.Size(520, 181);
             this.lblProcesos.TabIndex = 1;
             // 
             // openFileDialog1
@@ -639,11 +601,11 @@
             this.tableLayoutPanel3.Controls.Add(this.cmbEmpresas, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblUsuario, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblFecha, 2, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(560, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(693, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(330, 25);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(362, 24);
             this.tableLayoutPanel3.TabIndex = 15;
             // 
             // cmbEmpresas
@@ -652,7 +614,7 @@
             this.cmbEmpresas.FormattingEnabled = true;
             this.cmbEmpresas.Location = new System.Drawing.Point(44, 3);
             this.cmbEmpresas.Name = "cmbEmpresas";
-            this.cmbEmpresas.Size = new System.Drawing.Size(121, 21);
+            this.cmbEmpresas.Size = new System.Drawing.Size(188, 21);
             this.cmbEmpresas.TabIndex = 6;
             // 
             // lblUsuario
@@ -661,7 +623,7 @@
             this.lblUsuario.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblUsuario.Location = new System.Drawing.Point(3, 0);
             this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(35, 25);
+            this.lblUsuario.Size = new System.Drawing.Size(35, 24);
             this.lblUsuario.TabIndex = 5;
             this.lblUsuario.Text = "label3";
             this.lblUsuario.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -670,18 +632,164 @@
             // 
             this.lblFecha.AutoSize = true;
             this.lblFecha.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFecha.Location = new System.Drawing.Point(171, 0);
+            this.lblFecha.Location = new System.Drawing.Point(238, 0);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(156, 25);
+            this.lblFecha.Size = new System.Drawing.Size(121, 24);
             this.lblFecha.TabIndex = 7;
             this.lblFecha.Text = "label2";
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // toolStripAccionesXML
+            // 
+            this.toolStripAccionesXML.AutoSize = false;
+            this.toolStripAccionesXML.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStripAccionesXML.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripAccionesXML.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsButtonGenerar});
+            this.toolStripAccionesXML.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStripAccionesXML.Location = new System.Drawing.Point(0, 0);
+            this.toolStripAccionesXML.Name = "toolStripAccionesXML";
+            this.toolStripAccionesXML.Size = new System.Drawing.Size(90, 87);
+            this.toolStripAccionesXML.TabIndex = 51;
+            this.toolStripAccionesXML.Text = "toolStrip1";
+            // 
+            // toolStripAccionesXMLOtros
+            // 
+            this.toolStripAccionesXMLOtros.AutoSize = false;
+            this.toolStripAccionesXMLOtros.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStripAccionesXMLOtros.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripAccionesXMLOtros.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsBtnMostrarContenido});
+            this.toolStripAccionesXMLOtros.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStripAccionesXMLOtros.Location = new System.Drawing.Point(90, 0);
+            this.toolStripAccionesXMLOtros.Name = "toolStripAccionesXMLOtros";
+            this.toolStripAccionesXMLOtros.Size = new System.Drawing.Size(136, 87);
+            this.toolStripAccionesXMLOtros.TabIndex = 52;
+            this.toolStripAccionesXMLOtros.Text = "toolStrip1";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip1.Location = new System.Drawing.Point(226, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(772, 87);
+            this.toolStrip1.TabIndex = 83;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label3);
+            this.panel5.Controls.Add(this.label2);
+            this.panel5.Controls.Add(this.cmbTipoDoc);
+            this.panel5.Controls.Add(this.cmbAno);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(3, 90);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(998, 29);
+            this.panel5.TabIndex = 18;
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.AutoSize = false;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsButtonSeleccionarArchivo});
+            this.toolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip2.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(90, 79);
+            this.toolStrip2.TabIndex = 52;
+            this.toolStrip2.Text = "toolStrip1";
+            // 
+            // toolStrip3
+            // 
+            this.toolStrip3.AutoSize = false;
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsButtonImportarArchivos});
+            this.toolStrip3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip3.Location = new System.Drawing.Point(90, 0);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Size = new System.Drawing.Size(90, 79);
+            this.toolStrip3.TabIndex = 53;
+            this.toolStrip3.Text = "toolStrip1";
+            // 
+            // tsBtnMostrarContenido
+            // 
+            this.tsBtnMostrarContenido.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnMostrarContenido.Image")));
+            this.tsBtnMostrarContenido.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnMostrarContenido.Name = "tsBtnMostrarContenido";
+            this.tsBtnMostrarContenido.Size = new System.Drawing.Size(127, 20);
+            this.tsBtnMostrarContenido.Text = "Mostrar Contenido";
+            this.tsBtnMostrarContenido.Click += new System.EventHandler(this.tsBtnMostrarContenido_Click);
+            // 
+            // tsButtonGenerar
+            // 
+            this.tsButtonGenerar.AutoSize = false;
+            this.tsButtonGenerar.Image = global::CE.WinFormUI.Properties.Resources.process;
+            this.tsButtonGenerar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsButtonGenerar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsButtonGenerar.Name = "tsButtonGenerar";
+            this.tsButtonGenerar.Size = new System.Drawing.Size(85, 68);
+            this.tsButtonGenerar.Text = "Procesar";
+            this.tsButtonGenerar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.tsButtonGenerar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsButtonGenerar.ToolTipText = "Generación de múltiples facturas";
+            this.tsButtonGenerar.Click += new System.EventHandler(this.tsButtonGenerar_Click);
+            // 
+            // tsButtonImportarArchivos
+            // 
+            this.tsButtonImportarArchivos.AutoSize = false;
+            this.tsButtonImportarArchivos.Image = global::CE.WinFormUI.Properties.Resources.process;
+            this.tsButtonImportarArchivos.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsButtonImportarArchivos.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsButtonImportarArchivos.Name = "tsButtonImportarArchivos";
+            this.tsButtonImportarArchivos.Size = new System.Drawing.Size(85, 68);
+            this.tsButtonImportarArchivos.Text = "Procesar";
+            this.tsButtonImportarArchivos.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.tsButtonImportarArchivos.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsButtonImportarArchivos.ToolTipText = "Importar archivos";
+            this.tsButtonImportarArchivos.Click += new System.EventHandler(this.tsButtonImportarArchivos_Click);
+            // 
+            // tsButtonSeleccionarArchivo
+            // 
+            this.tsButtonSeleccionarArchivo.AutoSize = false;
+            this.tsButtonSeleccionarArchivo.Image = global::CE.WinFormUI.Properties.Resources.chooseF;
+            this.tsButtonSeleccionarArchivo.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsButtonSeleccionarArchivo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsButtonSeleccionarArchivo.Name = "tsButtonSeleccionarArchivo";
+            this.tsButtonSeleccionarArchivo.Size = new System.Drawing.Size(85, 68);
+            this.tsButtonSeleccionarArchivo.Text = "Seleccionar";
+            this.tsButtonSeleccionarArchivo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.tsButtonSeleccionarArchivo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsButtonSeleccionarArchivo.ToolTipText = "Seleccionar archivos";
+            this.tsButtonSeleccionarArchivo.Click += new System.EventHandler(this.tsButtonSeleccionarArchivo_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(4, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Archivo:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(180, 7);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Año:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(956, 625);
+            this.ClientSize = new System.Drawing.Size(1058, 689);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
@@ -694,11 +802,11 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridVista)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
@@ -719,11 +827,21 @@
             this.groupBox1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
+            this.toolStripAccionesXML.ResumeLayout(false);
+            this.toolStripAccionesXML.PerformLayout();
+            this.toolStripAccionesXMLOtros.ResumeLayout(false);
+            this.toolStripAccionesXMLOtros.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
+            this.toolStrip3.ResumeLayout(false);
+            this.toolStrip3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource3)).EndInit();
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -745,7 +863,6 @@
         private System.Windows.Forms.DataGridView grid;
         private System.Windows.Forms.ComboBox cmbTipoDoc;
         private System.Windows.Forms.ComboBox cmbAno;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -758,7 +875,6 @@
         private System.Windows.Forms.DataGridView dataGridView8;
         private System.Windows.Forms.DataGridView dataGridView9;
         private System.Windows.Forms.DataGridView gridFiles;
-        private System.Windows.Forms.Button bntSeleccionarArchivos;
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.BindingSource bindingSource2;
         private System.Windows.Forms.BindingSource bindingSource3;
@@ -767,7 +883,6 @@
         private System.Windows.Forms.ComboBox cmbEmpresas;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblFecha;
-        private System.Windows.Forms.Button btnProcesarFacturas;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem versión10ToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -780,13 +895,23 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn TipoSolicitud;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumOrden;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumTramite;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button btnMostrarContenido;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStripAccionesXMLOtros;
+        private System.Windows.Forms.ToolStripButton tsBtnMostrarContenido;
+        private System.Windows.Forms.ToolStrip toolStripAccionesXML;
+        private System.Windows.Forms.ToolStripButton tsButtonGenerar;
+        private System.Windows.Forms.ToolStrip toolStrip3;
+        private System.Windows.Forms.ToolStripButton tsButtonImportarArchivos;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton tsButtonSeleccionarArchivo;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 

@@ -112,39 +112,28 @@ return
 	union all
 	--cobros simultáneos. 
 	SELECT cast('CS' as varchar(3)) origenDoc, 
-		pt.doctype, pt.vchrnmbr, pt.voided, 
-		mp.codMetodoPago, 
-		pt.docnumbr, 
-
-		case when cp.param1 like 'no existe tag%' then null else cp.param1 end bancoOrigenSat,
-		case when cp.param2 like 'no existe tag%' then null else cp.param3 end ctaOrigenSat,
-		case when cp.param3 like 'no existe tag%' then null else cp.param2 end banOriExt,
-
-		pt.DOCDATE, 
-		isnull(pt.ordocamt, pt.DOCAMNT) DOCAMNT, 
-		pt.vendname, rtrim(pt.txrgnnum) txrgnnum, 
-		
-		cb.codBancoSat, cb.bnkactnm, cb.nomBancoExt,
-
-		upper(pt.country) country, upper(pt.ccode) ccode, mn.ISOCURRC, pt.xchgrate,
-		rtrim(ff.FolioFiscal)
-	from dbo.vwRmTransaccionesTodas pt				--de [doctype, vchrnmbr]
-		inner join vwRmTrxAplicadas ap
-			on ap.APFRDCNM = pt.docnumbr
-			and ap.APFRDCTY = pt.rmdtypal			
-			and pt.rmdtypal = 9						--pago
-			and pt.bchsourc = 'Sales Entry'
+		rm.RMDTYPAL, rm.DOCNUMBR, rm.VOIDstts, 
+		rm.codMetodoPago, 
+		rm.numCheque, 
+		rm.bancoOrigenSat, rm.ctaOrigenSat, rm.banOriExt,
+		rm.docdate, 
+		rm.docamnt, 
+		rm.beneficiarioSat,	rtrim(isnull(ff.rfc, rm.txrgnnum)) txrgnnum,
+		rm.bancoDestinoSat, rm.ctaDestinoSat , rm.banDesExt, 
+		rm.country, rm.ccode, rm.ISOCURRC, rm.xchgrate,
+		rtrim(ff.foliofiscal)
+	from dbo.vwRmTrxAplicadas ap
 		inner join vwRmTransaccionesTodas ti		--a
 			on ti.docnumbr = ap.aptodcnm
 			and ti.rmdtypal = ap.aptodcty
 			and ti.cashamnt <> 0					--factura pagada simultáneamente
-		outer apply dbo.dcemFnGetMetodosPagoRM(pt.MSCSCHID, pt.cshrctyp, pt.FRTSCHID) mp	
-		outer apply dbo.dcemFnGetDatosBancarios(pt.MSCSCHID) cb
-		outer apply dbo.fCfdiParametrosCliente(pt.custnmbr, 'CodigoBancoSat', 'CtaOrdenante', 'NomBancoOrdExt', 'NA', 'NA', 'NA', 'PREDETERMINADO') cp
-		outer apply dbo.DcemFnGetFolioFiscalDeDocumento (pt.docnumbr, pt.rmdtypal) ff      
+		cross apply dbo.dcemFnGetRMtrx(ap.APFRDCNM, ap.APFRDCTY) rm
+		outer apply dbo.DcemFnGetFolioFiscalDeDocumento (ap.APFRDCNM, ap.APFRDCTY) ff      
 	where @SOURCEDOC = 'SJ'
 	and ap.APTODCNM = @VCHRNMBR
 	and ap.aptodcty = @DOCTYPE
+	and ap.APFRDCTY = 9						--pago
+	and rm.bchsourc = 'Sales Entry'
 	
 	union all
 	--Transferencia entre chequeras

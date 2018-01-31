@@ -170,26 +170,27 @@ namespace CE.Business
         /// <returns></returns>
         public string GetXML2(int year, int perdiodo, string tipo)
         {
-            string tabla = "";
+            var iTipoDoc = _lParametros.Where(x => x.Tipo == tipo);
+            string tabla = iTipoDoc.First().FuncionSql;
 
-            switch (tipo)
-            {
-                case "Auxiliar Cuentas":
-                    tabla = "DCEMFCNAUXILIARCTAS";
-                    break;
-                case "Auxiliar folios":
-                    tabla = "DCEMFCNAUXILIARFOLIOS";
-                    break;
-                case "Balanza":
-                    tabla = "DCEMFCNBALANCE";
-                    break;
-                case "Catálogo":
-                    tabla = "DCEMFCNCATALOGOXML";
-                    break;
-                case "Pólizas":
-                    tabla = "DCEMFCNPOLIZAS";
-                    break;
-            }
+            //switch (tipo)
+            //{
+            //    case "Auxiliar Cuentas":
+            //        tabla = "DCEMFCNAUXILIARCTAS";
+            //        break;
+            //    case "Auxiliar folios":
+            //        tabla = "DCEMFCNAUXILIARFOLIOS";
+            //        break;
+            //    case "Balanza":
+            //        tabla = "DCEMFCNBALANCE";
+            //        break;
+            //    case "Catálogo":
+            //        tabla = "DCEMFCNCATALOGOXML";
+            //        break;
+            //    case "Pólizas":
+            //        tabla = "DCEMFCNPOLIZAS";
+            //        break;
+            //}
 
             string sql = "select dbo."+ tabla +" (@periodid, @year1)";
 
@@ -246,11 +247,11 @@ namespace CE.Business
             }
         }
 
-        void validarUnaPolizaPorVez(string docXml, string esquemaXml)
+        void validarUnaPolizaPorVez(string docXml, string esquemaXml, string nameSpace)
         {
             XmlSchemaSet schemas = new XmlSchemaSet();
             schemas.Add(null, esquemaXml);
-            XNamespace ns = "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
+            XNamespace ns = nameSpace;  // "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
 
             XDocument xDocAValidar = new XDocument();
             xDocAValidar = XDocument.Parse(docXml);
@@ -303,7 +304,8 @@ namespace CE.Business
         /// <param name="archivo5"></param>
         /// <param name="directorioXSD"></param>
         /// <returns></returns>
-        public List<XmlExportado> ProcesarArchivos(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
+        public List<XmlExportado> ProcesarArchivos(List<DcemVwContabilidad> items, string directorio, string directorioXSD)
+                //string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, 
         {
             string archivo = "";
             
@@ -317,29 +319,12 @@ namespace CE.Business
                 string archivoXSD = directorioXSD;
                 ErroresValidarXml = "";
 
-                switch (item.tipodoc)
+                var iTipoDoc = _lParametros.Where(x => x.Tipo == item.tipodoc);
+                archivo = iTipoDoc.First().Archivo;
+                archivoXSD += iTipoDoc.First().Esquema;
+                if (item.tipodoc.Equals("Pólizas"))
                 {
-                    case "Catálogo":
-                        archivo = archivo1;
-                        archivoXSD += "CatalogoCuentas_1_1.xsd";
-                        break;
-                    case "Balanza":
-                        archivo = archivo2;
-                        archivoXSD += "BalanzaComprobacion_1_1.xsd";
-                        break;
-                    case "Pólizas":
-                        archivo = archivo3;
-                        archivoXSD += "PolizasPeriodo_1_1.xsd";
-                        this.corregirDocsConError("dcem.dcemCorrigePoliza");
-                        break;
-                    case "Auxiliar Cuentas":
-                        archivo = archivo4;
-                        archivoXSD += "AuxiliarCtas_1_1.xsd";
-                        break;
-                    case "Auxiliar folios":
-                        archivo = archivo5;
-                        archivoXSD += "AuxiliarFolios_1_2.xsd";
-                        break;
+                    this.corregirDocsConError("dcem.dcemCorrigePoliza");
                 }
 
                 int version = GetVersionXML(item);
@@ -350,12 +335,9 @@ namespace CE.Business
                 
                 item.catalogo = this.GetXML2(item.year1, item.periodid, item.tipodoc);
 
-                //xml += item.catalogo;
-
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(item.catalogo);
                 XmlElement root = xmlDoc.DocumentElement;
-
                 XmlAttribute attr;
 
                 if (item.TipoSolicitud != null)
@@ -391,9 +373,10 @@ namespace CE.Business
                 System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
                 InsertDatosExportados(item, (Int16)version);
 
+                //Detecta y marca pólizas con error
                 if (item.tipodoc.Equals("Pólizas"))
                 {
-                    validarUnaPolizaPorVez(item.catalogo, archivoXSD);
+                    validarUnaPolizaPorVez(item.catalogo, archivoXSD, iTipoDoc.First().NameSpace);
                     marcarDocsConError("dcem.dcemMarcarPolizasConError", item.year1);
                 }
                 else

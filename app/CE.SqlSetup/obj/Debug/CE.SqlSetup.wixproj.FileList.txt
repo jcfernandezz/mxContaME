@@ -1,0 +1,7 @@
+obj\Debug\Product.wixobj
+obj\Debug\UserRegistrationDlg.wixobj
+obj\Debug\CE.SqlSetup.wixproj.BindContentsFileListnull.txt
+obj\Debug\CE.SqlSetup.wixproj.BindOutputsFileListnull.txt
+obj\Debug\CE.SqlSetup.wixproj.BindBuiltOutputsFileListnull.txt
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.SqlSetup\bin\Debug\CE.SqlSetup.msi
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.SqlSetup\bin\Debug\CE.SqlSetup.wixpdb

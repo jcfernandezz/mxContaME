@@ -1,0 +1,9 @@
+obj\Debug\Product.wixobj
+C:\jcTii\Desarrollo\MEX_Factura_digital_cfdi\E_Implementation\MxFElctr_App\cfdiSqlSetup\bin\Debug\cfdiSqlSetup.msi
+C:\jcTii\Desarrollo\MEX_Factura_digital_cfdi\E_Implementation\MxFElctr_App\cfdiSqlSetup\bin\Debug\cfdiSqlSetup.wixpdb
+obj\Debug\cfdiSqlSetup.wixproj.BindContentsFileListnull.txt
+obj\Debug\cfdiSqlSetup.wixproj.BindOutputsFileListnull.txt
+obj\Debug\cfdiSqlSetup.wixproj.BindBuiltOutputsFileListnull.txt
+obj\Debug\UserRegistrationDlg.wixobj
+C:\jcTii\Desarrollo\MEX_Factura_digital_cfdi\mx01\App\cfdiSqlSetup\bin\Debug\cfdiSqlSetup.msi
+C:\jcTii\Desarrollo\MEX_Factura_digital_cfdi\mx01\App\cfdiSqlSetup\bin\Debug\cfdiSqlSetup.wixpdb
