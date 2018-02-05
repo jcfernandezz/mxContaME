@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GPCompras.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="LecturaContabilidadFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
