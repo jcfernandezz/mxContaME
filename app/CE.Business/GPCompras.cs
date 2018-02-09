@@ -104,14 +104,13 @@ namespace CE.Business
 
                             var impuesto = impuestos[0];
 
-                            var retenciones = (from c in xdoc.Descendants(cfdi + "Comprobante/Impuestos/Retenciones/Retencion")
+                            var retenciones = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosRetenidos") != null).Descendants(cfdi + "Retencion")
                                                select new
                                                {
                                                    impuesto = c.Attribute("Impuesto").Value,
                                                    importe = c.Attribute("Importe").Value
                                                }).ToList();
-
-                            var traslados = (from c in xdoc.Descendants(cfdi + "Comprobante/Impuestos/Traslados/Traslado")
+                            var traslados = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null).Descendants(cfdi + "Traslado")
                                              select new
                                              {
                                                  impuesto = c.Attribute("Impuesto").Value,

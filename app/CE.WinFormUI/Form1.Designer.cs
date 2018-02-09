@@ -93,6 +93,13 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource3 = new System.Windows.Forms.BindingSource(this.components);
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -136,7 +143,7 @@
             this.acercaDeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1058, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1094, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -182,7 +189,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.05264F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.94737F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1058, 665);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1094, 665);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // tabControl1
@@ -197,7 +204,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1052, 466);
+            this.tabControl1.Size = new System.Drawing.Size(1088, 466);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 1;
             // 
@@ -436,7 +443,7 @@
             this.tabPage2.Location = new System.Drawing.Point(44, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1004, 458);
+            this.tabPage2.Size = new System.Drawing.Size(1040, 458);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "IMPORTAR FACTURAS";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -447,7 +454,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 82);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(998, 373);
+            this.panel4.Size = new System.Drawing.Size(1034, 373);
             this.panel4.TabIndex = 17;
             // 
             // tableLayoutPanel5
@@ -463,7 +470,7 @@
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(998, 373);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(1034, 373);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // gridFiles
@@ -474,64 +481,77 @@
             this.gridFiles.MultiSelect = false;
             this.gridFiles.Name = "gridFiles";
             this.gridFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridFiles.Size = new System.Drawing.Size(420, 367);
+            this.gridFiles.Size = new System.Drawing.Size(435, 367);
             this.gridFiles.TabIndex = 9;
             this.gridFiles.SelectionChanged += new System.EventHandler(this.gridFiles_SelectionChanged);
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Controls.Add(this.label4);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView1);
+            this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView2);
+            this.flowLayoutPanel1.Controls.Add(this.label6);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView3);
+            this.flowLayoutPanel1.Controls.Add(this.label7);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView4);
+            this.flowLayoutPanel1.Controls.Add(this.label8);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView5);
+            this.flowLayoutPanel1.Controls.Add(this.label9);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView6);
+            this.flowLayoutPanel1.Controls.Add(this.label10);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView7);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView8);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView9);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(429, 3);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(444, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(566, 367);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(587, 367);
             this.flowLayoutPanel1.TabIndex = 10;
+            this.flowLayoutPanel1.WrapContents = false;
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView1.Size = new System.Drawing.Size(555, 58);
             this.dataGridView1.TabIndex = 0;
             // 
             // dataGridView2
             // 
             this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(3, 81);
+            this.dataGridView2.Location = new System.Drawing.Point(3, 93);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView2.Size = new System.Drawing.Size(555, 46);
             this.dataGridView2.TabIndex = 1;
             // 
             // dataGridView3
             // 
             this.dataGridView3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView3.Location = new System.Drawing.Point(3, 159);
+            this.dataGridView3.Location = new System.Drawing.Point(3, 158);
             this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView3.Size = new System.Drawing.Size(555, 41);
             this.dataGridView3.TabIndex = 2;
             // 
             // dataGridView4
             // 
             this.dataGridView4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView4.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView4.Location = new System.Drawing.Point(3, 237);
+            this.dataGridView4.Location = new System.Drawing.Point(3, 218);
             this.dataGridView4.Name = "dataGridView4";
-            this.dataGridView4.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView4.Size = new System.Drawing.Size(555, 95);
             this.dataGridView4.TabIndex = 3;
             // 
             // dataGridView5
@@ -539,9 +559,9 @@
             this.dataGridView5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView5.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView5.Location = new System.Drawing.Point(3, 315);
+            this.dataGridView5.Location = new System.Drawing.Point(3, 332);
             this.dataGridView5.Name = "dataGridView5";
-            this.dataGridView5.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView5.Size = new System.Drawing.Size(555, 70);
             this.dataGridView5.TabIndex = 4;
             // 
             // dataGridView6
@@ -549,19 +569,20 @@
             this.dataGridView6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView6.Location = new System.Drawing.Point(3, 393);
+            this.dataGridView6.Location = new System.Drawing.Point(3, 421);
             this.dataGridView6.Name = "dataGridView6";
-            this.dataGridView6.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView6.Size = new System.Drawing.Size(555, 69);
             this.dataGridView6.TabIndex = 5;
             // 
             // dataGridView7
             // 
             this.dataGridView7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView7.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView7.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView7.Location = new System.Drawing.Point(3, 471);
+            this.dataGridView7.Location = new System.Drawing.Point(3, 509);
             this.dataGridView7.Name = "dataGridView7";
-            this.dataGridView7.Size = new System.Drawing.Size(506, 150);
+            this.dataGridView7.Size = new System.Drawing.Size(555, 45);
             this.dataGridView7.TabIndex = 6;
             // 
             // dataGridView8
@@ -569,9 +590,9 @@
             this.dataGridView8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView8.Location = new System.Drawing.Point(3, 627);
+            this.dataGridView8.Location = new System.Drawing.Point(3, 560);
             this.dataGridView8.Name = "dataGridView8";
-            this.dataGridView8.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView8.Size = new System.Drawing.Size(555, 20);
             this.dataGridView8.TabIndex = 7;
             // 
             // dataGridView9
@@ -579,9 +600,9 @@
             this.dataGridView9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView9.Location = new System.Drawing.Point(3, 705);
+            this.dataGridView9.Location = new System.Drawing.Point(3, 586);
             this.dataGridView9.Name = "dataGridView9";
-            this.dataGridView9.Size = new System.Drawing.Size(506, 72);
+            this.dataGridView9.Size = new System.Drawing.Size(555, 22);
             this.dataGridView9.TabIndex = 8;
             // 
             // panel3
@@ -593,7 +614,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(3, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(998, 79);
+            this.panel3.Size = new System.Drawing.Size(1034, 79);
             this.panel3.TabIndex = 16;
             // 
             // toolStrip3
@@ -688,11 +709,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(576, 30);
+            this.label1.Location = new System.Drawing.Point(664, 46);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(131, 13);
+            this.label1.Size = new System.Drawing.Size(138, 13);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Previsualizar comprobante";
+            this.label1.Text = "Contenido del Comprobante";
             // 
             // tableLayoutPanel2
             // 
@@ -707,7 +728,7 @@
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 187F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1052, 187);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1088, 187);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // lblError
@@ -719,19 +740,19 @@
             this.lblError.Name = "lblError";
             this.lblError.ReadOnly = true;
             this.lblError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.lblError.Size = new System.Drawing.Size(520, 181);
+            this.lblError.Size = new System.Drawing.Size(538, 181);
             this.lblError.TabIndex = 0;
             // 
             // lblProcesos
             // 
             this.lblProcesos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.lblProcesos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblProcesos.Location = new System.Drawing.Point(529, 3);
+            this.lblProcesos.Location = new System.Drawing.Point(547, 3);
             this.lblProcesos.Multiline = true;
             this.lblProcesos.Name = "lblProcesos";
             this.lblProcesos.ReadOnly = true;
             this.lblProcesos.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.lblProcesos.Size = new System.Drawing.Size(520, 181);
+            this.lblProcesos.Size = new System.Drawing.Size(538, 181);
             this.lblProcesos.TabIndex = 1;
             // 
             // openFileDialog1
@@ -785,11 +806,75 @@
             this.lblFecha.Text = "label2";
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(70, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Comprobante";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 77);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Emisor";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 142);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(51, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Receptor";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 202);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Concepto";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 316);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(116, 13);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "Impuestos Trasladados";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 405);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(67, 13);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "Retenciones";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 493);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(39, 13);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Timbre";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1058, 689);
+            this.ClientSize = new System.Drawing.Size(1094, 689);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
@@ -818,6 +903,7 @@
             this.tableLayoutPanel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridFiles)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
@@ -912,6 +998,13 @@
         private System.Windows.Forms.ToolStripButton tsButtonSeleccionarArchivo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
     }
 }
 

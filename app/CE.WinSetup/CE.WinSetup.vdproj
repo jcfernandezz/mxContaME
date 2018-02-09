@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_1B97FB2B0F68EE5BA59FCC703D4AF6A9"
-        "OwnerKey" = "8:_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
+        "OwnerKey" = "8:_4EBA097B5DFFA83D237AAA3397EFC40B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,13 +52,25 @@
         "Entry"
         {
         "MsmKey" = "8:_4598206B8F9C35EC03DCE0B04E662FDF"
-        "OwnerKey" = "8:_DE6AAF27C427ACE69EF77D2C2F011475"
+        "OwnerKey" = "8:_7863D7CC866153EEB96E4578E453080C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_4598206B8F9C35EC03DCE0B04E662FDF"
-        "OwnerKey" = "8:_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
+        "OwnerKey" = "8:_4EBA097B5DFFA83D237AAA3397EFC40B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4EBA097B5DFFA83D237AAA3397EFC40B"
+        "OwnerKey" = "8:_7863D7CC866153EEB96E4578E453080C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4EBA097B5DFFA83D237AAA3397EFC40B"
+        "OwnerKey" = "8:_64396B01EE954A239AA37AA01638BF58"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,7 +82,7 @@
         "Entry"
         {
         "MsmKey" = "8:_525F49CE42576A654D2D50E3EBEDF341"
-        "OwnerKey" = "8:_DE6AAF27C427ACE69EF77D2C2F011475"
+        "OwnerKey" = "8:_7863D7CC866153EEB96E4578E453080C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,25 +93,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
-        "OwnerKey" = "8:_DE6AAF27C427ACE69EF77D2C2F011475"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
+        "MsmKey" = "8:_7863D7CC866153EEB96E4578E453080C"
         "OwnerKey" = "8:_64396B01EE954A239AA37AA01638BF58"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_833215EC86AB1C4A85CD147192D4BA60"
-        "OwnerKey" = "8:_DE6AAF27C427ACE69EF77D2C2F011475"
+        "MsmKey" = "8:_87490EDE29E1D5D48B5A72829B1C1F5A"
+        "OwnerKey" = "8:_7863D7CC866153EEB96E4578E453080C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_833215EC86AB1C4A85CD147192D4BA60"
+        "MsmKey" = "8:_87490EDE29E1D5D48B5A72829B1C1F5A"
         "OwnerKey" = "8:_64396B01EE954A239AA37AA01638BF58"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -107,12 +113,6 @@
         {
         "MsmKey" = "8:_B8CA4D83E417496692BD2AA716FD2D78"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DE6AAF27C427ACE69EF77D2C2F011475"
-        "OwnerKey" = "8:_64396B01EE954A239AA37AA01638BF58"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -130,24 +130,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DE6AAF27C427ACE69EF77D2C2F011475"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_833215EC86AB1C4A85CD147192D4BA60"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_525F49CE42576A654D2D50E3EBEDF341"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -155,6 +137,24 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_64396B01EE954A239AA37AA01638BF58"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7863D7CC866153EEB96E4578E453080C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_87490EDE29E1D5D48B5A72829B1C1F5A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4EBA097B5DFFA83D237AAA3397EFC40B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -188,6 +188,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
         "Release"
@@ -372,6 +380,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4EBA097B5DFFA83D237AAA3397EFC40B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:CE.econn10, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_4EBA097B5DFFA83D237AAA3397EFC40B"
+                    {
+                    "Name" = "8:CE.econn10.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CE.econn10.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F143242872F14F408BC45593C1DD90FD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_525F49CE42576A654D2D50E3EBEDF341"
             {
             "AssemblyRegister" = "3:1"
@@ -403,20 +442,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7863D7CC866153EEB96E4578E453080C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CE.econn10, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CE.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7E7ADF09BB14BDFD70AD7D6ACC5A0E4F"
+                    "_7863D7CC866153EEB96E4578E453080C"
                     {
-                    "Name" = "8:CE.econn10.dll"
+                    "Name" = "8:CE.Business.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CE.econn10.dll"
+            "SourcePath" = "8:CE.Business.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F143242872F14F408BC45593C1DD90FD"
@@ -434,14 +473,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_833215EC86AB1C4A85CD147192D4BA60"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_87490EDE29E1D5D48B5A72829B1C1F5A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CE.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_833215EC86AB1C4A85CD147192D4BA60"
+                    "_87490EDE29E1D5D48B5A72829B1C1F5A"
                     {
                     "Name" = "8:CE.Model.dll"
                     "Attributes" = "3:512"
@@ -483,37 +522,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DE6AAF27C427ACE69EF77D2C2F011475"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CE.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_DE6AAF27C427ACE69EF77D2C2F011475"
-                    {
-                    "Name" = "8:CE.Business.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:CE.Business.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F143242872F14F408BC45593C1DD90FD"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EDF192AEC2A24FDF960101D1BDC17E20"
@@ -604,7 +612,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GP MEX Contabilidad Electrónica 1.3"
         "ProductCode" = "8:{2A82DCAA-32FA-4BA2-84CB-6D3CB00E1ADD}"
-        "PackageCode" = "8:{965A33B9-AF26-49E9-865A-8B303C33A82D}"
+        "PackageCode" = "8:{122A7136-F544-4925-953A-4A23A55A5835}"
         "UpgradeCode" = "8:{862532C7-C312-45D1-8E48-75CFA1C48A8A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -734,6 +742,20 @@
             "Transitive" = "11:FALSE"
             "Target" = "8:_F143242872F14F408BC45593C1DD90FD"
             "Folder" = "8:_8CC01C3E47824E569089871A877DD2F5"
+            "WorkingFolder" = "8:_F143242872F14F408BC45593C1DD90FD"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A3935346B83349DFBE2583B0E9A532AC"
+            {
+            "Name" = "8:GP MEX Contabilidad Electrónica"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F143242872F14F408BC45593C1DD90FD"
+            "Folder" = "8:_F143242872F14F408BC45593C1DD90FD"
             "WorkingFolder" = "8:_F143242872F14F408BC45593C1DD90FD"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -1153,7 +1175,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_64396B01EE954A239AA37AA01638BF58"
             {
-            "SourcePath" = "8:..\\CE.WinFormUI\\obj\\x86\\Release\\CE.WinFormUI.exe"
+            "SourcePath" = "8:..\\CE.WinFormUI\\obj\\x86\\Debug\\CE.WinFormUI.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F143242872F14F408BC45593C1DD90FD"
