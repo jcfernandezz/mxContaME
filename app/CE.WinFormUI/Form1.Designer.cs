@@ -64,12 +64,19 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.gridFiles = new System.Windows.Forms.DataGridView();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.label5 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.label6 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.label7 = new System.Windows.Forms.Label();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.label8 = new System.Windows.Forms.Label();
             this.dataGridView5 = new System.Windows.Forms.DataGridView();
+            this.label9 = new System.Windows.Forms.Label();
             this.dataGridView6 = new System.Windows.Forms.DataGridView();
+            this.label10 = new System.Windows.Forms.Label();
             this.dataGridView7 = new System.Windows.Forms.DataGridView();
             this.dataGridView8 = new System.Windows.Forms.DataGridView();
             this.dataGridView9 = new System.Windows.Forms.DataGridView();
@@ -93,13 +100,6 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource3 = new System.Windows.Forms.BindingSource(this.components);
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -174,7 +174,7 @@
             // 
             this.versión10ToolStripMenuItem.Name = "versión10ToolStripMenuItem";
             this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
-            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v.4.0.0";
+            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v.4.1.0";
             // 
             // tableLayoutPanel1
             // 
@@ -216,7 +216,7 @@
             this.tabPage1.Location = new System.Drawing.Point(44, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1004, 458);
+            this.tabPage1.Size = new System.Drawing.Size(1040, 458);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "EXPORTAR XML";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -234,17 +234,17 @@
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.59073F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.40926F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(998, 336);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(1034, 336);
             this.tableLayoutPanel4.TabIndex = 15;
             // 
             // grid
             // 
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grid.Location = new System.Drawing.Point(331, 3);
+            this.grid.Location = new System.Drawing.Point(343, 3);
             this.grid.Name = "grid";
             this.grid.ReadOnly = true;
-            this.grid.Size = new System.Drawing.Size(664, 330);
+            this.grid.Size = new System.Drawing.Size(688, 330);
             this.grid.TabIndex = 13;
             // 
             // gridVista
@@ -264,7 +264,7 @@
             this.gridVista.Name = "gridVista";
             this.gridVista.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridVista.ShowEditingIcon = false;
-            this.gridVista.Size = new System.Drawing.Size(322, 330);
+            this.gridVista.Size = new System.Drawing.Size(334, 330);
             this.gridVista.TabIndex = 14;
             this.gridVista.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridVista_CellFormatting);
             this.gridVista.SelectionChanged += new System.EventHandler(this.gridVista_SelectionChanged);
@@ -326,7 +326,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 90);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(998, 29);
+            this.panel5.Size = new System.Drawing.Size(1034, 29);
             this.panel5.TabIndex = 18;
             // 
             // label3
@@ -373,7 +373,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(998, 87);
+            this.panel1.Size = new System.Drawing.Size(1034, 87);
             this.panel1.TabIndex = 16;
             // 
             // toolStrip1
@@ -381,7 +381,7 @@
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip1.Location = new System.Drawing.Point(226, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(772, 87);
+            this.toolStrip1.Size = new System.Drawing.Size(808, 87);
             this.toolStrip1.TabIndex = 83;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -475,12 +475,13 @@
             // 
             // gridFiles
             // 
+            this.gridFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridFiles.Location = new System.Drawing.Point(3, 3);
             this.gridFiles.MultiSelect = false;
             this.gridFiles.Name = "gridFiles";
-            this.gridFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridFiles.Size = new System.Drawing.Size(435, 367);
             this.gridFiles.TabIndex = 9;
             this.gridFiles.SelectionChanged += new System.EventHandler(this.gridFiles_SelectionChanged);
@@ -512,6 +513,15 @@
             this.flowLayoutPanel1.TabIndex = 10;
             this.flowLayoutPanel1.WrapContents = false;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(70, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Comprobante";
+            // 
             // dataGridView1
             // 
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
@@ -520,6 +530,15 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(555, 58);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 77);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Emisor";
             // 
             // dataGridView2
             // 
@@ -532,6 +551,15 @@
             this.dataGridView2.Size = new System.Drawing.Size(555, 46);
             this.dataGridView2.TabIndex = 1;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 142);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(51, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Receptor";
+            // 
             // dataGridView3
             // 
             this.dataGridView3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -542,6 +570,16 @@
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.Size = new System.Drawing.Size(555, 41);
             this.dataGridView3.TabIndex = 2;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 202);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Concepto";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // dataGridView4
             // 
@@ -554,6 +592,15 @@
             this.dataGridView4.Size = new System.Drawing.Size(555, 95);
             this.dataGridView4.TabIndex = 3;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 316);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(116, 13);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "Impuestos Trasladados";
+            // 
             // dataGridView5
             // 
             this.dataGridView5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -564,6 +611,15 @@
             this.dataGridView5.Size = new System.Drawing.Size(555, 70);
             this.dataGridView5.TabIndex = 4;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 405);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(67, 13);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "Retenciones";
+            // 
             // dataGridView6
             // 
             this.dataGridView6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -573,6 +629,15 @@
             this.dataGridView6.Name = "dataGridView6";
             this.dataGridView6.Size = new System.Drawing.Size(555, 69);
             this.dataGridView6.TabIndex = 5;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 493);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(39, 13);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Timbre";
             // 
             // dataGridView7
             // 
@@ -805,70 +870,6 @@
             this.lblFecha.TabIndex = 7;
             this.lblFecha.Text = "label2";
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Comprobante";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 77);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Emisor";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 142);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(51, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Receptor";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 202);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(53, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Concepto";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 316);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(116, 13);
-            this.label8.TabIndex = 13;
-            this.label8.Text = "Impuestos Trasladados";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 405);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(67, 13);
-            this.label9.TabIndex = 14;
-            this.label9.Text = "Retenciones";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 493);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(39, 13);
-            this.label10.TabIndex = 15;
-            this.label10.Text = "Timbre";
             // 
             // Form1
             // 

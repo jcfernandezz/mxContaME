@@ -32,13 +32,15 @@ namespace CE.Business
             _pre = pre;
         }
 
+
+
         #region Importar Facturas Electronicas
-        /// <summary>
-        /// Importar facturas a GP
-        /// </summary>
-        /// <param name="archivos">Path de los archivos</param>
-        /// <param name="metodo">1: PM - 2: POP</param>
-        /// 
+                    /// <summary>
+                    /// Importar facturas a GP
+                    /// </summary>
+                    /// <param name="archivos">Path de los archivos</param>
+                    /// <param name="metodo">1: PM - 2: POP</param>
+                    /// 
         public void Importar(List<string> archivos, int metodo)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
@@ -313,13 +315,13 @@ namespace CE.Business
 
                                             if (lTraslado.impuesto.Trim() == "002") //iva
                                             {
-                                                if (decimal.Parse(lTraslado.tasa) == 0)
+                                                if (decimal.Parse(lTraslado.tasa) == decimal.Parse("0"))
                                                     item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA0"].ToString();
                                                 else
-                                                    if (decimal.Equals(decimal.Parse(lTraslado.tasa), 0.11))
+                                                    if (decimal.Equals(decimal.Parse(lTraslado.tasa), decimal.Parse("0.11")))
                                                     item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA11"].ToString();
                                                 else
-                                                        if (decimal.Equals(decimal.Parse(lTraslado.tasa), 0.16))
+                                                        if (decimal.Equals(decimal.Parse(lTraslado.tasa), decimal.Parse("0.16")))
                                                     item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA16"].ToString();
                                                 else
                                                 {
@@ -327,7 +329,7 @@ namespace CE.Business
 
                                                     ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
                                                     args.Archivo = archivo;
-                                                    args.Error = "Error en traslados";
+                                                    args.Error = "Error en traslados IVA";
 
                                                     OnErrorImportarPM(args);
                                                 }
@@ -343,7 +345,7 @@ namespace CE.Business
 
                                                     ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
                                                     args.Archivo = archivo;
-                                                    args.Error = "Error en traslados";
+                                                    args.Error = "Error en traslados IEPS";
 
                                                     OnErrorImportarPM(args);
                                                 }
@@ -375,7 +377,7 @@ namespace CE.Business
 
                                                 ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
                                                 args.Archivo = archivo;
-                                                args.Error = "Error en traslados";
+                                                args.Error = "Error en traslados locales. Ej. ISH";
 
                                                 OnErrorImportarPM(args);
                                             }

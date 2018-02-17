@@ -579,7 +579,9 @@ namespace CE.WinFormUI
                 string[] filenames = openFileDialog1.FileNames;
 
                 var f = from ff in filenames
-                        select new { archivo = System.IO.Path.GetFileName(ff), directorio = System.IO.Path.GetDirectoryName(ff) };
+                        select new { archivo = System.IO.Path.GetFileName(ff),
+                                     directorio = System.IO.Path.GetDirectoryName(ff),
+                                     };
 
                 gridFiles.Columns.Clear();
 
@@ -589,10 +591,43 @@ namespace CE.WinFormUI
                 col.Name = "col1";
                 gridFiles.Columns.Add(col);
 
+                col = new DataGridViewTextBoxColumn();
+                col.DataPropertyName = "selloValido";
+                col.HeaderText = "Sello";
+                col.Name = "selloValido";
+                gridFiles.Columns.Add(col);
+
                 bindingSource3.DataSource = f.ToList();
                 gridFiles.AutoGenerateColumns = false;
                 gridFiles.DataSource = bindingSource3;
                 gridFiles.AutoResizeColumns();
+
+
+                //Cambia de color si validación de integridad es incorrecto
+                cfdi comprobanteCfdi = new cfdi(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
+                foreach (DataGridViewRow row in gridFiles.Rows)
+                {
+
+                    try
+                    {
+                        var item = row.DataBoundItem;
+                        if (item != null)
+                        {
+                            System.Type type = item.GetType();
+                            string archivo = (string)type.GetProperty("archivo").GetValue(item, null);
+                            string directorio = (string)type.GetProperty("directorio").GetValue(item, null);
+
+                            if (comprobanteCfdi.ValidarSello(directorio + "\\" + archivo))
+                                row.Cells[1].Style.BackColor = Color.Green;
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        lblError.Text += "Validación de integridad. " + ex.Message + Environment.NewLine;
+                    }
+                }
+
             }
 
         }

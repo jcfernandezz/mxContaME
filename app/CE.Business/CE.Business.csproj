@@ -53,10 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="cfdi.cs" />
     <Compile Include="GPCompras.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="LecturaContabilidadFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransformerXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CE.econn10\CE.econn10.csproj">
