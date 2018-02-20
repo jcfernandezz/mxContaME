@@ -53,7 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cfdi.cs" />
+    <Compile Include="Cfdi.cs" />
+    <Compile Include="UtilitarioArchivos.cs" />
     <Compile Include="GPCompras.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="LecturaContabilidadFactory.cs" />

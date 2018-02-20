@@ -7,18 +7,60 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 using System.Xml;
-using System.IO;
 
 namespace CE.Business
 {
-    public class cfdi
+    public class Cfdi
     {
-        XNamespace ns_cfdi;
-        TransformerXML plantillaXslt;
-        public cfdi(String nameSpace, String rutaXslt)
+        String _archivoYCarpeta = String.Empty;
+        bool _valida = false;
+        String _sxml = String.Empty;
+        TransformerXML _plantillaXslt = null;
+        XNamespace _nscfdi;
+
+        public string ArchivoYCarpeta
         {
-            ns_cfdi = nameSpace;
-            plantillaXslt = new TransformerXML(rutaXslt);
+            get
+            {
+                return _archivoYCarpeta;
+            }
+
+            set
+            {
+                _archivoYCarpeta = value;
+            }
+        }
+
+        public bool Valida
+        {
+            get
+            {
+                return _valida;
+            }
+
+            set
+            {
+                _valida = value;
+            }
+        }
+
+        public string Sxml
+        {
+            get
+            {
+                return _sxml;
+            }
+
+            set
+            {
+                _sxml = value;
+            }
+        }
+
+        public Cfdi(String nameSpace, TransformerXML plantillaXslt)
+        {
+            _nscfdi = nameSpace;
+            _plantillaXslt = plantillaXslt;
         }
 
         /// <summary>
@@ -47,44 +89,24 @@ namespace CE.Business
             return verificado;
         }
 
-        public async Task<bool> ValidarSelloAsync(String archivo)
+        public bool ValidaSelloAsync()
         {
-            
-            if (System.IO.File.Exists(archivo))
-            {
-                string xml = String.Empty;
-                //byte[] result;
-                //using (FileStream SourceStream = File.Open(archivo, FileMode.Open))
-                //{
-                //    result = new byte[SourceStream.Length];
-                //    await SourceStream.ReadAsync(result, 0, (int)SourceStream.Length);
-                //}
-                //xml = System.Text.Encoding.UTF8.GetString(result);
 
+            XmlDocument comprobanteXml = new XmlDocument();
+            comprobanteXml.LoadXml(_sxml);
+            _plantillaXslt.getCadenaOriginal(comprobanteXml);
 
-                using (var reader = File.OpenText(archivo))
-                {
-                    xml = await reader.ReadToEndAsync();
-                }
+            XDocument xdoc = XDocument.Parse(_sxml);
+            var comprobante = xdoc.Descendants(_nscfdi + "Comprobante")
+                                .Select(c => new
+                                {
+                                    Sello = c.Attribute("Sello") == null ? "" : c.Attribute("Sello").Value,
+                                    Certificado = c.Attribute("Certificado") == null ? "" : c.Attribute("Certificado").Value
+                                }).First();
 
-                //string xml = System.IO.File.ReadAllText(archivo);
-                XmlDocument comprobanteXml = new XmlDocument();
-                comprobanteXml.LoadXml(xml);
-                plantillaXslt.getCadenaOriginal(comprobanteXml);
+            return (VerificaIntegridadDeDatosSellados(_plantillaXslt.cadenaOriginal, comprobante.Sello, comprobante.Certificado));
 
-                XDocument xdoc = XDocument.Parse(xml);
-                //plantillaXslt.TransformXDocument(xdoc);
-                var comprobante = xdoc.Descendants(ns_cfdi + "Comprobante")
-                                    .Select(c => new
-                                    {
-                                        Sello = c.Attribute("Sello") == null ? "" : c.Attribute("Sello").Value,
-                                        Certificado = c.Attribute("Certificado") == null ? "" : c.Attribute("Certificado").Value
-                                    }).First();
-
-                return VerificaIntegridadDeDatosSellados(plantillaXslt.cadenaOriginal, comprobante.Sello, comprobante.Certificado);
-            }
-            else
-                return false;
         }
+
     }
 }

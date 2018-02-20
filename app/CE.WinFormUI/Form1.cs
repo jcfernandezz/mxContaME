@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using CE.Business;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace CE.WinFormUI
 {
@@ -566,14 +567,16 @@ namespace CE.WinFormUI
             lblError.Refresh();
         }
 
-        private async Task validaArchivosAsync()
+        private async Task validaArchivosAsync(IProgress<int> prbar, UtilitarioArchivos utileria)
         {
-            //Cambia de color si validación de integridad es incorrecto
-            cfdi comprobanteCfdi = new cfdi(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
+            string archivo = String.Empty;
+            string directorio = String.Empty;
+
+            //carga y validar archivos
+            int i = 1;
+            int max = gridFiles.Rows.Count;
             foreach (DataGridViewRow row in gridFiles.Rows)
             {
-                string archivo=String.Empty;
-                string directorio=String.Empty;
                 try
                 {
                     var item = row.DataBoundItem;
@@ -583,26 +586,42 @@ namespace CE.WinFormUI
                         archivo = (string)type.GetProperty("archivo").GetValue(item, null);
                         directorio = (string)type.GetProperty("directorio").GetValue(item, null);
 
-                        if (await comprobanteCfdi.ValidarSelloAsync(directorio + "\\" + archivo))
+                        var cmp = await utileria.CargarArchivoAsync(directorio + "\\" + archivo);
+                        if (cmp.ValidaSelloAsync())
                             row.Cells[1].Style.BackColor = Color.GreenYellow;
                         else
                             row.Cells[1].Style.BackColor = Color.LightGray;
 
-                        gridFiles.Refresh();
+                        if (prbar != null)
+                        {
+                            prbar.Report(100 * i / max);
+                            //lblProcesos.Text += "Validando : " + archivo + Environment.NewLine ;
+                        }
+                        i++;
                     }
                 }
                 catch (Exception ex)
                 {
-                    lblError.Text += "Excepción al validar la integridad de "+ archivo + " " + ex.Message + Environment.NewLine;
+                    lblError.Text += "Excepción al leer "+ archivo + " " + ex.Message + Environment.NewLine;
                 }
             }
-
         }
 
         private async void tsButtonSeleccionarArchivo_Click(object sender, EventArgs e)
         {
             lblError.Text = "";
             lblProcesos.Text = "";
+            dataGridView1.DataSource = null;
+            dataGridView2.DataSource = null;
+            dataGridView3.DataSource = null;
+            dataGridView4.DataSource = null;
+            dataGridView5.DataSource = null;
+            dataGridView6.DataSource = null;
+            dataGridView7.DataSource = null;
+            tsProgressBar.Value = 0;
+            lblProcesos.Text = "Iniciando carga de parámetros..." + Environment.NewLine; 
+            UtilitarioArchivos utileria = new UtilitarioArchivos(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
+            lblProcesos.Text += "Listo para seleccionar archivos..."+Environment.NewLine;
 
             openFileDialog1.Filter = "XML Files|*.xml";
             openFileDialog1.Multiselect = true;
@@ -637,8 +656,10 @@ namespace CE.WinFormUI
                 gridFiles.AutoResizeColumns();
                 gridFiles.Refresh();
 
-                await validaArchivosAsync();
-
+                IProgress<int> prbar = new Progress<int>(p => tsProgressBar.Value = p);
+                await validaArchivosAsync(prbar, utileria);
+                lblProcesos.Text += "Validaciones finalizadas." + Environment.NewLine;
+                lblProcesos.Text += "Listo para importar a GP."+Environment.NewLine;
             }
 
         }
@@ -911,9 +932,7 @@ namespace CE.WinFormUI
 
         #endregion
 
-        private void label7_Click(object sender, EventArgs e)
-        {
 
-        }
+
     }
 }
