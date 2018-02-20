@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 using System.Xml;
+using System.IO;
 
 namespace CE.Business
 {
@@ -46,13 +47,27 @@ namespace CE.Business
             return verificado;
         }
 
-        public bool ValidarSello(String archivo)
+        public async Task<bool> ValidarSelloAsync(String archivo)
         {
             
             if (System.IO.File.Exists(archivo))
             {
-                string xml = System.IO.File.ReadAllText(archivo);
+                string xml = String.Empty;
+                //byte[] result;
+                //using (FileStream SourceStream = File.Open(archivo, FileMode.Open))
+                //{
+                //    result = new byte[SourceStream.Length];
+                //    await SourceStream.ReadAsync(result, 0, (int)SourceStream.Length);
+                //}
+                //xml = System.Text.Encoding.UTF8.GetString(result);
 
+
+                using (var reader = File.OpenText(archivo))
+                {
+                    xml = await reader.ReadToEndAsync();
+                }
+
+                //string xml = System.IO.File.ReadAllText(archivo);
                 XmlDocument comprobanteXml = new XmlDocument();
                 comprobanteXml.LoadXml(xml);
                 plantillaXslt.getCadenaOriginal(comprobanteXml);

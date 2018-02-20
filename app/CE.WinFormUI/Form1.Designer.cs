@@ -481,7 +481,6 @@
             this.gridFiles.Location = new System.Drawing.Point(3, 3);
             this.gridFiles.MultiSelect = false;
             this.gridFiles.Name = "gridFiles";
-            this.gridFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridFiles.Size = new System.Drawing.Size(435, 367);
             this.gridFiles.TabIndex = 9;
             this.gridFiles.SelectionChanged += new System.EventHandler(this.gridFiles_SelectionChanged);

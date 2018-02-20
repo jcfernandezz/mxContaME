@@ -11,6 +11,7 @@ using CE.Model;
 using System.Xml.Linq;
 using CE.Business;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CE.WinFormUI
 {
@@ -565,7 +566,40 @@ namespace CE.WinFormUI
             lblError.Refresh();
         }
 
-        private void tsButtonSeleccionarArchivo_Click(object sender, EventArgs e)
+        private async Task validaArchivosAsync()
+        {
+            //Cambia de color si validación de integridad es incorrecto
+            cfdi comprobanteCfdi = new cfdi(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
+            foreach (DataGridViewRow row in gridFiles.Rows)
+            {
+                string archivo=String.Empty;
+                string directorio=String.Empty;
+                try
+                {
+                    var item = row.DataBoundItem;
+                    if (item != null)
+                    {
+                        System.Type type = item.GetType();
+                        archivo = (string)type.GetProperty("archivo").GetValue(item, null);
+                        directorio = (string)type.GetProperty("directorio").GetValue(item, null);
+
+                        if (await comprobanteCfdi.ValidarSelloAsync(directorio + "\\" + archivo))
+                            row.Cells[1].Style.BackColor = Color.GreenYellow;
+                        else
+                            row.Cells[1].Style.BackColor = Color.LightGray;
+
+                        gridFiles.Refresh();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblError.Text += "Excepción al validar la integridad de "+ archivo + " " + ex.Message + Environment.NewLine;
+                }
+            }
+
+        }
+
+        private async void tsButtonSeleccionarArchivo_Click(object sender, EventArgs e)
         {
             lblError.Text = "";
             lblProcesos.Text = "";
@@ -601,32 +635,9 @@ namespace CE.WinFormUI
                 gridFiles.AutoGenerateColumns = false;
                 gridFiles.DataSource = bindingSource3;
                 gridFiles.AutoResizeColumns();
+                gridFiles.Refresh();
 
-
-                //Cambia de color si validación de integridad es incorrecto
-                cfdi comprobanteCfdi = new cfdi(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
-                foreach (DataGridViewRow row in gridFiles.Rows)
-                {
-
-                    try
-                    {
-                        var item = row.DataBoundItem;
-                        if (item != null)
-                        {
-                            System.Type type = item.GetType();
-                            string archivo = (string)type.GetProperty("archivo").GetValue(item, null);
-                            string directorio = (string)type.GetProperty("directorio").GetValue(item, null);
-
-                            if (comprobanteCfdi.ValidarSello(directorio + "\\" + archivo))
-                                row.Cells[1].Style.BackColor = Color.Green;
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        lblError.Text += "Validación de integridad. " + ex.Message + Environment.NewLine;
-                    }
-                }
+                await validaArchivosAsync();
 
             }
 
