@@ -97,7 +97,7 @@ namespace CE.Business
                                                 }).ToList();
                             var comprobante = comprobantes[0];
 
-                            var impuestos = (from c in xdoc.Descendants(cfdi + "Impuestos")
+                            var impuestos = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null || x.Attribute("TotalImpuestosRetenidos") != null)
                                              select new
                                              {
                                                  totalImpuestosTrasladados = c.Attribute("TotalImpuestosTrasladados") == null ? "0" : c.Attribute("TotalImpuestosTrasladados").Value,

@@ -18,6 +18,7 @@ namespace CE.WinFormUI
 {
     public partial class Form1 : Form
     {
+        UtilitarioArchivos utileria;
         private List<ParametrosDeArchivo> lParametros = new List<ParametrosDeArchivo>();
         public Form1()
         {
@@ -52,7 +53,11 @@ namespace CE.WinFormUI
             lblUsuario.Text = Environment.UserDomainName + "\\" + Environment.UserName;
             lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
+            lblProcesos.Text = "Iniciando carga de parámetros..." + Environment.NewLine;
             inicializarExportarXML();
+            inicializarImportarXML();
+            lblProcesos.Text = "Listo!" + Environment.NewLine;
+
         }
 
         private void cmbEmpresas_SelectedIndexChanged(object sender, EventArgs e)
@@ -283,7 +288,7 @@ namespace CE.WinFormUI
 
                 if (data != null && data.existe)
                 {
-                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LawnGreen;
                 }
             }
         }
@@ -429,6 +434,11 @@ namespace CE.WinFormUI
         #endregion
 
         #region IMPORTACION DE FACTURAS
+        private void inicializarImportarXML()
+        {
+            utileria = new UtilitarioArchivos(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
+
+        }
 
         private void gridFiles_SelectionChanged(object sender, EventArgs e)
         {
@@ -588,7 +598,7 @@ namespace CE.WinFormUI
 
                         var cmp = await utileria.CargarArchivoAsync(directorio + "\\" + archivo);
                         if (cmp.ValidaSelloAsync())
-                            row.Cells[1].Style.BackColor = Color.GreenYellow;
+                            row.Cells[1].Style.BackColor = Color.LawnGreen;
                         else
                             row.Cells[1].Style.BackColor = Color.LightGray;
 
@@ -605,6 +615,7 @@ namespace CE.WinFormUI
                     lblError.Text += "Excepción al leer "+ archivo + " " + ex.Message + Environment.NewLine;
                 }
             }
+            prbar.Report(0);
         }
 
         private async void tsButtonSeleccionarArchivo_Click(object sender, EventArgs e)
@@ -619,9 +630,6 @@ namespace CE.WinFormUI
             dataGridView6.DataSource = null;
             dataGridView7.DataSource = null;
             tsProgressBar.Value = 0;
-            lblProcesos.Text = "Iniciando carga de parámetros..." + Environment.NewLine; 
-            UtilitarioArchivos utileria = new UtilitarioArchivos(@"http://www.sat.gob.mx/cfd/3", System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_archivoXslt"].ToString());
-            lblProcesos.Text += "Listo para seleccionar archivos..."+Environment.NewLine;
 
             openFileDialog1.Filter = "XML Files|*.xml";
             openFileDialog1.Multiselect = true;
