@@ -104,7 +104,7 @@ namespace CE.Business
                                                  totalImpuestosRetenidos = c.Attribute("TotalImpuestosRetenidos") == null ? "0" : c.Attribute("TotalImpuestosRetenidos").Value
                                              }).ToList();
 
-                            var impuesto = impuestos[0];
+                            //var impuesto = impuestos[0];
 
                             var retenciones = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosRetenidos") != null).Descendants(cfdi + "Retencion")
                                                select new
@@ -239,7 +239,11 @@ namespace CE.Business
                                             totalImpuestosTrasladados += Decimal.Round(decimal.Parse(impuestoLocal.TotaldeTraslados), 2);
                                         }
 
-                                        PMHeader.TAXAMNT = totalImpuestosTrasladados - Decimal.Round(decimal.Parse(impuesto.totalImpuestosRetenidos), 2);
+                                        decimal tImpuestosRetenidos = 0;
+                                        if (impuestos.Count > 0)
+                                            decimal.TryParse(impuestos.First().totalImpuestosRetenidos, out tImpuestosRetenidos);
+
+                                        PMHeader.TAXAMNT = totalImpuestosTrasladados - Decimal.Round(tImpuestosRetenidos, 2);
                                         PMHeader.TRXDSCRN = conceptos[0].descripcion.Length > 30 ? conceptos[0].descripcion.Substring(0, 30) : conceptos[0].descripcion;
                                         PMHeader.SHIPMTHD = System.Configuration.ConfigurationManager.AppSettings[_pre + "_SHIPMTHD"].ToString(); ;
                                         PMHeader.CURNCYID = "MXN";

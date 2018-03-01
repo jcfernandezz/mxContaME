@@ -178,7 +178,7 @@
             // 
             this.versión10ToolStripMenuItem.Name = "versión10ToolStripMenuItem";
             this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
-            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v.4.1.0";
+            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v.4.1.1";
             // 
             // tableLayoutPanel1
             // 
