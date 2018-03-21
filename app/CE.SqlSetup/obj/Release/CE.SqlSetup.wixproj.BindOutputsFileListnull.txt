@@ -1,0 +1,2 @@
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.SqlSetup\bin\Release\CE.SqlSetup.msi
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.SqlSetup\bin\Release\CE.SqlSetup.wixpdb

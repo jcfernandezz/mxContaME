@@ -35,13 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Dynamics.GP.eConnect, Version=14.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+    <Reference Include="Microsoft.Dynamics.GP.eConnect, Version=16.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Microsoft Dynamics\eConnect 14.0\API\Microsoft.Dynamics.GP.eConnect.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Microsoft Dynamics\eConnect 12.0\API\Microsoft.Dynamics.GP.eConnect.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.GP.eConnect.Serialization, Version=14.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+    <Reference Include="Microsoft.Dynamics.GP.eConnect.Serialization, Version=16.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Microsoft Dynamics\eConnect 14.0\API\Microsoft.Dynamics.GP.eConnect.Serialization.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Microsoft Dynamics\eConnect 12.0\API\Microsoft.Dynamics.GP.eConnect.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -53,9 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cfdi.cs" />
+    <Compile Include="UtilitarioArchivos.cs" />
+    <Compile Include="GPCompras.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="LecturaContabilidadFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransformerXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CE.econn10\CE.econn10.csproj">

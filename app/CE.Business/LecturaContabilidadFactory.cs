@@ -24,6 +24,20 @@ namespace CE.Business
         private string _pre = "";
         private string ErroresValidarXml = "";
         private List<string> l_ErroresValidarXml = null;
+        private List<ParametrosDeArchivo> _lParametros = new List<ParametrosDeArchivo>();
+
+        public List<ParametrosDeArchivo> LParametros
+        {
+            get
+            {
+                return _lParametros;
+            }
+
+            set
+            {
+                _lParametros = value;
+            }
+        }
 
         public LecturaContabilidadFactory(string pre)
         {
@@ -156,26 +170,27 @@ namespace CE.Business
         /// <returns></returns>
         public string GetXML2(int year, int perdiodo, string tipo)
         {
-            string tabla = "";
+            var iTipoDoc = _lParametros.Where(x => x.Tipo == tipo);
+            string tabla = iTipoDoc.First().FuncionSql;
 
-            switch (tipo)
-            {
-                case "Auxiliar Cuentas":
-                    tabla = "DCEMFCNAUXILIARCTAS";
-                    break;
-                case "Auxiliar folios":
-                    tabla = "DCEMFCNAUXILIARFOLIOS";
-                    break;
-                case "Balanza":
-                    tabla = "DCEMFCNBALANCE";
-                    break;
-                case "Catálogo":
-                    tabla = "DCEMFCNCATALOGOXML";
-                    break;
-                case "Pólizas":
-                    tabla = "DCEMFCNPOLIZAS";
-                    break;
-            }
+            //switch (tipo)
+            //{
+            //    case "Auxiliar Cuentas":
+            //        tabla = "DCEMFCNAUXILIARCTAS";
+            //        break;
+            //    case "Auxiliar folios":
+            //        tabla = "DCEMFCNAUXILIARFOLIOS";
+            //        break;
+            //    case "Balanza":
+            //        tabla = "DCEMFCNBALANCE";
+            //        break;
+            //    case "Catálogo":
+            //        tabla = "DCEMFCNCATALOGOXML";
+            //        break;
+            //    case "Pólizas":
+            //        tabla = "DCEMFCNPOLIZAS";
+            //        break;
+            //}
 
             string sql = "select dbo."+ tabla +" (@periodid, @year1)";
 
@@ -232,11 +247,11 @@ namespace CE.Business
             }
         }
 
-        void validarUnaPolizaPorVez(string docXml, string esquemaXml)
+        void validarUnaPolizaPorVez(string docXml, string esquemaXml, string nameSpace)
         {
             XmlSchemaSet schemas = new XmlSchemaSet();
             schemas.Add(null, esquemaXml);
-            XNamespace ns = "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
+            XNamespace ns = nameSpace;  // "www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
 
             XDocument xDocAValidar = new XDocument();
             xDocAValidar = XDocument.Parse(docXml);
@@ -289,7 +304,8 @@ namespace CE.Business
         /// <param name="archivo5"></param>
         /// <param name="directorioXSD"></param>
         /// <returns></returns>
-        public List<XmlExportado> ProcesarArchivos(List<DcemVwContabilidad> items, string directorio, string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, string directorioXSD)
+        public List<XmlExportado> ProcesarArchivos(List<DcemVwContabilidad> items, string directorio, string directorioXSD)
+                //string archivo1, string archivo2, string archivo3, string archivo4, string archivo5, 
         {
             string archivo = "";
             
@@ -303,29 +319,12 @@ namespace CE.Business
                 string archivoXSD = directorioXSD;
                 ErroresValidarXml = "";
 
-                switch (item.tipodoc)
+                var iTipoDoc = _lParametros.Where(x => x.Tipo == item.tipodoc);
+                archivo = iTipoDoc.First().Archivo;
+                archivoXSD += iTipoDoc.First().Esquema;
+                if (item.tipodoc.Equals("Pólizas"))
                 {
-                    case "Catálogo":
-                        archivo = archivo1;
-                        archivoXSD += "CatalogoCuentas_1_1.xsd";
-                        break;
-                    case "Balanza":
-                        archivo = archivo2;
-                        archivoXSD += "BalanzaComprobacion_1_1.xsd";
-                        break;
-                    case "Pólizas":
-                        archivo = archivo3;
-                        archivoXSD += "PolizasPeriodo_1_1.xsd";
-                        this.corregirDocsConError("dcem.dcemCorrigePoliza");
-                        break;
-                    case "Auxiliar Cuentas":
-                        archivo = archivo4;
-                        archivoXSD += "AuxiliarCtas_1_1.xsd";
-                        break;
-                    case "Auxiliar folios":
-                        archivo = archivo5;
-                        archivoXSD += "AuxiliarFolios_1_2.xsd";
-                        break;
+                    this.corregirDocsConError("dcem.dcemCorrigePoliza");
                 }
 
                 int version = GetVersionXML(item);
@@ -336,12 +335,9 @@ namespace CE.Business
                 
                 item.catalogo = this.GetXML2(item.year1, item.periodid, item.tipodoc);
 
-                //xml += item.catalogo;
-
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(item.catalogo);
                 XmlElement root = xmlDoc.DocumentElement;
-
                 XmlAttribute attr;
 
                 if (item.TipoSolicitud != null)
@@ -377,9 +373,10 @@ namespace CE.Business
                 System.IO.File.WriteAllText(directorio + "\\" + this.GetRFC() + item.year1.ToString() + item.periodid.ToString().PadLeft(2, '0') + archivo, xml);
                 InsertDatosExportados(item, (Int16)version);
 
+                //Detecta y marca pólizas con error
                 if (item.tipodoc.Equals("Pólizas"))
                 {
-                    validarUnaPolizaPorVez(item.catalogo, archivoXSD);
+                    validarUnaPolizaPorVez(item.catalogo, archivoXSD, iTipoDoc.First().NameSpace);
                     marcarDocsConError("dcem.dcemMarcarPolizasConError", item.year1);
                 }
                 else
@@ -456,781 +453,5 @@ namespace CE.Business
         }
         #endregion
 
-        #region Importar Facturas Electronicas
-        /// <summary>
-        /// Importar facturas a GP
-        /// </summary>
-        /// <param name="archivos">Path de los archivos</param>
-        /// <param name="metodo">1: PM - 2: POP</param>
-        public void ImportarGPPM(List<string> archivos, int metodo)
-        {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-
-            XNamespace cfdi = @"http://www.sat.gob.mx/cfd/3";
-            XNamespace tfd = @"http://www.sat.gob.mx/TimbreFiscalDigital";
-            XNamespace implocal = @"http://www.sat.gob.mx/implocal";
-
-            string BACHNUMB = DateTime.Now.ToString("yyyyMMddHHmmss");
-            string formatoFecha = System.Configuration.ConfigurationManager.AppSettings[_pre + "_FormatoFecha"].ToString();
-
-            foreach (string archivo in archivos)
-            {
-                if (System.IO.File.Exists(archivo))
-                {
-                    using (eConnectMethods eConnectMethods = new eConnectMethods())
-                    {
-                        eConnectMethods.RequireProxyService = true;
-                        
-                        List<PMTransactionType> masterPMTransactionTypes = new List<PMTransactionType>();
-                        List<POPReceivingsType> masterPOPReceivingsTypes = new List<POPReceivingsType>();
-
-
-                        try
-                        {
-                            bool error = false;
-
-                            string xml = System.IO.File.ReadAllText(archivo);
-
-                            XDocument xdoc = XDocument.Parse(xml);
-
-                            PMTransactionType PAInvoiceEntry = new PMTransactionType();
-                            POPReceivingsType POPInvoiceEntry = new POPReceivingsType();
-
-                            taPMTransactionInsert PMHeader = new taPMTransactionInsert();
-                            taPopRcptHdrInsert POPHeader = new taPopRcptHdrInsert();
-
-                            List<taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert> items = new List<taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert>();
-
-                            var comprobantes = (from c in xdoc.Descendants(cfdi + "Comprobante")
-                                                select new
-                                                {
-                                                    folio = c.Attribute("folio") == null ? "" : c.Attribute("folio").Value,
-                                                    fecha = c.Attribute("fecha").Value,
-                                                    formaDePago = c.Attribute("formaDePago").Value,
-                                                    condicionesDePago = c.Attribute("condicionesDePago") == null ? "" : c.Attribute("condicionesDePago").Value,
-                                                    subTotal = c.Attribute("subTotal").Value,
-                                                    TipoCambio = c.Attribute("TipoCambio") == null ? "" : c.Attribute("TipoCambio").Value,
-                                                    Moneda = c.Attribute("Moneda") == null ? "" : c.Attribute("Moneda").Value,
-                                                    total = c.Attribute("total").Value,
-                                                    tipoDeComprobante = c.Attribute("tipoDeComprobante").Value,
-                                                    metodoDePago = c.Attribute("metodoDePago").Value,
-                                                    LugarExpedicion = c.Attribute("LugarExpedicion").Value,
-                                                    Descuento = c.Attribute("descuento") == null ? "0" : c.Attribute("descuento").Value,
-                                                }).ToList();
-
-                            var comprobante = comprobantes[0];
-
-                            var impuestos = (from c in xdoc.Descendants(cfdi + "Impuestos")
-                                             select new
-                                             {
-                                                 totalImpuestosTrasladados = c.Attribute("totalImpuestosTrasladados") == null ? "0" : c.Attribute("totalImpuestosTrasladados").Value,
-                                                 totalImpuestosRetenidos = c.Attribute("totalImpuestosRetenidos") == null ? "0" : c.Attribute("totalImpuestosRetenidos").Value
-                                             }).ToList();
-
-                            var impuesto = impuestos[0];
-
-                            var impuestosLocales = (from c in xdoc.Descendants(implocal + "ImpuestosLocales")
-                                                    select new
-                                                    {
-                                                        TotaldeTraslados = c.Attribute("TotaldeTraslados") == null ? "0" : c.Attribute("TotaldeTraslados").Value,
-                                                        TotaldeRetenciones = c.Attribute("TotaldeRetenciones") == null ? "0" : c.Attribute("TotaldeRetenciones").Value
-                                                    }).ToList();
-
-                            var retenciones = (from c in xdoc.Descendants(cfdi + "Retencion")
-                                               select new
-                                               {
-                                                   impuesto = c.Attribute("impuesto").Value,
-                                                   importe = c.Attribute("importe").Value
-                                               }).ToList();
-
-                            var translados = (from c in xdoc.Descendants(cfdi + "Traslado")
-                                              select new
-                                              {
-                                                  impuesto = c.Attribute("impuesto").Value,
-                                                  tasa = c.Attribute("tasa").Value,
-                                                  importe = c.Attribute("importe").Value
-                                              }).ToList();
-
-                            var implocalTrasladosLocales = (from c in xdoc.Descendants(implocal + "TrasladosLocales")
-                                                            select new
-                                                            {
-                                                                ImpLocTrasladado = c.Attribute("ImpLocTrasladado").Value,
-                                                                TasadeTraslado = c.Attribute("TasadeTraslado").Value,
-                                                                Importe = c.Attribute("Importe").Value
-                                                            }).ToList();
-
-                            var conceptos = (from c in xdoc.Descendants(cfdi + "Concepto")
-                                             select new
-                                             {
-                                                 cantidad = c.Attribute("cantidad").Value,
-                                                 unidad = c.Attribute("unidad").Value,
-                                                 noIdentificacion = c.Attribute("noIdentificacion") == null ? "" : c.Attribute("noIdentificacion").Value,
-                                                 descripcion = c.Attribute("descripcion").Value,
-                                                 valorUnitario = c.Attribute("valorUnitario").Value,
-                                                 importe = c.Attribute("importe").Value
-                                             }).ToList();
-
-                            var emisores = (from c in xdoc.Descendants(cfdi + "Emisor")
-                                            select new
-                                            {
-                                                rfc = c.Attribute("rfc").Value,
-                                                nombre = c.Attribute("nombre") == null ? "" : c.Attribute("nombre").Value
-                                            }).ToList();
-
-                            var emisor = emisores[0];
-
-                            var timbresDigital = (from c in xdoc.Descendants(tfd + "TimbreFiscalDigital")
-                                                  select new
-                                                  {
-                                                      UUID = c.Attribute("UUID").Value
-                                                  }).ToList();
-
-                            var timbreDigital = timbresDigital[0];
-
-                            string vendorid = getVendroID(emisor.rfc);
-                            if (vendorid == null)
-                            {
-                                ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                args.Archivo = archivo;
-                                args.Error = "Proveedor " + emisor.rfc + " no encontrado";
-
-                                OnErrorImportarPM(args);
-
-                                error = true;
-                            }
-                            else
-                            {
-                                string folio = comprobante.folio;
-                                if (folio == "")
-                                {
-                                    var numeros = timbreDigital.UUID.Substring(timbreDigital.UUID.Length - 6, 6);
-                                    folio = numeros;
-                                }
-
-                                string VCHRNMBR = "";
-                                if (metodo == 1)
-                                    VCHRNMBR = this.GetVchrnmbrFacturaExists(vendorid, folio, 1, DateTime.Parse(comprobante.fecha).Date, decimal.Parse(comprobante.total));
-                                else
-                                    if (metodo == 2)
-                                        VCHRNMBR = this.FacturaPOPExists(vendorid, folio, DateTime.Parse(comprobante.fecha).Date);
-
-                                if (VCHRNMBR == null)
-                                {
-                                    //la factura no existe en GP
-                                    //Factura tipo POP
-                                    if (metodo == 2)
-                                    {
-                                        VCHRNMBR = getNum(metodo);
-
-                                        POPHeader.POPRCTNM = VCHRNMBR;
-                                        POPHeader.POPTYPE = 1;
-                                        POPHeader.VNDDOCNM = folio;
-                                        POPHeader.receiptdate = DateTime.Parse(comprobante.fecha).ToString(formatoFecha);
-                                        POPHeader.BACHNUMB = BACHNUMB;
-                                        POPHeader.VENDORID = vendorid;
-                                        POPHeader.REFRENCE = conceptos.First().descripcion.Length > 30 ? conceptos.First().descripcion.Substring(0, 30) : conceptos.First().descripcion;
-                                        POPHeader.CURNCYID = "MXN";
-                                        POPHeader.DISAVAMT = 0;
-                                    }
-
-                                    //Factura tipo PM
-                                    if (metodo == 1)
-                                    {
-                                        PMHeader.BACHNUMB = BACHNUMB;
-
-                                        VCHRNMBR = getNum(metodo);
-                                        PMHeader.VCHNUMWK = VCHRNMBR;
-
-                                        PMHeader.VENDORID = vendorid;
-                                        PMHeader.DOCNUMBR = folio;
-                                        PMHeader.DOCTYPE = 1;
-                                        PMHeader.DOCAMNT = Decimal.Round( decimal.Parse(comprobante.total), 2);
-                                        PMHeader.CHRGAMNT = PMHeader.DOCAMNT;
-                                        PMHeader.DOCDATE = DateTime.Parse(comprobante.fecha).ToString(formatoFecha);
-                                        PMHeader.TAXSCHID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_TAXSCHID"].ToString();
-                                        PMHeader.PRCHAMNT = Decimal.Round( decimal.Parse(comprobante.subTotal), 2);
-                                        PMHeader.TRDISAMT = Decimal.Round( decimal.Parse(comprobante.Descuento), 2);
-
-                                        decimal totalImpuestosTrasladados = 0;
-                                        if (translados.Count > 0)
-                                            totalImpuestosTrasladados = Decimal.Round( translados.Sum(x => decimal.Parse(x.importe)), 2);
-                                                            
-                                        //decimal totalImpuestosTrasladados = decimal.Parse(impuesto.totalImpuestosTrasladados);
-                                        if (impuestosLocales.Count > 0)
-                                        {
-                                            var impuestoLocal = impuestosLocales[0];
-                                            totalImpuestosTrasladados += Decimal.Round( decimal.Parse(impuestoLocal.TotaldeTraslados), 2);
-                                        }
-
-                                        PMHeader.TAXAMNT = totalImpuestosTrasladados - Decimal.Round( decimal.Parse(impuesto.totalImpuestosRetenidos), 2);
-                                        PMHeader.TRXDSCRN = conceptos[0].descripcion.Length > 30 ? conceptos[0].descripcion.Substring(0, 30) : conceptos[0].descripcion;
-                                        PMHeader.SHIPMTHD = System.Configuration.ConfigurationManager.AppSettings[_pre + "_SHIPMTHD"].ToString(); ;
-                                        PMHeader.CURNCYID = "MXN";
-                                        PMHeader.CREATEDIST = 1;
-
-                                        //DOCAMNT = MSCCHAMT + PRCHAMNT + TAXAMNT + FRTAMNT - TRDISAMT
-
-                                        decimal totalCalculo = PMHeader.PRCHAMNT + PMHeader.TAXAMNT - PMHeader.TRDISAMT;
-                                        PMHeader.MSCCHAMT = PMHeader.DOCAMNT - totalCalculo;
-                                        
-                                        #region Retenciones
-                                        var retencionGroup = retenciones
-                                                            .GroupBy(x => new { x.importe, x.impuesto })
-                                                            .Select(g => new
-                                                            {
-                                                                g.Key.impuesto,
-                                                                importe = g.Sum(y => decimal.Parse(y.importe))
-                                                            });
-
-                                        foreach (var retencion in retencionGroup)
-                                        {
-                                            taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
-
-                                            item.VENDORID = PMHeader.VENDORID;
-                                            item.VCHRNMBR = PMHeader.VCHNUMWK;
-                                            item.DOCTYPE = PMHeader.DOCTYPE;
-                                            item.BACHNUMB = PMHeader.BACHNUMB;
-
-                                            if (retencion.impuesto.Trim() == "ISR")
-                                                item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_ret_ISR"].ToString();
-                                            else
-                                                if (retencion.impuesto.Trim() == "IVA")
-                                                {
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_ret_IVA"].ToString();
-                                                }
-                                                else
-                                                {
-                                                    error = true;
-
-                                                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                    args.Archivo = archivo;
-                                                    args.Error = "Error en retención";
-
-                                                    OnErrorImportarPM(args);
-                                                }
-
-                                            item.TAXAMNT = -1 * Decimal.Round( retencion.importe, 2);
-                                            item.TDTTXPUR = PMHeader.PRCHAMNT;
-                                            item.TXDTTPUR = PMHeader.PRCHAMNT;
-
-                                            items.Add(item);
-                                        }
-                                        #endregion
-
-                                        #region Traslados
-                                        var trasladoGroup = translados
-                                                            .GroupBy(x => new { x.tasa, x.impuesto })
-                                                            .Select(g => new
-                                                            {
-                                                                g.Key.impuesto,
-                                                                g.Key.tasa,
-                                                                importe = g.Sum(y => decimal.Parse(y.importe))
-                                                            });
-
-                                        foreach (var retencion in trasladoGroup)
-                                        {
-                                            taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
-
-                                            item.VENDORID = PMHeader.VENDORID;
-                                            item.VCHRNMBR = PMHeader.VCHNUMWK;
-                                            item.DOCTYPE = PMHeader.DOCTYPE;
-                                            item.BACHNUMB = PMHeader.BACHNUMB;
-
-                                            if (retencion.impuesto.Trim() == "IVA")
-                                            {
-                                                if (decimal.Parse(retencion.tasa) == 0)
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA0"].ToString();
-                                                else
-                                                    if (decimal.Parse(retencion.tasa) == 11)
-                                                        item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA11"].ToString();
-                                                    else
-                                                        if (decimal.Parse(retencion.tasa) == 16)
-                                                            item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA16"].ToString();
-                                                        else
-                                                        {
-                                                            error = true;
-
-                                                            ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                            args.Archivo = archivo;
-                                                            args.Error = "Error en traslados";
-
-                                                            OnErrorImportarPM(args);
-                                                        }
-
-                                            }
-                                            else
-                                            {
-                                                if (retencion.impuesto.Trim() == "IEPS")
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IEPS"].ToString();
-                                                else
-                                                {
-                                                    error = true;
-
-                                                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                    args.Archivo = archivo;
-                                                    args.Error = "Error en traslados";
-
-                                                    OnErrorImportarPM(args);
-                                                }
-                                            }
-
-                                            item.TAXAMNT = Decimal.Round( retencion.importe, 2);
-                                            item.TDTTXPUR = PMHeader.PRCHAMNT;
-                                            item.TXDTTPUR = PMHeader.PRCHAMNT;
-
-                                            items.Add(item);
-                                        }
-                                        
-                                        foreach (var implocalTrasladosLocal in implocalTrasladosLocales)
-                                        {
-                                            taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
-
-                                            item.VENDORID = PMHeader.VENDORID;
-                                            item.VCHRNMBR = PMHeader.VCHNUMWK;
-                                            item.DOCTYPE = PMHeader.DOCTYPE;
-                                            item.BACHNUMB = PMHeader.BACHNUMB;
-
-                                            if (implocalTrasladosLocal.ImpLocTrasladado == "ISH" || implocalTrasladosLocal.ImpLocTrasladado == "IMPUESTO SOBRE HOSPEDAJE")
-                                            {
-                                                item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_loctra_ISH"].ToString();
-                                            }
-                                            else
-                                            {
-                                                error = true;
-
-                                                ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                args.Archivo = archivo;
-                                                args.Error = "Error en traslados";
-
-                                                OnErrorImportarPM(args);
-                                            }
-
-                                            item.TAXAMNT = Decimal.Round( decimal.Parse(implocalTrasladosLocal.Importe), 2);
-                                            item.TDTTXPUR = PMHeader.PRCHAMNT;
-                                            item.TXDTTPUR = PMHeader.PRCHAMNT;
-
-                                            items.Add(item);
-                                        }
-                                    }
-                                    #endregion
-
-                                    if (!error)
-                                    {
-                                        // Serialize the master vendor type in memory.
-                                        eConnectType eConnectType = new eConnectType();
-                                        MemoryStream memoryStream = new MemoryStream();
-                                        XmlSerializer xmlSerializer = new XmlSerializer(eConnectType.GetType());
-
-                                        if (metodo == 1)
-                                        {
-                                            PAInvoiceEntry.taPMTransactionInsert = PMHeader;
-                                            PAInvoiceEntry.taPMTransactionTaxInsert_Items = items.ToArray();
-                                            masterPMTransactionTypes.Add(PAInvoiceEntry);
-
-                                            // Assign the master vendor types to the eConnectType.
-                                            eConnectType.PMTransactionType = masterPMTransactionTypes.ToArray();
-                                        }
-
-                                        if (metodo == 2)
-                                        {
-                                            POPInvoiceEntry.taPopRcptHdrInsert = POPHeader;
-                                            masterPOPReceivingsTypes.Add(POPInvoiceEntry);
-
-                                            // Assign the master vendor types to the eConnectType.
-                                            eConnectType.POPReceivingsType = masterPOPReceivingsTypes.ToArray();
-                                        }
-
-                                        // Serialize the eConnectType.
-                                        xmlSerializer.Serialize(memoryStream, eConnectType);
-
-                                        // Reset the position of the memory stream to the start.              
-                                        memoryStream.Position = 0;
-
-                                        // Create an XmlDocument from the serialized eConnectType in memory.
-                                        XmlDocument xmlDocument = new XmlDocument();
-                                        xmlDocument.Load(memoryStream);
-                                        memoryStream.Close();
-
-                                        string xmlEconn = xmlDocument.OuterXml;
-                                        //xmlEconn = xmlEconn.Replace("</CURNCYID>", "</CURNCYID><DISAVAMT>0</DISAVAMT><ORTDISAM>0</ORTDISAM>");
-
-                                        /*
-                                        ErrorImportarPMEventArgs argse = new ErrorImportarPMEventArgs();
-                                        argse.Archivo = archivo;
-                                        argse.Error = xmlEconn;
-                                        OnErrorImportarPM(argse);
-                                        */
-                                        
-                                        // Call eConnect to process the XmlDocument.
-                                        if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "2010")
-                                            eConnectMethods.CreateEntity(connectionString, xmlEconn);
-                                        else
-                                            if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "10")
-                                            {
-                                                econn10.process p = new econn10.process(_pre);
-                                                p.Execute(xmlEconn);
-                                            }
-
-                                        if (metodo == 1)
-                                            this.FixDistributions(VCHRNMBR);
-                                        else
-                                            if (metodo == 2)
-                                                this.ChangePopType(VCHRNMBR);
-
-                                        ProcesoOkImportarPMEventArgs args = new ProcesoOkImportarPMEventArgs();
-                                        args.Archivo = archivo;
-                                        args.Msg = "Factura Importada";
-
-                                        OnProcesoOkImportarPM(args);
-                                        System.Threading.Thread.Sleep(100);
-                                    }
-                                }
-                                else
-                                {
-                                    //factura ya existe en GP
-                                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                    args.Archivo = archivo;
-                                    args.Error = "Factura existente";
-
-                                    OnErrorImportarPM(args);
-                                }
-
-                                if (!error)
-                                {
-                                    if (!this.FolioExists(1, VCHRNMBR))
-                                    {
-                                        this.InsertFolio(1, VCHRNMBR, timbreDigital.UUID);
-
-                                        ProcesoOkImportarPMEventArgs args = new ProcesoOkImportarPMEventArgs();
-                                        args.Archivo = archivo;
-                                        args.Msg = "Folio Importado";
-
-                                        OnProcesoOkImportarPM(args);
-                                        System.Threading.Thread.Sleep(100);
-                                    }
-                                    else
-                                    {
-                                        ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                        args.Archivo = archivo;
-                                        args.Error = "Folio ya cargado";
-
-                                        OnErrorImportarPM(args);
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                            args.Archivo = archivo;
-                            args.Error = ex.Message + " - " + ex.StackTrace + " - " + ex.Source;
-
-                            OnErrorImportarPM(args);
-                        }
-                        finally
-                        {
-                            eConnectMethods.Dispose();
-                        }
-                    }
-                }
-            }
-        }
-            
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="metodo">1: PM - 2: POP</param>
-        /// <returns></returns>
-        private string getNum(int metodo)
-        {
-            if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "2010")
-            {
-                GetNextDocNumbers myDocNumbers = new GetNextDocNumbers();
-                GetSopNumber mySopNumber = new GetSopNumber();
-
-                //n.Add(mySopNumber.GetNextSopNumber(3, "STDINV", connString));
-
-                // Use each method of the GetNextDocNumber object to retrieve the next document number 
-                // for the available Microsoft Dynamics GP document types
-                if (metodo == 1)
-                    return myDocNumbers.GetPMNextVoucherNumber(IncrementDecrement.Increment, connectionString);
-                else
-                    if (metodo == 2)
-                        return myDocNumbers.GetNextPOPReceiptNumber(IncrementDecrement.Increment, connectionString);
-                    else
-                        return null;
-            }
-            else
-                if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "10")
-                {
-                    econn10.process p = new econn10.process(_pre);
-                    return p.getNum(metodo);
-                }
-                else
-                    return null;
-        }
-
-        private string getVendroID(string rfc)
-        {
-            string sql = "select vendorid from pm00200 where txrgnnum = @txrgnnum";
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                cmd.Parameters.Add("@txrgnnum", SqlDbType.VarChar, 50).Value = rfc;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
-                        return dt.Rows[0]["vendorid"].ToString();
-                    else
-                        return null;
-                }
-            }
-        }
-
-        public string GetVchrnmbrFacturaExists(string VENDORID, string DOCNUMBR, Int16 DOCTYPE, DateTime DOCDATE, decimal DOCAMNT)
-        {
-            return GetVchrnmbrFactura(VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-        }
-
-        private string GetVchrnmbrFactura(string VENDORID, string DOCNUMBR, Int16 DOCTYPE, DateTime DOCDATE, decimal DOCAMNT)
-        {
-            string Vchrnmbr = null;
-
-            Vchrnmbr = FacturaExists("pm20000", "VCHRNMBR", VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-            if (Vchrnmbr == null)
-                Vchrnmbr = FacturaExists("pm30200", "VCHRNMBR", VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-            if (Vchrnmbr == null)
-                Vchrnmbr = FacturaExists("pm10000", "VCHRNMBR", VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-
-            /*
-            if (Vchrnmbr == null)
-                Vchrnmbr = FacturaExists("PM00400", "VCHRNMBR", VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-            if (Vchrnmbr == null)
-                Vchrnmbr = FacturaExists("POP10300", "VCHRNMBR", VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-            if (Vchrnmbr == null)
-                Vchrnmbr = FacturaExists("MC020103", "VCHRNMBR", VENDORID, DOCNUMBR, DOCTYPE, DOCDATE, DOCAMNT);
-            */
-
-            return Vchrnmbr;
-        }
-
-        private string FacturaExists(string tabla, string campo, string VENDORID, string DOCNUMBR, Int16 DOCTYPE, DateTime DOCDATE, decimal DOCAMNT)
-        {
-            //string sql = "select "+ campo +" from " + tabla + " where VENDORID = @VENDORID and DOCNUMBR = @DOCNUMBR and DOCTYPE = @DOCTYPE and DOCDATE = @DOCDATE and DOCAMNT = @DOCAMNT";
-            string sql = "select " + campo + " from " + tabla + " where VENDORID = @VENDORID and DOCNUMBR = @DOCNUMBR";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@VENDORID", SqlDbType.VarChar, 15).Value = VENDORID;
-                cmd.Parameters.Add("@DOCNUMBR", SqlDbType.VarChar, 21).Value = DOCNUMBR;
-                //cmd.Parameters.Add("@DOCTYPE", SqlDbType.SmallInt).Value = DOCTYPE;
-                //cmd.Parameters.Add("@DOCDATE", SqlDbType.DateTime).Value = DOCDATE;
-                //cmd.Parameters.Add("@DOCAMNT", SqlDbType.Decimal).Value = DOCAMNT;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
-                        return dt.Rows[0][campo].ToString();
-                    else
-                        return null;
-                }
-            }
-        }
-
-        private string FacturaPOPExists(string VENDORID, string DOCNUMBR, DateTime DOCDATE)
-        {
-            //string sql = "select POPRCTNM from POP10300 where VENDORID = @VENDORID and VNDDOCNM = @DOCNUMBR and receiptdate = @DOCDATE";
-            string sql = "select POPRCTNM from vwPopPmDocumentosDeCompraLoteAbieHist where VENDORID = @VENDORID and VNDDOCNM = @DOCNUMBR";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@VENDORID", SqlDbType.VarChar, 15).Value = VENDORID;
-                cmd.Parameters.Add("@DOCNUMBR", SqlDbType.VarChar, 21).Value = DOCNUMBR;
-                //cmd.Parameters.Add("@DOCDATE", SqlDbType.DateTime).Value = DOCDATE;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
-                        return dt.Rows[0]["POPRCTNM"].ToString();
-                    else
-                        return null;
-                }
-            }
-        }
-
-        public bool FolioExistsBlank(Int16 DOCTYPE, string VCHRNMBR)
-        {
-            string sql = "select * from ACA_IETU00400 where DOCTYPE = @DOCTYPE and VCHRNMBR = @VCHRNMBR";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@VCHRNMBR", SqlDbType.VarChar, 21).Value = VCHRNMBR;
-                cmd.Parameters.Add("@DOCTYPE", SqlDbType.SmallInt).Value = DOCTYPE;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    return (dt.Rows.Count > 0 && dt.Rows[0]["MexFolioFiscal"].ToString().Trim() == "");
-                }
-            }
-        }
-
-        public bool FolioExists(Int16 DOCTYPE, string VCHRNMBR)
-        {
-            string sql = "select * from ACA_IETU00400 where DOCTYPE = @DOCTYPE and VCHRNMBR = @VCHRNMBR";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@VCHRNMBR", SqlDbType.VarChar, 21).Value = VCHRNMBR;
-                cmd.Parameters.Add("@DOCTYPE", SqlDbType.SmallInt).Value = DOCTYPE;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    return (dt.Rows.Count > 0 && dt.Rows[0]["MexFolioFiscal"].ToString().Trim() != "");
-                }
-            }
-        }
-
-        public void ChangePopType(string VCHRNMBR)
-        {
-            string sql = "update POP10300 set poptype=3 where POPRCTNM = @VCHRNMBR";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@VCHRNMBR", SqlDbType.VarChar, 21).Value = VCHRNMBR;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void InsertFolio(Int16 DOCTYPE, string VCHRNMBR, string uuid)
-        {
-            string sql = "";
-
-            if (!this.FolioExistsBlank(DOCTYPE, VCHRNMBR))
-                sql = "insert into ACA_IETU00400 (DOCTYPE, VCHRNMBR, ACA_Gasto, ACA_IVA, MexFolioFiscal) values (@DOCTYPE, @VCHRNMBR, 1, 1, @MexFolioFiscal)";
-            else
-                sql = "update ACA_IETU00400 set MexFolioFiscal = @MexFolioFiscal where DOCTYPE = @DOCTYPE and VCHRNMBR = @VCHRNMBR";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@DOCTYPE", SqlDbType.SmallInt).Value = DOCTYPE;
-                cmd.Parameters.Add("@VCHRNMBR", SqlDbType.VarChar, 21).Value = VCHRNMBR;
-                cmd.Parameters.Add("@MexFolioFiscal", SqlDbType.VarChar, 41).Value = uuid;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void FixDistributions(string VCHRNMBR)
-        {
-            string sql = "update pm10100 set CRDTAMNT= DEBITAMT*-1 , DEBITAMT=0 where VCHRNMBR = @VCHRNMBR and DEBITAMT<0";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.CommandType = CommandType.Text;
-                //cmd.CommandTimeout = Settings.Default.reportTimeout;
-                cmd.Parameters.Add("@VCHRNMBR", SqlDbType.VarChar, 21).Value = VCHRNMBR;
-
-                cmd.CommandTimeout = 0;
-                cmd.Connection.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
-        #endregion
-
-        #region Eventos
-        #region Error
-        public event EventHandler<ErrorImportarPMEventArgs> ErrorImportarPM;
-
-        protected virtual void OnErrorImportarPM(ErrorImportarPMEventArgs e)
-        {
-            EventHandler<ErrorImportarPMEventArgs> handler = ErrorImportarPM;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        public class ErrorImportarPMEventArgs : EventArgs
-        {
-            public string Archivo { get; set; }
-            public string Error { get; set; }
-        }
-        #endregion
-
-        #region OK
-        public event EventHandler<ProcesoOkImportarPMEventArgs> ProcesoOkImportarPM;
-
-        protected virtual void OnProcesoOkImportarPM(ProcesoOkImportarPMEventArgs e)
-        {
-            EventHandler<ProcesoOkImportarPMEventArgs> handler = ProcesoOkImportarPM;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        public class ProcesoOkImportarPMEventArgs : EventArgs
-        {
-            public string Archivo { get; set; }
-            public string Msg { get; set; }
-        }
-        #endregion
-        #endregion
     }
 }

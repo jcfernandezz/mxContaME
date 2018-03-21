@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension">
+
+  <Product Id="8E040966-CF0D-4629-BE31-0AFCE9C95FF8"
+           Name="GP Contabilidad Electrónica 1.3 Sql Setup"
+           Language="1033"
+           Version="4.0.0.0"
+           Manufacturer="JCF"
+           UpgradeCode="8E607B01-0D14-4C3E-B135-53631A6B44FF">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
+    
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+    
+    <!-- Define Installation folder-->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="StartMenuFolder"/>
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="MainDirectory" Name="Microsoft Dynamics">
+          <Directory Id="INSTALLFOLDER" Name="GP Contabilidad Electrónica 1.3 Sql Setup">
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!-- Define Installation components-->
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!--<Component Id="SqlComponentDyn" Guid="116E3271-192B-4ea7-8CB3-E91CDA1B8C03" KeyPath="yes">
+        <sql:SqlDatabase Id="SqlDatabaseDyn" User="SQLUser" Server="[SQLSERVER]" Database="DYNAMICS" CreateOnInstall="no" DropOnUninstall="no" ContinueOnError="yes">
+          <sql:SqlScript Id="Createview01" BinaryKey="Createview01" ExecuteOnInstall="yes" Sequence="30" ContinueOnError="no"/>
+          <sql:SqlScript Id="Grants02" BinaryKey="Grants02" ExecuteOnInstall="yes" Sequence="1000" ContinueOnError="no"/>
+        </sql:SqlDatabase>
+      </Component>-->
+
+      <Component Id="SqlComponent" Guid="7c32cf65-e060-4c7f-b5dd-d85c181da89c" KeyPath="yes">
+        <sql:SqlDatabase Id="SqlDatabase" User="SQLUser" Server="[SQLSERVER]" Database="[SQLDATABASE]" CreateOnInstall="no" DropOnUninstall="no" ContinueOnError="yes" >
+          <sql:SqlScript Id="CreateBaseView02" BinaryKey="CreateBaseView02" ExecuteOnInstall="yes" Sequence="02" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateBaseView04" BinaryKey="CreateBaseView04" ExecuteOnInstall="yes" Sequence="04" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateBaseView06" BinaryKey="CreateBaseView06" ExecuteOnInstall="yes" Sequence="06" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateBaseView08" BinaryKey="CreateBaseView08" ExecuteOnInstall="yes" Sequence="08" ExecuteOnReinstall="yes"/>          
+          <sql:SqlScript Id="CreateBaseView10" BinaryKey="CreateBaseView10" ExecuteOnInstall="yes" Sequence="10" ExecuteOnReinstall="yes"/>          
+          <sql:SqlScript Id="CreateBaseView12" BinaryKey="CreateBaseView12" ExecuteOnInstall="yes" Sequence="12" ExecuteOnReinstall="yes"/>          
+          
+          <sql:SqlScript Id="CreateObj010" BinaryKey="CreateObj010" ExecuteOnInstall="yes" Sequence="010" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj013" BinaryKey="CreateObj013" ExecuteOnInstall="yes" Sequence="013" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj016" BinaryKey="CreateObj016" ExecuteOnInstall="yes" Sequence="016" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj019" BinaryKey="CreateObj019" ExecuteOnInstall="yes" Sequence="019" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj022" BinaryKey="CreateObj022" ExecuteOnInstall="yes" Sequence="022" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj025" BinaryKey="CreateObj025" ExecuteOnInstall="yes" Sequence="025" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj028" BinaryKey="CreateObj028" ExecuteOnInstall="yes" Sequence="028" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj031" BinaryKey="CreateObj031" ExecuteOnInstall="yes" Sequence="031" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj034" BinaryKey="CreateObj034" ExecuteOnInstall="yes" Sequence="034" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj037" BinaryKey="CreateObj037" ExecuteOnInstall="yes" Sequence="037" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj040" BinaryKey="CreateObj040" ExecuteOnInstall="yes" Sequence="040" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj043" BinaryKey="CreateObj043" ExecuteOnInstall="yes" Sequence="043" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj046" BinaryKey="CreateObj046" ExecuteOnInstall="yes" Sequence="046" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj049" BinaryKey="CreateObj049" ExecuteOnInstall="yes" Sequence="049" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj052" BinaryKey="CreateObj052" ExecuteOnInstall="yes" Sequence="052" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj055" BinaryKey="CreateObj055" ExecuteOnInstall="yes" Sequence="055" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj058" BinaryKey="CreateObj058" ExecuteOnInstall="yes" Sequence="058" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj061" BinaryKey="CreateObj061" ExecuteOnInstall="yes" Sequence="061" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj064" BinaryKey="CreateObj064" ExecuteOnInstall="yes" Sequence="064" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj067" BinaryKey="CreateObj067" ExecuteOnInstall="yes" Sequence="067" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj070" BinaryKey="CreateObj070" ExecuteOnInstall="yes" Sequence="070" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj073" BinaryKey="CreateObj073" ExecuteOnInstall="yes" Sequence="073" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj076" BinaryKey="CreateObj076" ExecuteOnInstall="yes" Sequence="076" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj079" BinaryKey="CreateObj079" ExecuteOnInstall="yes" Sequence="079" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj082" BinaryKey="CreateObj082" ExecuteOnInstall="yes" Sequence="082" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj085" BinaryKey="CreateObj085" ExecuteOnInstall="yes" Sequence="085" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj088" BinaryKey="CreateObj088" ExecuteOnInstall="yes" Sequence="088" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj091" BinaryKey="CreateObj091" ExecuteOnInstall="yes" Sequence="091" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj094" BinaryKey="CreateObj094" ExecuteOnInstall="yes" Sequence="094" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj097" BinaryKey="CreateObj097" ExecuteOnInstall="yes" Sequence="097" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj100" BinaryKey="CreateObj100" ExecuteOnInstall="yes" Sequence="100" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj103" BinaryKey="CreateObj103" ExecuteOnInstall="yes" Sequence="103" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj106" BinaryKey="CreateObj106" ExecuteOnInstall="yes" Sequence="106" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj109" BinaryKey="CreateObj109" ExecuteOnInstall="yes" Sequence="109" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj112" BinaryKey="CreateObj112" ExecuteOnInstall="yes" Sequence="112" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj115" BinaryKey="CreateObj115" ExecuteOnInstall="yes" Sequence="115" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj118" BinaryKey="CreateObj118" ExecuteOnInstall="yes" Sequence="118" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj121" BinaryKey="CreateObj121" ExecuteOnInstall="yes" Sequence="121" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj124" BinaryKey="CreateObj124" ExecuteOnInstall="yes" Sequence="124" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj127" BinaryKey="CreateObj127" ExecuteOnInstall="yes" Sequence="127" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj130" BinaryKey="CreateObj130" ExecuteOnInstall="yes" Sequence="130" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj133" BinaryKey="CreateObj133" ExecuteOnInstall="yes" Sequence="133" ExecuteOnReinstall="yes"/>
+          <sql:SqlScript Id="CreateObj136" BinaryKey="CreateObj136" ExecuteOnInstall="yes" Sequence="136" ExecuteOnReinstall="yes"/>
+
+      </sql:SqlDatabase>
+      </Component>
+
+    </ComponentGroup>
+
+    <!--Install-->
+    <Feature Id="Complete" Title="GP Contabilidad Electrónica Sql Config" Level="1" Description="Objetos sql." Display="expand" ConfigurableDirectory="INSTALLFOLDER">
+      <!--<Feature Id="SqlFeatureDyn" Title="Objetos Sql Dynamics" Description="Tablas, vistas y procedimientos almacenados de Dynamics." Level="1">
+        <ComponentRef Id="SqlComponentDyn" />
+        <ComponentGroupRef Id="ProductComponents" />
+      </Feature>-->
+
+      <Feature Id="SqlFeature" Title="Objetos Sql Compañía" Description="Tablas, vistas y procedimientos almacenados de la Compañía." Level="1">
+        <ComponentRef Id="SqlComponent" />
+        <ComponentGroupRef Id="ProductComponents" />
+      </Feature>
+
+    </Feature>
+
+    <Binary Id="CreateBaseView02" SourceFile="C:\jcTii\GPRelational\pmVwPmAplicados.view.sql"/>
+    <Binary Id="CreateBaseView04" SourceFile="C:\jcTii\GPRelational\pmVwTransaccionesTodas.view.sql"/>
+    <Binary Id="CreateBaseView06" SourceFile="C:\jcTii\GPRelational\popVwPopRecepcionesHdr.view.sql"/>
+    <Binary Id="CreateBaseView08" SourceFile="C:\jcTii\GPRelational\rmvwRmTransaccionesTodas.view.sql"/>
+    <Binary Id="CreateBaseView10" SourceFile="C:\jcTii\GPRelational\popvwPopPmDocumentosDeCompraLoteAbieHist.view.sql"/>
+    <Binary Id="CreateBaseView12" SourceFile="C:\jcTii\GPRelational\cmFnGetDatosDeChequera.function.sql"/>
+
+    <Binary Id="CreateObj010" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\01_dcemPoliza.table.sql"/>
+    <Binary Id="CreateObj013" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\02_dcemFnParametros.function.sql"/>
+    <Binary Id="CreateObj016" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\07_dcemFnGetSegmento2.sql"/>
+    <Binary Id="CreateObj019" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\08_dcemFnGetDatosBancoDelProveedor.function.sql"/>
+    <Binary Id="CreateObj022" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\09_dcemFnGetDatosBancarios.function.sql"/>
+    <Binary Id="CreateObj025" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\10_dcemFnGetMCP.function_con_mcp.sql"/>
+    <Binary Id="CreateObj028" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\14_dcemFnGetMetodosPagoPM.function.sql"/>
+    <Binary Id="CreateObj031" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\16_dcemFnGetMetodosPagoRM.function.sql"/>
+    <Binary Id="CreateObj034" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\18_dcemFnGetPMtrx.function.sql"/>
+    <Binary Id="CreateObj037" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\20_dcemFnGetRMtrx.function.sql"/>
+    <Binary Id="CreateObj040" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\21_DcemFcnGetFolioFiscalDeDocs.function.sql"/>
+    <Binary Id="CreateObj043" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\22_dcemFnGetDocumentoOriginal.function.sql"/>
+    <Binary Id="CreateObj046" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\50_dcemFcnReplace.function.sql"/>
+    <Binary Id="CreateObj049" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\59_DcemFcnCatalogoCtasXML.function.sql"/>
+    <Binary Id="CreateObj052" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\60_DcemFcnCatalogoXML.function.sql"/>
+    <Binary Id="CreateObj055" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\61_dcemvwSaldos.view.sql"/>
+    <Binary Id="CreateObj058" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\62_DcemFcnObtieneSaldo.function.sql"/>
+    <Binary Id="CreateObj061" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\62_DcemFcnObtieneSaldoTab.function.sql"/>
+    <Binary Id="CreateObj064" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\63_dcemfcnctas.function.sql"/>
+    <Binary Id="CreateObj067" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\65_DcemFcnBalance.function.sql"/>
+    <Binary Id="CreateObj070" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\70_dcemvwtransaccion.view.sql"/>
+    <Binary Id="CreateObj073" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\74_DcemFcnDocNac.function.sql"/>
+    <Binary Id="CreateObj076" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\75_dcemFcnDocExt.function.sql"/>
+    <Binary Id="CreateObj079" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\76_DcemFcnCheque.function.sql"/>
+    <Binary Id="CreateObj082" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\77_DcemFcnTransferencia.function.sql"/>
+    <Binary Id="CreateObj085" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\78_dcemFcnOtro.function.sql"/>
+    <Binary Id="CreateObj088" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\79_DcemFcnTransaccion.function.sql"/>
+    <Binary Id="CreateObj091" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\80_DcemFcnGetPolizaDesdeTabla.sql"/>
+    <Binary Id="CreateObj094" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\80_dcemFcnPoliza.function.sql"/>
+    <Binary Id="CreateObj097" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\81_dcemFcnPolizas.function.sql"/>
+    <Binary Id="CreateObj100" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\82_DcemFcnDocNacFolio.function.sql"/>
+    <Binary Id="CreateObj103" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\83_DcemFcnDocExtFolio.function.sql"/>
+    <Binary Id="CreateObj106" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\84_DcemFcnDetFolios.function.sql"/>
+    <Binary Id="CreateObj109" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\85_DcemFcnAuxiliarFolios.function.sql"/>
+    <Binary Id="CreateObj112" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\86_dcemFcnObtieneSaldo.function.sql"/>
+    <Binary Id="CreateObj115" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\87_DcemFcnDetalleAux.function.sql"/>
+    <Binary Id="CreateObj118" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\88_dcemfcnctasblz.function.sql"/>
+    <Binary Id="CreateObj121" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\89_DcemFcnAuxiliarCtas.function.sql"/>
+    <Binary Id="CreateObj124" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\90_DcemVwContabilidad.view.sql"/>
+    <Binary Id="CreateObj127" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\91_dcemCorrigePoliza.sprocedure.sql"/>
+    <Binary Id="CreateObj130" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\91_dcemMarcarPolizasConError.sprocedure.sql"/>
+    <Binary Id="CreateObj133" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\92_PreprocesaArchivosDeContaElectronica.sprocedure.sql"/>
+    <Binary Id="CreateObj135" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\94_dcemContabilidadExportados.table.sql"/>
+    <Binary Id="CreateObj136" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\95_DaPermisosContaElectronica.grant.sql"/>
+
+    
+
+    <util:User Id="SQLUser" Name="[SQLUSER]" Password="[SQLPASSWORD]"></util:User>
+    <!--Variables SQL-->
+    <Property Id="SQLUSER">sa</Property>
+    <Property Id="SQLPASSWORD">password</Property>
+    <Property Id="SQLSERVER">servidor\instancia</Property>
+    <Property Id="SQLDATABASE">bd</Property>
+
+    <UI Id="MyWixUI_Mondo">
+      <UIRef Id="WixUI_Mondo"/>
+
+      <!--Pide valores para variables SQL-->
+      <DialogRef Id="UserRegistrationDlg"/>
+
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="UserRegistrationDlg" Order="4">WixUI_InstallMode = "Change"</Publish>
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="UserRegistrationDlg" Order="5">WixUI_InstallMode = "InstallCustom"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="UserRegistrationDlg" Order="5">WixUI_InstallMode = "InstallCustom"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="UserRegistrationDlg" Order="6">WixUI_InstallMode = "Change"</Publish>
+    </UI>
+
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+  </Product>
+</Wix>

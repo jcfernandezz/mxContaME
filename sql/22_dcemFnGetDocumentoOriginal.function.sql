@@ -10,7 +10,7 @@ as
 --Requisitos. 
 --18/12/14 jcf Creación 
 --19/02/15 jcf Agrega curncyid, xchgrate, bancoOriCountry, bancoDesCountry. Modifica codMetodoPago
---7/4/15 jcf Agrega ccode, modifica origenDoc, agrega facturas pop
+--07/04/15 jcf Agrega ccode, modifica origenDoc, agrega facturas pop
 --
 return
 ( 
@@ -43,19 +43,18 @@ return
 		isnull(pt.ordocamt, pt.DOCAMNT) DOCAMNT, 
 		pt.vendname, rtrim(pt.txrgnnum) txrgnnum, 
 		
-		dbo.dcemFnGetSegmentoX(pt.comment1, 1) bancoDestinoSat, 
-		pt.comment2 ctaDestinoSat, 
-		dbo.dcemFnGetSegmentoX(rtrim(pt.comment1), 2) banDesExt, 
+		dbp.bancoSat, dbp.cuentaSat, dbp.nomBancoExtranjero, 
 
 		upper(pt.country) country, upper(pt.ccode) ccode, mn.ISOCURRC, pt.xchgrate,
-		'' MexFolioFiscal
-	from vwPmTransaccionesTodas pt			--[doctype, vchrnmbr]
+		null MexFolioFiscal
+	from dbo.vwPmTransaccionesTodas pt			--[doctype, vchrnmbr]
 		inner join dbo.tii_vwPmAplicadas ap
 			on ap.vchrnmbr = pt.vchrnmbr
 			and ap.doctype = pt.doctype
 			and pt.bchsourc = 'PM_Trxent'
-		outer apply dbo.dcemFnGetMetodosPagoPM(pt.pyenttyp) mp
+		outer apply dbo.dcemFnGetMetodosPagoPM(pt.chekbkid, pt.pyenttyp, pt.cardname) mp  
 		outer apply dbo.dcemFnGetDatosBancarios(pt.chekbkid) cb
+		outer apply dbo.dcemFnGetDatosBancoDelProveedor(pt.vendorid, pt.vaddcdpr, 4, pt.comment1, pt.comment2) dbp
 		left join DYNAMICS..MC40200 mn
 			on mn.curncyid = pt.curncyid
 	where @SOURCEDOC = 'PMTRX'
@@ -106,28 +105,35 @@ return
 		rm.country, rm.ccode, rm.ISOCURRC, rm.xchgrate,
 		rtrim(ff.foliofiscal)
 	from dbo.dcemFnGetRMtrx(@VCHRNMBR, @DOCTYPE) rm
-		outer apply dbo.DcemFcnGetFolioFiscalDeFacturaSOP (@VCHRNMBR, @DOCTYPE) ff      
-	where @SOURCEDOC in ('CRJ', 'RMJ', 'SJ')
+		outer apply dbo.DcemFnGetFolioFiscalDeDocumento (@VCHRNMBR, @DOCTYPE) ff      
+	where @SOURCEDOC in ('CRJ', 'SJ')	--'RMJ', 
 	--and rm.RMDTYPAL = 9
 
-	--union all
-	----cobros simultáneos. ATENCION!!! obtiene un sólo pago
-	--select top 1 
-	--	cast('CS' as varchar(2)) origenDoc, 
-	--	pt.rmdtypal, pt.docnumbr, pt.voidstts, mp.medioid, pt.mscschid, mp.metodoPago, '' tipo, '' serie, '' numero
-	--from vwRmTransaccionesTodas pt					--de [doctype, vchrnmbr]
-	--	inner join vwRmTrxAplicadas ap
-	--		on ap.APFRDCNM = pt.docnumbr
-	--		and ap.APFRDCTY = 9	--pt.rmdtypal		--pago
-	--		and pt.bchsourc = 'Sales Entry'
-	--	inner join vwRmTransaccionesTodas ti		--a
-	--		on ti.docnumbr = ap.aptodcnm
-	--		and ti.rmdtypal = ap.aptodcty
-	--		and ti.cashamnt <> 0					--factura pagada simultáneamente
-	--	outer apply dbo.fnAndinaGetMetodosPagoRM(pt.cshrctyp) mp
-	--where @SOURCEDOC = 'SJ'
-	--and ap.APTODCNM = @VCHRNMBR
-	--and ap.aptodcty = @DOCTYPE
+	union all
+	--cobros simultáneos. 
+	SELECT cast('CS' as varchar(3)) origenDoc, 
+		rm.RMDTYPAL, rm.DOCNUMBR, rm.VOIDstts, 
+		rm.codMetodoPago, 
+		rm.numCheque, 
+		rm.bancoOrigenSat, rm.ctaOrigenSat, rm.banOriExt,
+		rm.docdate, 
+		rm.docamnt, 
+		rm.beneficiarioSat,	rtrim(isnull(ff.rfc, rm.txrgnnum)) txrgnnum,
+		rm.bancoDestinoSat, rm.ctaDestinoSat , rm.banDesExt, 
+		rm.country, rm.ccode, rm.ISOCURRC, rm.xchgrate,
+		rtrim(ff.foliofiscal)
+	from dbo.vwRmTrxAplicadas ap
+		inner join vwRmTransaccionesTodas ti		--a
+			on ti.docnumbr = ap.aptodcnm
+			and ti.rmdtypal = ap.aptodcty
+			and ti.cashamnt <> 0					--factura pagada simultáneamente
+		cross apply dbo.dcemFnGetRMtrx(ap.APFRDCNM, ap.APFRDCTY) rm
+		outer apply dbo.DcemFnGetFolioFiscalDeDocumento (ap.APFRDCNM, ap.APFRDCTY) ff      
+	where @SOURCEDOC = 'SJ'
+	and ap.APTODCNM = @VCHRNMBR
+	and ap.aptodcty = @DOCTYPE
+	and ap.APFRDCTY = 9						--pago
+	and rm.bchsourc = 'Sales Entry'
 	
 	union all
 	--Transferencia entre chequeras
@@ -138,8 +144,8 @@ return
 		tf.cmxftdate, tb.origamt,
 		cia.cmpnynam, rtrim(cia.taxregtn) taxregtn,
 		bd.codBancoSat, bd.bnkactnm, bd.nomBancoExt,
-		'MEXICO', 'MX', mn.ISOCURRC, tb.xchgrate,
-		'' foliofiscal
+		'MEXICO', 'MEX', mn.ISOCURRC, tb.xchgrate,
+		NULL foliofiscal
 	from cm20600 tf
 		inner join cm20200 tb
 			on tb.cmtrxnum = tf.cmxfrnum

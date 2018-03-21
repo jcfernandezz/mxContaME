@@ -9,26 +9,23 @@ as
 --Propósito. Obtiene datos de la cuenta y el banco
 --Requisitos. 
 --24/12/15 jcf Creación 
---29/1/16 jcf Agrega parámetro para seleccionar el código del banco
+--29/01/16 jcf Agrega parámetro para seleccionar el código del banco
+--26/01/18 jcf Rediseña query
 --
 return
 ( 	
-	select cb.CHEKBKID, cb.bnkactnm, bk.bankid, bk.bankname, bk.country, 
-		case when pa.param1 = '01' then bk.bnkbrnch
-			 when pa.param1 = '02' then bk.trnstnbr 
-			 else '' 
-		end codBancoSat, 
-		case when bk.bnkbrnch = '999' or bk.trnstnbr = '999' then
-			bk.BANKNAME
+	select cb.CHEKBKID, --cb.bnkactnm, 
+		case when isnull(cb.EFTBANKACCT, '') != '' then cb.EFTBANKACCT 
+			else cb.bnkactnm
+		end bnkactnm,
+		cb.bankid, cb.bankname, cb.country, 
+		left(cb.BANKID, 3) codBancoSat, 
+		case when left(cb.BANKID, 3) = '999' then
+			cb.BANKNAME
 		else
 			null
 		end nomBancoExt
-	from cm00100 cb
-		left join SY04100 bk		--bank	
-			on bk.BANKID = cb.BANKID
-		outer apply dbo.dcemFnParametros('P_DATOSBANCO', '-', '-', '-', '-', '-') pa
-	where cb.CHEKBKID = @chekbkid
-
+	from dbo.cmFnGetDatosDeChequera(@chekbkid) cb
 )
 go
 

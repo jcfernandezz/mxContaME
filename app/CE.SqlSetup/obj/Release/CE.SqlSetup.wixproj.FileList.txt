@@ -1,0 +1,7 @@
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.SqlSetup\bin\Release\CE.SqlSetup.msi
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.SqlSetup\bin\Release\CE.SqlSetup.wixpdb
+obj\Release\Product.wixobj
+obj\Release\UserRegistrationDlg.wixobj
+obj\Release\CE.SqlSetup.wixproj.BindContentsFileListnull.txt
+obj\Release\CE.SqlSetup.wixproj.BindOutputsFileListnull.txt
+obj\Release\CE.SqlSetup.wixproj.BindBuiltOutputsFileListnull.txt
