@@ -23,3 +23,11 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Deb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csproj.CE.WinFormUI.exe.config
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\Microsoft.Dynamics.GP.eConnect.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\Microsoft.Dynamics.GP.eConnect.Serialization.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ClosedXML.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\DocumentFormat.OpenXml.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ExcelNumberFormat.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\FastMember.Signed.dll
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ClosedXML.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ClosedXML.xml
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\DocumentFormat.OpenXml.xml
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ExcelNumberFormat.xml

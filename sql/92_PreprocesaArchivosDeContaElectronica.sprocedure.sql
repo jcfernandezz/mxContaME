@@ -34,7 +34,7 @@ AS
 	and datediff(day, @fechaIni, trxdate) >= 0
 	and datediff(day, @fechaFin, trxdate) <= 0
 	GROUP BY t.JRNENTRY, t.TRXDATE, t.refrence
-
+GO
 
 	--BEGIN TRAN;
 	----Pólizas
@@ -56,7 +56,6 @@ AS
 	--	VALUES(S.jrnentry, S.trxdate, S.refrence, S.nodoPoliza);
 	----OUTPUT $action, inserted.*, deleted.*;
 	--COMMIT TRAN;
-GO
 
 IF (@@Error = 0) PRINT 'Creación exitosa de: dcem.PreprocesaArchivosDeContaElectronica'
 ELSE PRINT 'Error en la creación de: dcem.PreprocesaArchivosDeContaElectronica'

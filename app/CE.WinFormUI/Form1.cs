@@ -13,6 +13,8 @@ using CE.Business;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace CE.WinFormUI
 {
@@ -128,119 +130,39 @@ namespace CE.WinFormUI
             bindingSource2.DataSource = l;
             gridVista.AutoGenerateColumns = false;
             gridVista.DataSource = bindingSource2;
+            gridVista.ClearSelection();
+//            InicializaCheckBoxDelGrid(gridVista, 0, false);
 
-            //gridVista.Columns[4].Visible = false;
-            
             gridVista.AutoResizeColumns();
-            gridVista.RowHeadersVisible = false;
+//            gridVista.RowHeadersVisible = false;
         }
 
-        private void mostrarContenido(Int16 year1, Int16 periodid, string tipo)
+        void InicializaCheckBoxDelGrid(DataGridView dataGrid, short idxChkBox, bool marca)
         {
-            LecturaContabilidadFactory oL = new LecturaContabilidadFactory(companySelected());
-            oL.LParametros = lParametros;
-
-            XDocument xdoc = XDocument.Parse(oL.GetXML2(year1, periodid, tipo));
-
-            object items = null;
-
-            var nspace = lParametros.Where(x => x.Tipo == tipo);
-
-            XNamespace cfdi = nspace.First().NameSpace;
-
-            switch (tipo)
+            for (int r = 0; r < dataGrid.RowCount; r++)
             {
-                case "Catálogo":
-                    //cfdi = @"www.sat.gob.mx/esquemas/ContabilidadE/1_1/CatalogoCuentas";
-                    items = from l in xdoc.Descendants(cfdi + "Ctas")
-                            select new
-                            {
-                                NumCta = l.Attribute("NumCta").Value,
-                                Desc = l.Attribute("Desc").Value,
-                                CodAgrup = l.Attribute("CodAgrup").Value
-                            };
-                    break;
-                case "Balanza":
-                    //cfdi = @"www.sat.gob.mx/esquemas/ContabilidadE/1_1/BalanzaComprobacion";
-                    items = from l in xdoc.Descendants(cfdi + "Ctas")
-                                 select new
-                                 {
-                                     NumCta = l.Attribute("NumCta").Value,
-                                     SaldoIni = (l.Attribute("SaldoIni").Value),
-                                     Debe = (l.Attribute("Debe").Value),
-                                     Haber = (l.Attribute("Haber").Value),
-                                     SaldoFin = (l.Attribute("SaldoFin").Value)
-                                 };
-
-                    //var itemsB = from l in xdoc.Descendants(cfdi + "Ctas")
-                    //        select new
-                    //        {
-                    //            NumCta = l.Attribute("NumCta").Value,
-                    //            SaldoIni = Convert.ToDecimal(l.Attribute("SaldoIni").Value.Replace(".",".")),
-                    //            Debe = Convert.ToDecimal(l.Attribute("Debe").Value.Replace(".", ".")),
-                    //            Haber = Convert.ToDecimal(l.Attribute("Haber").Value.Replace(".", ".")),
-                    //            SaldoFin = Convert.ToDecimal(l.Attribute("SaldoFin").Value.Replace(".", "."))
-                    //        };
-                    
-                    //var sum =
-                    //    from l in xdoc.Descendants(cfdi + "Ctas")
-                    //    select new
-                    //        {
-                    //            NumCta = "Total",
-                    //            SaldoIni = itemsB.Sum(x => Convert.ToDecimal(x.SaldoIni.ToString().Replace(".", "."))),
-                    //            Debe = itemsB.Sum(x => Convert.ToDecimal(x.Debe.ToString().Replace(".", "."))),
-                    //            Haber = itemsB.Sum(x => Convert.ToDecimal(x.Haber.ToString().Replace(".", "."))),
-                    //            SaldoFin = itemsB.Sum(x => Convert.ToDecimal(x.SaldoFin.ToString().Replace(".", ".")))
-                    //        };
-                    
-                    //items = itemsB.Union(sum);
-                    
-                    break;
-                case "Pólizas":
-                    //cfdi = @"www.sat.gob.mx/esquemas/ContabilidadE/1_1/PolizasPeriodo";
-                    items = from l in xdoc.Descendants(cfdi + "Transaccion")
-                            select new
-                            {
-                                NumCta = l.Attribute("NumCta").Value,
-                                DesCta = l.Attribute("DesCta").Value,
-                                Concepto = l.Attribute("Concepto").Value,
-                                Debe = l.Attribute("Debe").Value,
-                                Haber = l.Attribute("Haber").Value
-                            };
-                    break;
-                case "Auxiliar Cuentas":
-                    //cfdi = @"www.sat.gob.mx/esquemas/ContabilidadE/1_1/AuxiliarCtas";
-                    items = from l in xdoc.Descendants(cfdi + "DetalleAux")
-                            select new
-                            {
-                                Fecha = l.Attribute("Fecha").Value,
-                                NumUnIdenPol = l.Attribute("NumUnIdenPol").Value,
-                                Concepto = l.Attribute("Concepto").Value,
-                                Debe = l.Attribute("Debe").Value,
-                                Haber = l.Attribute("Haber").Value
-                            };
-                    break;
-                case "Auxiliar folios":
-                    //cfdi = @"www.sat.gob.mx/esquemas/ContabilidadE/1_1/AuxiliarFolios";
-                    items = from l in xdoc.Descendants(cfdi + "DetAuxFol")
-                            select new
-                            {
-                                NumUnIdenPol = l.Attribute("NumUnIdenPol").Value,
-                                Fecha = l.Attribute("Fecha").Value
-                            };
-                    break;
+                dataGrid[idxChkBox, r].Value = marca;
             }
+            dataGrid.EndEdit();
+        }
+
+        private object mostrarContenido(Int16 year1, Int16 periodid, string tipo)
+        {
+            string company = companySelected();
+            object items = ContabilidadElectronicaPresentacion.ObtieneContenidoLinqDeXML(year1, periodid, tipo, company, lParametros);
 
             bindingSource1.DataSource = items;
             grid.AutoGenerateColumns = true;
             grid.DataSource = bindingSource1;
             grid.RowHeadersVisible = false;
             grid.AutoResizeColumns();
+
+            return items;
         }
 
         private void mostrarMensaje()
         {
-            XDocument xdoc = XDocument.Parse("<Mensajes><Mensaje texto = \"Para ver el contenido presione el botón Mostrar. ¡Atención! Esto puede demorar varios minutos dependiendo de la cantidad de datos a mostrar.\" /></Mensajes>");
+            XDocument xdoc = XDocument.Parse("<Mensajes><Mensaje texto = \"Para ver el contenido presione el botón Mostrar.\" /></Mensajes>");
             object items = null;
             items = xdoc.Descendants("Mensaje").Select(x => new { Atención = x.Attribute("texto").Value });
 
@@ -306,7 +228,10 @@ namespace CE.WinFormUI
 
             foreach (DataGridViewRow row in gridVista.Rows)
             {
-                if (row.Cells[0].Value != null && (bool)row.Cells[0].Value)
+                DataGridViewCheckBoxCell marca = row.Cells[0] as DataGridViewCheckBoxCell;
+                
+                //if (row.Cells[0].Value != null && (bool)row.Cells[0].Value)
+                if (marca.Value != null && (bool)marca.Value)
                 {
                     var item = (DcemVwContabilidad)row.DataBoundItem;
 
@@ -392,7 +317,7 @@ namespace CE.WinFormUI
                 lblProcesos.Text = "Carpeta de trabajo: " + directorio + Environment.NewLine;
                 foreach (var xmle in xmls)
                 {
-                    lblProcesos.Text += " Año: " + xmle.DcemVwContabilidad.year1.ToString() + "Mes:" + xmle.DcemVwContabilidad.periodid.ToString() + " Tipo: " + xmle.DcemVwContabilidad.tipodoc + " Archivo: " + xmle.archivo + Environment.NewLine;
+                    lblProcesos.Text += " Año: " + xmle.DcemVwContabilidad.year1.ToString() + " Mes:" + xmle.DcemVwContabilidad.periodid.ToString() + " Tipo: " + xmle.DcemVwContabilidad.tipodoc + " Archivo: " + xmle.archivo + Environment.NewLine;
                     lblProcesos.Refresh();
                 }
 
@@ -940,7 +865,48 @@ namespace CE.WinFormUI
 
         #endregion
 
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (gridVista.SelectedRows.Count != 0)
+            {
+                try
+                {
+                    string carpeta = System.Configuration.ConfigurationManager.AppSettings[companySelected() + "_directorio"].ToString();
+                    DcemVwContabilidad item = (DcemVwContabilidad)gridVista.SelectedRows[0].DataBoundItem;
+                    if (item != null)
+                    {
+                        var iTipoDoc = lParametros.Where(x => x.Tipo == item.tipodoc);
+                        string nombreArchivo = iTipoDoc.First().Archivo;
+                        nombreArchivo = Path.GetFileNameWithoutExtension(nombreArchivo) + "_" + DateTime.Now.ToString("yyyyMMdd HHmmss");
+                        string archivo = Path.Combine(carpeta, nombreArchivo + ".xlsx");
 
+                        object items = mostrarContenido(item.year1, item.periodid, item.tipodoc);
+                        DataTable dtItems = ContabilidadElectronicaPresentacion.ConvierteLinqQueryADataTable((IEnumerable<dynamic>)items);
+                        var wb = new ClosedXML.Excel.XLWorkbook();
 
+                        dtItems.TableName = "test";
+                        wb.Worksheets.Add(dtItems);
+                        //wb.Worksheet(1).Cell("B1").Value = "0";
+                        
+                        //wb.Worksheet(1).Column(2).CellsUsed().SetDataType(XLDataType.Number);
+
+                        //wb.Worksheet(1).Cell("B1").Value = "Saldo Inicial";
+
+                        wb.SaveAs(archivo);
+                        UtilitarioArchivos.AbrirArchivo(archivo);
+                        lblProcesos.Text = "Archivo guardado en: " + archivo;
+
+                    }
+                }
+                catch(Exception exl)
+                {
+
+                    grid.DataSource = null;
+                    lblError.Text = exl.Message;
+
+                }
+            }
+
+        }
     }
 }

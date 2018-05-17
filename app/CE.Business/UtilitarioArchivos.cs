@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 
 namespace CE.Business
 {
@@ -33,5 +34,22 @@ namespace CE.Business
             }
             return cfdi;
         }
+
+        public static void AbrirArchivo(string archivo)
+        {
+                if (File.Exists(archivo))
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo();
+                    psi.FileName = archivo;
+                    using (Process p = new Process())
+                    {
+                        p.StartInfo = psi;
+                        p.Start();
+                    }
+                }
+                else
+                    throw new IOException("No existe el archivo: " + archivo);
+        }
+
     }
 }

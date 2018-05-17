@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cfdi.cs" />
+    <Compile Include="CEPresentacion.cs" />
     <Compile Include="UtilitarioArchivos.cs" />
     <Compile Include="GPCompras.cs" />
     <Compile Include="Helper.cs" />
