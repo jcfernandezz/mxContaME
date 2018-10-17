@@ -35,11 +35,11 @@ namespace CE.Business
 
 
         #region Importar Facturas Electronicas
-                    /// <summary>
-                    /// Importar facturas a GP
-                    /// </summary>
-                    /// <param name="archivos">Path de los archivos</param>
-                    /// <param name="metodo">1: PM - 2: POP</param>
+        /// <summary>
+        /// Importar facturas a GP
+        /// </summary>
+        /// <param name="archivos">Path de los archivos</param>
+        /// <param name="metodo">1: PM - 2: POP</param>
                     /// 
         public void Importar(List<string> archivos, int metodo)
         {
@@ -54,467 +54,524 @@ namespace CE.Business
 
             foreach (string archivo in archivos)
             {
-                if (System.IO.File.Exists(archivo))
+                try
                 {
-                    using (eConnectMethods eConnectMethods = new eConnectMethods())
+                    if (System.IO.File.Exists(archivo))
                     {
-                        eConnectMethods.RequireProxyService = true;
+                        string xml = System.IO.File.ReadAllText(archivo);
+                        XDocument xdoc = XDocument.Parse(xml);
 
-                        List<PMTransactionType> masterPMTransactionTypes = new List<PMTransactionType>();
-                        List<POPReceivingsType> masterPOPReceivingsTypes = new List<POPReceivingsType>();
-
-                        try
+                        string tipoComprobante = AveriguarElTipoDeCfdi(xdoc, cfdi);
+                        switch (tipoComprobante)
                         {
-                            bool error = false;
-
-                            string xml = System.IO.File.ReadAllText(archivo);
-
-                            XDocument xdoc = XDocument.Parse(xml);
-
-                            PMTransactionType PAInvoiceEntry = new PMTransactionType();
-                            POPReceivingsType POPInvoiceEntry = new POPReceivingsType();
-
-                            taPMTransactionInsert PMHeader = new taPMTransactionInsert();
-                            taPopRcptHdrInsert POPHeader = new taPopRcptHdrInsert();
-
-                            List<taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert> items = new List<taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert>();
-
-                            var comprobantes = (from c in xdoc.Descendants(cfdi + "Comprobante")
-                                                select new
-                                                {
-                                                    folio = c.Attribute("Folio") == null ? "" : c.Attribute("Folio").Value,
-                                                    fecha = c.Attribute("Fecha").Value,
-                                                    formaDePago = c.Attribute("FormaPago").Value,
-                                                    condicionesDePago = c.Attribute("CondicionesDePago") == null ? "" : c.Attribute("CondicionesDePago").Value,
-                                                    subTotal = c.Attribute("SubTotal").Value,
-                                                    TipoCambio = c.Attribute("TipoCambio") == null ? "" : c.Attribute("TipoCambio").Value,
-                                                    Moneda = c.Attribute("Moneda") == null ? "" : c.Attribute("Moneda").Value,
-                                                    total = c.Attribute("Total").Value,
-                                                    tipoDeComprobante = c.Attribute("TipoDeComprobante").Value,
-                                                    metodoDePago = c.Attribute("MetodoPago").Value,
-                                                    LugarExpedicion = c.Attribute("LugarExpedicion").Value,
-                                                    Descuento = c.Attribute("Descuento") == null ? "0" : c.Attribute("Descuento").Value,
-                                                }).ToList();
-                            var comprobante = comprobantes[0];
-
-                            var impuestos = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null || x.Attribute("TotalImpuestosRetenidos") != null)
-                                             select new
-                                             {
-                                                 totalImpuestosTrasladados = c.Attribute("TotalImpuestosTrasladados") == null ? "0" : c.Attribute("TotalImpuestosTrasladados").Value,
-                                                 totalImpuestosRetenidos = c.Attribute("TotalImpuestosRetenidos") == null ? "0" : c.Attribute("TotalImpuestosRetenidos").Value
-                                             }).ToList();
-
-                            //var impuesto = impuestos[0];
-
-                            var retenciones = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosRetenidos") != null).Descendants(cfdi + "Retencion")
-                                               select new
-                                               {
-                                                   impuesto = c.Attribute("Impuesto").Value,
-                                                   importe = c.Attribute("Importe").Value
-                                               }).ToList();
-                            var traslados = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null).Descendants(cfdi + "Traslado")
-                                             select new
-                                             {
-                                                 impuesto = c.Attribute("Impuesto").Value,
-                                                 tipoFActor = c.Attribute("TipoFactor").Value,
-                                                 tasa = c.Attribute("TasaOCuota").Value,
-                                                 importe = c.Attribute("Importe").Value
-                                             }).ToList();
-
-                            var impuestosLocales = (from c in xdoc.Descendants(implocal + "ImpuestosLocales")
-                                                    select new
-                                                    {
-                                                        TotaldeTraslados = c.Attribute("TotaldeTraslados") == null ? "0" : c.Attribute("TotaldeTraslados").Value,
-                                                        TotaldeRetenciones = c.Attribute("TotaldeRetenciones") == null ? "0" : c.Attribute("TotaldeRetenciones").Value
-                                                    }).ToList();
-
-                            var implocalTrasladosLocales = (from c in xdoc.Descendants(implocal + "TrasladosLocales")
-                                                            select new
-                                                            {
-                                                                ImpLocTrasladado = c.Attribute("ImpLocTrasladado").Value,
-                                                                TasadeTraslado = c.Attribute("TasadeTraslado").Value,
-                                                                Importe = c.Attribute("Importe").Value
-                                                            }).ToList();
-
-                            var conceptos = (from c in xdoc.Descendants(cfdi + "Concepto")
-                                             select new
-                                             {
-                                                 cantidad = c.Attribute("Cantidad").Value,
-                                                 unidad = c.Attribute("ClaveUnidad").Value,
-                                                 noIdentificacion = c.Attribute("NoIdentificacion") == null ? "" : c.Attribute("NoIdentificacion").Value,
-                                                 descripcion = c.Attribute("Descripcion").Value,
-                                                 valorUnitario = c.Attribute("ValorUnitario").Value,
-                                                 importe = c.Attribute("Importe").Value
-                                             }).ToList();
-
-                            var emisores = (from c in xdoc.Descendants(cfdi + "Emisor")
-                                            select new
-                                            {
-                                                rfc = c.Attribute("Rfc").Value,
-                                                nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value
-                                            }).ToList();
-
-                            var emisor = emisores[0];
-
-                            var timbresDigital = (from c in xdoc.Descendants(tfd + "TimbreFiscalDigital")
-                                                  select new
-                                                  {
-                                                      UUID = c.Attribute("UUID").Value
-                                                  }).ToList();
-
-                            var timbreDigital = timbresDigital[0];
-
-                            string vendorid = getVendroID(emisor.rfc);
-                            if (string.IsNullOrEmpty(vendorid))
-                            {
+                            case "I":
+                                IntegraFacturaPmPop(xdoc, cfdi, archivo, metodo, formatoFecha, BACHNUMB);
+                                break;
+                            case "P":
+                                CargaComprobanteCfdi(xdoc, cfdi, archivo, metodo, formatoFecha, BACHNUMB);
+                                break;
+                            default:
                                 ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
                                 args.Archivo = archivo;
-                                args.Error = "Proveedor " + emisor.rfc + " no encontrado";
-
+                                args.Error = "Este comprobante no se puede integrar a GP porque no es un comprobante de Ingreso ni de Pago";
                                 OnErrorImportarPM(args);
+                                break;
+                        }
 
-                                error = true;
-                            }
-                            else
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                    args.Archivo = archivo;
+                    args.Error = ex.Message + " - " + ex.StackTrace + " - " + ex.Source;
+                    OnErrorImportarPM(args);
+                }
+            }
+        }
+
+        private void CargaComprobanteCfdi(XDocument xdoc, XNamespace cfdi, string archivo, int metodo, string formatoFecha, string bACHNUMB)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Integra una factura pm o pop a partir de un archivo xml (xdoc)
+        /// </summary>
+        /// <param name="xdoc">archivo xml cfdi</param>
+        /// <param name="cfdi">namespace</param>
+        /// <param name="archivo">nombre del archivo</param>
+        /// <param name="metodo">1 pm, 2 pop</param>
+        /// <param name="formatoFecha"></param>
+        /// <param name="BACHNUMB"></param>
+        private void IntegraFacturaPmPop(XDocument xdoc, XNamespace cfdi, string archivo, int metodo, string formatoFecha, string BACHNUMB)
+        {
+            bool error = false;
+            using (eConnectMethods eConnectMethods = new eConnectMethods())
+            {
+                try
+                {
+                    eConnectMethods.RequireProxyService = true;
+                    List<PMTransactionType> masterPMTransactionTypes = new List<PMTransactionType>();
+                    List<POPReceivingsType> masterPOPReceivingsTypes = new List<POPReceivingsType>();
+                    PMTransactionType PAInvoiceEntry = new PMTransactionType();
+                    POPReceivingsType POPInvoiceEntry = new POPReceivingsType();
+                    taPMTransactionInsert PMHeader = new taPMTransactionInsert();
+                    taPopRcptHdrInsert POPHeader = new taPopRcptHdrInsert();
+
+                    List<taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert> items = new List<taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert>();
+
+                    var comprobantes = (from c in xdoc.Descendants(cfdi + "Comprobante")
+                                        select new
+                                        {
+                                            folio = c.Attribute("Folio") == null ? "" : c.Attribute("Folio").Value,
+                                            fecha = c.Attribute("Fecha").Value,
+                                            formaDePago = c.Attribute("FormaPago").Value,
+                                            condicionesDePago = c.Attribute("CondicionesDePago") == null ? "" : c.Attribute("CondicionesDePago").Value,
+                                            subTotal = c.Attribute("SubTotal").Value,
+                                            TipoCambio = c.Attribute("TipoCambio") == null ? "" : c.Attribute("TipoCambio").Value,
+                                            Moneda = c.Attribute("Moneda") == null ? "" : c.Attribute("Moneda").Value,
+                                            total = c.Attribute("Total").Value,
+                                            tipoDeComprobante = c.Attribute("TipoDeComprobante").Value,
+                                            metodoDePago = c.Attribute("MetodoPago").Value,
+                                            LugarExpedicion = c.Attribute("LugarExpedicion").Value,
+                                            Descuento = c.Attribute("Descuento") == null ? "0" : c.Attribute("Descuento").Value,
+                                        }).ToList();
+                    var comprobante = comprobantes[0];
+
+                    var impuestos = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null || x.Attribute("TotalImpuestosRetenidos") != null)
+                                     select new
+                                     {
+                                         totalImpuestosTrasladados = c.Attribute("TotalImpuestosTrasladados") == null ? "0" : c.Attribute("TotalImpuestosTrasladados").Value,
+                                         totalImpuestosRetenidos = c.Attribute("TotalImpuestosRetenidos") == null ? "0" : c.Attribute("TotalImpuestosRetenidos").Value
+                                     }).ToList();
+
+                    //var impuesto = impuestos[0];
+
+                    var retenciones = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosRetenidos") != null).Descendants(cfdi + "Retencion")
+                                       select new
+                                       {
+                                           impuesto = c.Attribute("Impuesto").Value,
+                                           importe = c.Attribute("Importe").Value
+                                       }).ToList();
+                    var traslados = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null).Descendants(cfdi + "Traslado")
+                                     select new
+                                     {
+                                         impuesto = c.Attribute("Impuesto").Value,
+                                         tipoFActor = c.Attribute("TipoFactor").Value,
+                                         tasa = c.Attribute("TasaOCuota").Value,
+                                         importe = c.Attribute("Importe").Value
+                                     }).ToList();
+
+                    var impuestosLocales = (from c in xdoc.Descendants(implocal + "ImpuestosLocales")
+                                            select new
+                                            {
+                                                TotaldeTraslados = c.Attribute("TotaldeTraslados") == null ? "0" : c.Attribute("TotaldeTraslados").Value,
+                                                TotaldeRetenciones = c.Attribute("TotaldeRetenciones") == null ? "0" : c.Attribute("TotaldeRetenciones").Value
+                                            }).ToList();
+
+                    var implocalTrasladosLocales = (from c in xdoc.Descendants(implocal + "TrasladosLocales")
+                                                    select new
+                                                    {
+                                                        ImpLocTrasladado = c.Attribute("ImpLocTrasladado").Value,
+                                                        TasadeTraslado = c.Attribute("TasadeTraslado").Value,
+                                                        Importe = c.Attribute("Importe").Value
+                                                    }).ToList();
+
+                    var conceptos = (from c in xdoc.Descendants(cfdi + "Concepto")
+                                     select new
+                                     {
+                                         cantidad = c.Attribute("Cantidad").Value,
+                                         unidad = c.Attribute("ClaveUnidad").Value,
+                                         noIdentificacion = c.Attribute("NoIdentificacion") == null ? "" : c.Attribute("NoIdentificacion").Value,
+                                         descripcion = c.Attribute("Descripcion").Value,
+                                         valorUnitario = c.Attribute("ValorUnitario").Value,
+                                         importe = c.Attribute("Importe").Value
+                                     }).ToList();
+
+                    var emisores = (from c in xdoc.Descendants(cfdi + "Emisor")
+                                    select new
+                                    {
+                                        rfc = c.Attribute("Rfc").Value,
+                                        nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value
+                                    }).ToList();
+
+                    var emisor = emisores[0];
+
+                    var timbresDigital = (from c in xdoc.Descendants(tfd + "TimbreFiscalDigital")
+                                          select new
+                                          {
+                                              UUID = c.Attribute("UUID").Value
+                                          }).ToList();
+
+                    var timbreDigital = timbresDigital[0];
+
+                    string vendorid = getVendroID(emisor.rfc);
+                    if (string.IsNullOrEmpty(vendorid))
+                    {
+                        ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                        args.Archivo = archivo;
+                        args.Error = "Proveedor " + emisor.rfc + " no encontrado";
+
+                        OnErrorImportarPM(args);
+
+                        error = true;
+                    }
+                    else
+                    {
+                        string folio = comprobante.folio;
+                        if (string.IsNullOrEmpty(folio))
+                        {
+                            var numeros = timbreDigital.UUID.Substring(timbreDigital.UUID.Length - 6, 6);
+                            folio = numeros;
+                        }
+
+                        string VCHRNMBR = "";
+                        if (metodo == 1)
+                            VCHRNMBR = this.GetVchrnmbrFacturaExists(vendorid, folio, 1, DateTime.Parse(comprobante.fecha).Date, decimal.Parse(comprobante.total));
+                        else
+                            if (metodo == 2)
+                            VCHRNMBR = this.FacturaPOPExists(vendorid, folio, DateTime.Parse(comprobante.fecha).Date);
+
+                        if (string.IsNullOrEmpty(VCHRNMBR))
+                        {
+                            //la factura no existe en GP
+                            //Factura tipo POP
+                            if (metodo == 2)
                             {
-                                string folio = comprobante.folio;
-                                if (string.IsNullOrEmpty(folio))
+                                VCHRNMBR = getNum(metodo);
+
+                                POPHeader.POPRCTNM = VCHRNMBR;
+                                POPHeader.POPTYPE = 1;
+                                POPHeader.VNDDOCNM = folio;
+                                POPHeader.receiptdate = DateTime.Parse(comprobante.fecha).ToString(formatoFecha);
+                                POPHeader.BACHNUMB = BACHNUMB;
+                                POPHeader.VENDORID = vendorid;
+                                POPHeader.REFRENCE = conceptos.First().descripcion.Length > 30 ? conceptos.First().descripcion.Substring(0, 30) : conceptos.First().descripcion;
+                                POPHeader.CURNCYID = "MXN";
+                                POPHeader.DISAVAMT = 0;
+                            }
+
+                            //Factura tipo PM
+                            if (metodo == 1)
+                            {
+                                PMHeader.BACHNUMB = BACHNUMB;
+
+                                VCHRNMBR = getNum(metodo);
+                                PMHeader.VCHNUMWK = VCHRNMBR;
+
+                                PMHeader.VENDORID = vendorid;
+                                PMHeader.DOCNUMBR = folio;
+                                PMHeader.DOCTYPE = 1;
+                                PMHeader.DOCAMNT = Decimal.Round(decimal.Parse(comprobante.total), 2);
+                                PMHeader.CHRGAMNT = PMHeader.DOCAMNT;
+                                PMHeader.DOCDATE = DateTime.Parse(comprobante.fecha).ToString(formatoFecha);
+                                PMHeader.TAXSCHID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_TAXSCHID"].ToString();
+                                PMHeader.PRCHAMNT = Decimal.Round(decimal.Parse(comprobante.subTotal), 2);
+                                PMHeader.TRDISAMT = Decimal.Round(decimal.Parse(comprobante.Descuento), 2);
+
+                                decimal totalImpuestosTrasladados = 0;
+                                if (traslados.Count > 0)
+                                    totalImpuestosTrasladados = Decimal.Round(traslados.Sum(x => decimal.Parse(x.importe)), 2);
+
+                                //decimal totalImpuestosTrasladados = decimal.Parse(impuesto.totalImpuestosTrasladados);
+                                if (impuestosLocales.Count > 0)
                                 {
-                                    var numeros = timbreDigital.UUID.Substring(timbreDigital.UUID.Length - 6, 6);
-                                    folio = numeros;
+                                    var impuestoLocal = impuestosLocales[0];
+                                    totalImpuestosTrasladados += Decimal.Round(decimal.Parse(impuestoLocal.TotaldeTraslados), 2);
                                 }
 
-                                string VCHRNMBR = "";
-                                if (metodo == 1)
-                                    VCHRNMBR = this.GetVchrnmbrFacturaExists(vendorid, folio, 1, DateTime.Parse(comprobante.fecha).Date, decimal.Parse(comprobante.total));
-                                else
-                                    if (metodo == 2)
-                                    VCHRNMBR = this.FacturaPOPExists(vendorid, folio, DateTime.Parse(comprobante.fecha).Date);
+                                decimal tImpuestosRetenidos = 0;
+                                if (impuestos.Count > 0)
+                                    decimal.TryParse(impuestos.First().totalImpuestosRetenidos, out tImpuestosRetenidos);
 
-                                if (string.IsNullOrEmpty(VCHRNMBR))
+                                PMHeader.TAXAMNT = totalImpuestosTrasladados - Decimal.Round(tImpuestosRetenidos, 2);
+                                PMHeader.TRXDSCRN = conceptos[0].descripcion.Length > 30 ? conceptos[0].descripcion.Substring(0, 30) : conceptos[0].descripcion;
+                                PMHeader.SHIPMTHD = System.Configuration.ConfigurationManager.AppSettings[_pre + "_SHIPMTHD"].ToString(); ;
+                                PMHeader.CURNCYID = "MXN";
+                                PMHeader.CREATEDIST = 1;
+
+                                //DOCAMNT = MSCCHAMT + PRCHAMNT + TAXAMNT + FRTAMNT - TRDISAMT
+
+                                decimal totalCalculo = PMHeader.PRCHAMNT + PMHeader.TAXAMNT - PMHeader.TRDISAMT;
+                                PMHeader.MSCCHAMT = PMHeader.DOCAMNT - totalCalculo;
+
+                                #region Retenciones
+                                var retencionGroup = retenciones
+                                                    .GroupBy(x => new { x.importe, x.impuesto })
+                                                    .Select(g => new
+                                                    {
+                                                        g.Key.impuesto,
+                                                        importe = g.Sum(y => decimal.Parse(y.importe))
+                                                    });
+
+                                foreach (var retencion in retencionGroup)
                                 {
-                                    //la factura no existe en GP
-                                    //Factura tipo POP
-                                    if (metodo == 2)
+                                    taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
+
+                                    item.VENDORID = PMHeader.VENDORID;
+                                    item.VCHRNMBR = PMHeader.VCHNUMWK;
+                                    item.DOCTYPE = PMHeader.DOCTYPE;
+                                    item.BACHNUMB = PMHeader.BACHNUMB;
+
+                                    if (retencion.impuesto.Trim() == "001")     //isr
+                                        item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_ret_ISR"].ToString();
+                                    else
+                                        if (retencion.impuesto.Trim() == "002") //iva
                                     {
-                                        VCHRNMBR = getNum(metodo);
-
-                                        POPHeader.POPRCTNM = VCHRNMBR;
-                                        POPHeader.POPTYPE = 1;
-                                        POPHeader.VNDDOCNM = folio;
-                                        POPHeader.receiptdate = DateTime.Parse(comprobante.fecha).ToString(formatoFecha);
-                                        POPHeader.BACHNUMB = BACHNUMB;
-                                        POPHeader.VENDORID = vendorid;
-                                        POPHeader.REFRENCE = conceptos.First().descripcion.Length > 30 ? conceptos.First().descripcion.Substring(0, 30) : conceptos.First().descripcion;
-                                        POPHeader.CURNCYID = "MXN";
-                                        POPHeader.DISAVAMT = 0;
-                                    }
-
-                                    //Factura tipo PM
-                                    if (metodo == 1)
-                                    {
-                                        PMHeader.BACHNUMB = BACHNUMB;
-
-                                        VCHRNMBR = getNum(metodo);
-                                        PMHeader.VCHNUMWK = VCHRNMBR;
-
-                                        PMHeader.VENDORID = vendorid;
-                                        PMHeader.DOCNUMBR = folio;
-                                        PMHeader.DOCTYPE = 1;
-                                        PMHeader.DOCAMNT = Decimal.Round(decimal.Parse(comprobante.total), 2);
-                                        PMHeader.CHRGAMNT = PMHeader.DOCAMNT;
-                                        PMHeader.DOCDATE = DateTime.Parse(comprobante.fecha).ToString(formatoFecha);
-                                        PMHeader.TAXSCHID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_TAXSCHID"].ToString();
-                                        PMHeader.PRCHAMNT = Decimal.Round(decimal.Parse(comprobante.subTotal), 2);
-                                        PMHeader.TRDISAMT = Decimal.Round(decimal.Parse(comprobante.Descuento), 2);
-
-                                        decimal totalImpuestosTrasladados = 0;
-                                        if (traslados.Count > 0)
-                                            totalImpuestosTrasladados = Decimal.Round(traslados.Sum(x => decimal.Parse(x.importe)), 2);
-
-                                        //decimal totalImpuestosTrasladados = decimal.Parse(impuesto.totalImpuestosTrasladados);
-                                        if (impuestosLocales.Count > 0)
-                                        {
-                                            var impuestoLocal = impuestosLocales[0];
-                                            totalImpuestosTrasladados += Decimal.Round(decimal.Parse(impuestoLocal.TotaldeTraslados), 2);
-                                        }
-
-                                        decimal tImpuestosRetenidos = 0;
-                                        if (impuestos.Count > 0)
-                                            decimal.TryParse(impuestos.First().totalImpuestosRetenidos, out tImpuestosRetenidos);
-
-                                        PMHeader.TAXAMNT = totalImpuestosTrasladados - Decimal.Round(tImpuestosRetenidos, 2);
-                                        PMHeader.TRXDSCRN = conceptos[0].descripcion.Length > 30 ? conceptos[0].descripcion.Substring(0, 30) : conceptos[0].descripcion;
-                                        PMHeader.SHIPMTHD = System.Configuration.ConfigurationManager.AppSettings[_pre + "_SHIPMTHD"].ToString(); ;
-                                        PMHeader.CURNCYID = "MXN";
-                                        PMHeader.CREATEDIST = 1;
-
-                                        //DOCAMNT = MSCCHAMT + PRCHAMNT + TAXAMNT + FRTAMNT - TRDISAMT
-
-                                        decimal totalCalculo = PMHeader.PRCHAMNT + PMHeader.TAXAMNT - PMHeader.TRDISAMT;
-                                        PMHeader.MSCCHAMT = PMHeader.DOCAMNT - totalCalculo;
-
-                                        #region Retenciones
-                                        var retencionGroup = retenciones
-                                                            .GroupBy(x => new { x.importe, x.impuesto })
-                                                            .Select(g => new
-                                                            {
-                                                                g.Key.impuesto,
-                                                                importe = g.Sum(y => decimal.Parse(y.importe))
-                                                            });
-
-                                        foreach (var retencion in retencionGroup)
-                                        {
-                                            taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
-
-                                            item.VENDORID = PMHeader.VENDORID;
-                                            item.VCHRNMBR = PMHeader.VCHNUMWK;
-                                            item.DOCTYPE = PMHeader.DOCTYPE;
-                                            item.BACHNUMB = PMHeader.BACHNUMB;
-
-                                            if (retencion.impuesto.Trim() == "001")     //isr
-                                                item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_ret_ISR"].ToString();
-                                            else
-                                                if (retencion.impuesto.Trim() == "002") //iva
-                                            {
-                                                item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_ret_IVA"].ToString();
-                                            }
-                                            else
-                                            {
-                                                error = true;
-
-                                                ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                args.Archivo = archivo;
-                                                args.Error = "Error en retención";
-
-                                                OnErrorImportarPM(args);
-                                            }
-
-                                            item.TAXAMNT = -1 * Decimal.Round(retencion.importe, 2);
-                                            item.TDTTXPUR = PMHeader.PRCHAMNT;
-                                            item.TXDTTPUR = PMHeader.PRCHAMNT;
-
-                                            items.Add(item);
-                                        }
-                                        #endregion
-
-                                        #region Traslados
-                                        var trasladoGroup = traslados
-                                                            .GroupBy(x => new { x.tasa, x.impuesto })
-                                                            .Select(g => new
-                                                            {
-                                                                g.Key.impuesto,
-                                                                g.Key.tasa,
-                                                                importe = g.Sum(y => decimal.Parse(y.importe))
-                                                            });
-
-                                        foreach (var lTraslado in trasladoGroup)
-                                        {
-                                            taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
-
-                                            item.VENDORID = PMHeader.VENDORID;
-                                            item.VCHRNMBR = PMHeader.VCHNUMWK;
-                                            item.DOCTYPE = PMHeader.DOCTYPE;
-                                            item.BACHNUMB = PMHeader.BACHNUMB;
-
-                                            if (lTraslado.impuesto.Trim() == "002") //iva
-                                            {
-                                                if (decimal.Parse(lTraslado.tasa) == decimal.Parse("0"))
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA0"].ToString();
-                                                else
-                                                    if (decimal.Equals(decimal.Parse(lTraslado.tasa), decimal.Parse("0.11")))
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA11"].ToString();
-                                                else
-                                                        if (decimal.Equals(decimal.Parse(lTraslado.tasa), decimal.Parse("0.16")))
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA16"].ToString();
-                                                else
-                                                {
-                                                    error = true;
-
-                                                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                    args.Archivo = archivo;
-                                                    args.Error = "Error en traslados IVA";
-
-                                                    OnErrorImportarPM(args);
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                if (lTraslado.impuesto.Trim() == "003") //IEPS
-                                                    item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IEPS"].ToString();
-                                                else
-                                                {
-                                                    error = true;
-
-                                                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                    args.Archivo = archivo;
-                                                    args.Error = "Error en traslados IEPS";
-
-                                                    OnErrorImportarPM(args);
-                                                }
-                                            }
-
-                                            item.TAXAMNT = Decimal.Round(lTraslado.importe, 2);
-                                            item.TDTTXPUR = PMHeader.PRCHAMNT;
-                                            item.TXDTTPUR = PMHeader.PRCHAMNT;
-
-                                            items.Add(item);
-                                        }
-
-                                        foreach (var implocalTrasladosLocal in implocalTrasladosLocales)
-                                        {
-                                            taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
-
-                                            item.VENDORID = PMHeader.VENDORID;
-                                            item.VCHRNMBR = PMHeader.VCHNUMWK;
-                                            item.DOCTYPE = PMHeader.DOCTYPE;
-                                            item.BACHNUMB = PMHeader.BACHNUMB;
-
-                                            if (implocalTrasladosLocal.ImpLocTrasladado == "ISH" || implocalTrasladosLocal.ImpLocTrasladado.ToUpper() == "IMPUESTO SOBRE HOSPEDAJE")
-                                            {
-                                                item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_loctra_ISH"].ToString();
-                                            }
-                                            else
-                                            {
-                                                error = true;
-
-                                                ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                                args.Archivo = archivo;
-                                                args.Error = "Error en traslados locales. Ej. ISH";
-
-                                                OnErrorImportarPM(args);
-                                            }
-
-                                            item.TAXAMNT = Decimal.Round(decimal.Parse(implocalTrasladosLocal.Importe), 2);
-                                            item.TDTTXPUR = PMHeader.PRCHAMNT;
-                                            item.TXDTTPUR = PMHeader.PRCHAMNT;
-
-                                            items.Add(item);
-                                        }
-                                    }
-                                    #endregion
-
-                                    if (!error)
-                                    {
-                                        // Serialize the master vendor type in memory.
-                                        eConnectType eConnectType = new eConnectType();
-                                        MemoryStream memoryStream = new MemoryStream();
-                                        XmlSerializer xmlSerializer = new XmlSerializer(eConnectType.GetType());
-
-                                        if (metodo == 1)
-                                        {
-                                            PAInvoiceEntry.taPMTransactionInsert = PMHeader;
-                                            PAInvoiceEntry.taPMTransactionTaxInsert_Items = items.ToArray();
-                                            masterPMTransactionTypes.Add(PAInvoiceEntry);
-
-                                            // Assign the master vendor types to the eConnectType.
-                                            eConnectType.PMTransactionType = masterPMTransactionTypes.ToArray();
-                                        }
-
-                                        if (metodo == 2)
-                                        {
-                                            POPInvoiceEntry.taPopRcptHdrInsert = POPHeader;
-                                            masterPOPReceivingsTypes.Add(POPInvoiceEntry);
-
-                                            // Assign the master vendor types to the eConnectType.
-                                            eConnectType.POPReceivingsType = masterPOPReceivingsTypes.ToArray();
-                                        }
-
-                                        // Serialize the eConnectType.
-                                        xmlSerializer.Serialize(memoryStream, eConnectType);
-
-                                        // Reset the position of the memory stream to the start.              
-                                        memoryStream.Position = 0;
-
-                                        // Create an XmlDocument from the serialized eConnectType in memory.
-                                        XmlDocument xmlDocument = new XmlDocument();
-                                        xmlDocument.Load(memoryStream);
-                                        memoryStream.Close();
-
-                                        string xmlEconn = xmlDocument.OuterXml;
-                                        //xmlEconn = xmlEconn.Replace("</CURNCYID>", "</CURNCYID><DISAVAMT>0</DISAVAMT><ORTDISAM>0</ORTDISAM>");
-
-                                        /*
-                                        ErrorImportarPMEventArgs argse = new ErrorImportarPMEventArgs();
-                                        argse.Archivo = archivo;
-                                        argse.Error = xmlEconn;
-                                        OnErrorImportarPM(argse);
-                                        */
-
-                                        // Call eConnect to process the XmlDocument.
-                                        if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "2010")
-                                            eConnectMethods.CreateEntity(connectionString, xmlEconn);
-                                        else
-                                            if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "10")
-                                        {
-                                            econn10.process p = new econn10.process(_pre);
-                                            p.Execute(xmlEconn);
-                                        }
-
-                                        if (metodo == 1)
-                                            this.FixDistributions(VCHRNMBR);
-                                        else
-                                            if (metodo == 2)
-                                            this.ChangePopType(VCHRNMBR);
-
-                                        ProcesoOkImportarPMEventArgs args = new ProcesoOkImportarPMEventArgs();
-                                        args.Archivo = archivo;
-                                        args.Msg = "Factura Importada";
-
-                                        OnProcesoOkImportarPM(args);
-                                        System.Threading.Thread.Sleep(100);
-                                    }
-                                }
-                                else
-                                {
-                                    //factura ya existe en GP
-                                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
-                                    args.Archivo = archivo;
-                                    args.Error = "Factura existente";
-
-                                    OnErrorImportarPM(args);
-                                }
-
-                                if (!error)
-                                {
-                                    if (!this.FolioExists(1, VCHRNMBR))
-                                    {
-                                        this.InsertFolio(1, VCHRNMBR, timbreDigital.UUID);
-
-                                        ProcesoOkImportarPMEventArgs args = new ProcesoOkImportarPMEventArgs();
-                                        args.Archivo = archivo;
-                                        args.Msg = "Folio Importado";
-
-                                        OnProcesoOkImportarPM(args);
-                                        System.Threading.Thread.Sleep(100);
+                                        item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_ret_IVA"].ToString();
                                     }
                                     else
                                     {
+                                        error = true;
+
                                         ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
                                         args.Archivo = archivo;
-                                        args.Error = "Folio ya cargado";
+                                        args.Error = "Error en retención";
 
                                         OnErrorImportarPM(args);
                                     }
+
+                                    item.TAXAMNT = -1 * Decimal.Round(retencion.importe, 2);
+                                    item.TDTTXPUR = PMHeader.PRCHAMNT;
+                                    item.TXDTTPUR = PMHeader.PRCHAMNT;
+
+                                    items.Add(item);
+                                }
+                                #endregion
+
+                                #region Traslados
+                                var trasladoGroup = traslados
+                                                    .GroupBy(x => new { x.tasa, x.impuesto })
+                                                    .Select(g => new
+                                                    {
+                                                        g.Key.impuesto,
+                                                        g.Key.tasa,
+                                                        importe = g.Sum(y => decimal.Parse(y.importe))
+                                                    });
+
+                                foreach (var lTraslado in trasladoGroup)
+                                {
+                                    taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
+
+                                    item.VENDORID = PMHeader.VENDORID;
+                                    item.VCHRNMBR = PMHeader.VCHNUMWK;
+                                    item.DOCTYPE = PMHeader.DOCTYPE;
+                                    item.BACHNUMB = PMHeader.BACHNUMB;
+
+                                    if (lTraslado.impuesto.Trim() == "002") //iva
+                                    {
+                                        if (decimal.Parse(lTraslado.tasa) == decimal.Parse("0"))
+                                            item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA0"].ToString();
+                                        else
+                                            if (decimal.Equals(decimal.Parse(lTraslado.tasa), decimal.Parse("0.11")))
+                                            item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA11"].ToString();
+                                        else
+                                                if (decimal.Equals(decimal.Parse(lTraslado.tasa), decimal.Parse("0.16")))
+                                            item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IVA16"].ToString();
+                                        else
+                                        {
+                                            error = true;
+
+                                            ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                                            args.Archivo = archivo;
+                                            args.Error = "Error en traslados IVA";
+
+                                            OnErrorImportarPM(args);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        if (lTraslado.impuesto.Trim() == "003") //IEPS
+                                            item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_tra_IEPS"].ToString();
+                                        else
+                                        {
+                                            error = true;
+
+                                            ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                                            args.Archivo = archivo;
+                                            args.Error = "Error en traslados IEPS";
+
+                                            OnErrorImportarPM(args);
+                                        }
+                                    }
+
+                                    item.TAXAMNT = Decimal.Round(lTraslado.importe, 2);
+                                    item.TDTTXPUR = PMHeader.PRCHAMNT;
+                                    item.TXDTTPUR = PMHeader.PRCHAMNT;
+
+                                    items.Add(item);
+                                }
+
+                                foreach (var implocalTrasladosLocal in implocalTrasladosLocales)
+                                {
+                                    taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert item = new taPMTransactionTaxInsert_ItemsTaPMTransactionTaxInsert();
+
+                                    item.VENDORID = PMHeader.VENDORID;
+                                    item.VCHRNMBR = PMHeader.VCHNUMWK;
+                                    item.DOCTYPE = PMHeader.DOCTYPE;
+                                    item.BACHNUMB = PMHeader.BACHNUMB;
+
+                                    if (implocalTrasladosLocal.ImpLocTrasladado == "ISH" || implocalTrasladosLocal.ImpLocTrasladado.ToUpper() == "IMPUESTO SOBRE HOSPEDAJE")
+                                    {
+                                        item.TAXDTLID = System.Configuration.ConfigurationManager.AppSettings[_pre + "_loctra_ISH"].ToString();
+                                    }
+                                    else
+                                    {
+                                        error = true;
+
+                                        ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                                        args.Archivo = archivo;
+                                        args.Error = "Error en traslados locales. Ej. ISH";
+
+                                        OnErrorImportarPM(args);
+                                    }
+
+                                    item.TAXAMNT = Decimal.Round(decimal.Parse(implocalTrasladosLocal.Importe), 2);
+                                    item.TDTTXPUR = PMHeader.PRCHAMNT;
+                                    item.TXDTTPUR = PMHeader.PRCHAMNT;
+
+                                    items.Add(item);
                                 }
                             }
+                            #endregion
+
+                            if (!error)
+                            {
+                                // Serialize the master vendor type in memory.
+                                eConnectType eConnectType = new eConnectType();
+                                MemoryStream memoryStream = new MemoryStream();
+                                XmlSerializer xmlSerializer = new XmlSerializer(eConnectType.GetType());
+
+                                if (metodo == 1)
+                                {
+                                    PAInvoiceEntry.taPMTransactionInsert = PMHeader;
+                                    PAInvoiceEntry.taPMTransactionTaxInsert_Items = items.ToArray();
+                                    masterPMTransactionTypes.Add(PAInvoiceEntry);
+
+                                    // Assign the master vendor types to the eConnectType.
+                                    eConnectType.PMTransactionType = masterPMTransactionTypes.ToArray();
+                                }
+
+                                if (metodo == 2)
+                                {
+                                    POPInvoiceEntry.taPopRcptHdrInsert = POPHeader;
+                                    masterPOPReceivingsTypes.Add(POPInvoiceEntry);
+
+                                    // Assign the master vendor types to the eConnectType.
+                                    eConnectType.POPReceivingsType = masterPOPReceivingsTypes.ToArray();
+                                }
+
+                                // Serialize the eConnectType.
+                                xmlSerializer.Serialize(memoryStream, eConnectType);
+
+                                // Reset the position of the memory stream to the start.              
+                                memoryStream.Position = 0;
+
+                                // Create an XmlDocument from the serialized eConnectType in memory.
+                                XmlDocument xmlDocument = new XmlDocument();
+                                xmlDocument.Load(memoryStream);
+                                memoryStream.Close();
+
+                                string xmlEconn = xmlDocument.OuterXml;
+                                //xmlEconn = xmlEconn.Replace("</CURNCYID>", "</CURNCYID><DISAVAMT>0</DISAVAMT><ORTDISAM>0</ORTDISAM>");
+
+                                /*
+                                ErrorImportarPMEventArgs argse = new ErrorImportarPMEventArgs();
+                                argse.Archivo = archivo;
+                                argse.Error = xmlEconn;
+                                OnErrorImportarPM(argse);
+                                */
+
+                                // Call eConnect to process the XmlDocument.
+                                if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "2010")
+                                    eConnectMethods.CreateEntity(connectionString, xmlEconn);
+                                else
+                                    if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "10")
+                                {
+                                    econn10.process p = new econn10.process(_pre);
+                                    p.Execute(xmlEconn);
+                                }
+
+                                if (metodo == 1)
+                                    this.FixDistributions(VCHRNMBR);
+                                else
+                                    if (metodo == 2)
+                                    this.ChangePopType(VCHRNMBR);
+
+                                ProcesoOkImportarPMEventArgs args = new ProcesoOkImportarPMEventArgs();
+                                args.Archivo = archivo;
+                                args.Msg = "Factura Importada";
+
+                                OnProcesoOkImportarPM(args);
+                                System.Threading.Thread.Sleep(100);
+                            }
                         }
-                        catch (Exception ex)
+                        else
                         {
+                            //factura ya existe en GP
                             ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
                             args.Archivo = archivo;
-                            args.Error = ex.Message + " - " + ex.StackTrace + " - " + ex.Source;
+                            args.Error = "Factura existente";
 
                             OnErrorImportarPM(args);
                         }
-                        finally
+
+                        if (!error)
                         {
-                            eConnectMethods.Dispose();
+                            CargaCfdi();
+                        }
+                            if (!error)
+                        {
+                            if (!this.FolioExists(1, VCHRNMBR))
+                            {
+                                this.InsertFolio(1, VCHRNMBR, timbreDigital.UUID);
+
+                                ProcesoOkImportarPMEventArgs args = new ProcesoOkImportarPMEventArgs();
+                                args.Archivo = archivo;
+                                args.Msg = "Folio Importado";
+
+                                OnProcesoOkImportarPM(args);
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            else
+                            {
+                                ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                                args.Archivo = archivo;
+                                args.Error = "Folio ya cargado";
+
+                                OnErrorImportarPM(args);
+                            }
                         }
                     }
+
                 }
+                catch (Exception ex)
+                {
+                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                    args.Archivo = archivo;
+                    args.Error = ex.Message + " - " + ex.StackTrace + " - " + ex.Source;
+
+                    OnErrorImportarPM(args);
+                }
+                finally
+                {
+                    eConnectMethods.Dispose();
+                }
+
             }
+
+        }
+
+        private string AveriguarElTipoDeCfdi(XDocument xdoc, XNamespace cfdi)
+        {
+            var comprobantes = (from c in xdoc.Descendants(cfdi + "Comprobante")
+                                select new
+                                {
+                                    tipoDeComprobante = c.Attribute("TipoDeComprobante").Value,
+                                }).FirstOrDefault();
+            return(comprobantes.tipoDeComprobante);
         }
 
         /// <summary>
