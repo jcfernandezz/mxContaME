@@ -155,7 +155,7 @@
     <Binary Id="CreateObj130" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\91_dcemMarcarPolizasConError.sprocedure.sql"/>
     <Binary Id="CreateObj133" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\92_PreprocesaArchivosDeContaElectronica.sprocedure.sql"/>
     <Binary Id="CreateObj135" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\94_dcemContabilidadExportados.table.sql"/>
-    <Binary Id="CreateObj136" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\95_DaPermisosContaElectronica.grant.sql"/>
+    <Binary Id="CreateObj136" SourceFile="C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\sql\195_DaPermisosContaElectronica.grant.sql"/>
 
     
 

@@ -32,6 +32,9 @@ grant select, update, insert on dbo.pop10300 to rol_contaelectr;
 grant execute on dcem.dcemMarcarPolizasConError to rol_contaelectr;
 grant execute on dcem.dcemCorrigePoliza to rol_contaelectr;
 
+grant execute on dace.spComprobanteCFDIInsDel to rol_contaelectr;
+
+
 ----------------------------------------------------------------------------
 use dynamics;
 IF DATABASE_PRINCIPAL_ID('rol_contaelectr') IS NULL
