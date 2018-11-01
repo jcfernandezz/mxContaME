@@ -65,3 +65,11 @@ update gl set userdef1 = '105.01'
 from gl00100 gl
 where actindx = 18
 --gl.userdef1 != ''
+------------------------------------------------------------------
+
+--carga de comprobantes cfdi
+select *
+from dace.ComprobanteCFDI
+
+select *
+from dace.ComprobanteCFDIRelacionado

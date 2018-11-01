@@ -35,12 +35,64 @@ namespace CE.Business
 
 
         #region Importar Facturas Electronicas
+
+        public async Task IntegrarDocumentosGPAsync(List<string> archivos, int metodo)
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+
+            XNamespace cfdi = @"http://www.sat.gob.mx/cfd/3";
+            XNamespace tfd = @"http://www.sat.gob.mx/TimbreFiscalDigital";
+            XNamespace implocal = @"http://www.sat.gob.mx/implocal";
+
+            string BACHNUMB = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string formatoFecha = System.Configuration.ConfigurationManager.AppSettings[_pre + "_FormatoFecha"].ToString();
+
+            foreach (string archivo in archivos)
+            {
+                try
+                {
+                    if (System.IO.File.Exists(archivo))
+                    {
+                        string xml = System.IO.File.ReadAllText(archivo);
+                        XDocument xdoc = XDocument.Parse(xml);
+
+                        string tipoComprobante = AveriguarElTipoDeCfdi(xdoc, cfdi);
+                        switch (tipoComprobante)
+                        {
+                            case "I":
+                                bool integrado = IntegraFacturaPmPop(xdoc, cfdi, tfd, implocal, archivo, metodo, formatoFecha, BACHNUMB);
+                                if (integrado)
+                                    await CargaComprobanteCfdiAsync(xdoc, cfdi, tfd, archivo);
+                                break;
+                            case "P":
+                                await CargaComprobanteCfdiAsync(xdoc, cfdi, tfd, archivo);
+                                break;
+                            default:
+                                ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                                args.Archivo = archivo;
+                                args.Error = "Este comprobante no se puede integrar a GP porque no es un comprobante de Ingreso ni de Pago";
+                                OnErrorImportarPM(args);
+                                break;
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorImportarPMEventArgs args = new ErrorImportarPMEventArgs();
+                    args.Archivo = archivo;
+                    args.Error = ex.Message + " - " + ex.StackTrace + " - " + ex.Source;
+                    OnErrorImportarPM(args);
+                }
+            }
+        }
+
         /// <summary>
         /// Importar facturas a GP
         /// </summary>
         /// <param name="archivos">Path de los archivos</param>
         /// <param name="metodo">1: PM - 2: POP</param>
-                    /// 
+        /// 
         public void Importar(List<string> archivos, int metodo)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
@@ -90,6 +142,60 @@ namespace CE.Business
             }
         }
 
+        private async Task<int> CargaComprobanteCfdiAsync(XDocument xdoc, XNamespace cfdi, XNamespace tfd, string carpetaYArchivo)
+        {
+            string carpeta = Path.GetDirectoryName(carpetaYArchivo);
+            string archivo = Path.GetFileName(carpetaYArchivo);
+            var comprobante = (from c in xdoc.Descendants(cfdi + "Comprobante")
+                               select new
+                               {
+                                   folio = c.Attribute("Folio") == null ? "" : c.Attribute("Folio").Value,
+                                   fecha = c.Attribute("Fecha").Value,
+                                   metodoDePago = c.Attribute("MetodoPago") == null ? string.Empty : c.Attribute("MetodoPago").Value,
+                                   Moneda = c.Attribute("Moneda") == null ? "" : c.Attribute("Moneda").Value,
+                                   total = c.Attribute("Total").Value,
+                                   tipoDeComprobante = c.Attribute("TipoDeComprobante").Value,
+                               }).FirstOrDefault();
+
+            var emisor = (from c in xdoc.Descendants(cfdi + "Emisor")
+                          select new
+                          {
+                              rfc = c.Attribute("Rfc").Value,
+                              nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value
+                          }).FirstOrDefault();
+
+            var timbre = (from c in xdoc.Descendants(tfd + "TimbreFiscalDigital")
+                          select new
+                          {
+                              UUID = c.Attribute("UUID").Value
+                          }).FirstOrDefault();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("dace.spComprobanteCFDIInsDel", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@UUID", timbre.UUID));
+                    cmd.Parameters.Add(new SqlParameter("@TIPOCOMPROBANTE", comprobante.tipoDeComprobante));
+                    cmd.Parameters.Add(new SqlParameter("@FOLIO", comprobante.folio));
+                    cmd.Parameters.Add(new SqlParameter("@FECHA", comprobante.fecha));
+                    cmd.Parameters.Add(new SqlParameter("@TOTAL", decimal.Parse(comprobante.total)));
+                    cmd.Parameters.Add(new SqlParameter("@MONEDA", comprobante.Moneda));
+                    cmd.Parameters.Add(new SqlParameter("@METODOPAGO", comprobante.metodoDePago));
+                    cmd.Parameters.Add(new SqlParameter("@EMISOR_RFC", emisor.rfc));
+                    cmd.Parameters.Add(new SqlParameter("@RESUMENCFDI", string.Empty));
+                    cmd.Parameters.Add(new SqlParameter("@NOMBREARCHIVO", archivo));
+                    cmd.Parameters.Add(new SqlParameter("@CARPETAARCHIVO", carpeta));
+                    cmd.Parameters.Add(new SqlParameter("@comprobanteXml", xdoc.ToString()));
+                    cmd.CommandTimeout = 0;
+                    await conn.OpenAsync();
+                    return await cmd.ExecuteNonQueryAsync();
+
+                }
+
+            }
+        }
+
         private void CargaComprobanteCfdi(XDocument xdoc, XNamespace cfdi, XNamespace tfd, string carpetaYArchivo)
         {
             string carpeta = Path.GetDirectoryName(carpetaYArchivo);
@@ -120,6 +226,7 @@ namespace CE.Business
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
+                conn.Open();
                 using (SqlCommand cmd = new SqlCommand("dace.spComprobanteCFDIInsDel", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -136,7 +243,6 @@ namespace CE.Business
                     cmd.Parameters.Add(new SqlParameter("@CARPETAARCHIVO", carpeta));
                     cmd.Parameters.Add(new SqlParameter("@comprobanteXml", xdoc.ToString()));
                     cmd.CommandTimeout = 0;
-                    cmd.Connection.Open();
                     cmd.ExecuteNonQuery();
 
                 }
@@ -152,7 +258,7 @@ namespace CE.Business
         /// <param name="metodo">1 pm, 2 pop</param>
         /// <param name="formatoFecha"></param>
         /// <param name="BACHNUMB"></param>
-        private void IntegraFacturaPmPop(XDocument xdoc, XNamespace cfdi, XNamespace tfd, XNamespace implocal, string archivo, int metodo, string formatoFecha, string BACHNUMB)
+        private bool IntegraFacturaPmPop(XDocument xdoc, XNamespace cfdi, XNamespace tfd, XNamespace implocal, string archivo, int metodo, string formatoFecha, string BACHNUMB)
         {
             bool error = false;
             using (eConnectMethods eConnectMethods = new eConnectMethods())
@@ -537,10 +643,10 @@ namespace CE.Business
                                     eConnectMethods.CreateEntity(connectionString, xmlEconn);
                                 else
                                     if (System.Configuration.ConfigurationManager.AppSettings[_pre + "_version"].ToString() == "10")
-                                {
-                                    econn10.process p = new econn10.process(_pre);
-                                    p.Execute(xmlEconn);
-                                }
+                                    {
+                                        econn10.process p = new econn10.process(_pre);
+                                        p.Execute(xmlEconn);
+                                    }
 
                                 if (metodo == 1)
                                     this.FixDistributions(VCHRNMBR);
@@ -570,7 +676,7 @@ namespace CE.Business
                         //{
                         //    CargaComprobanteCfdi();
                         //}
-                            if (!error)
+                        if (!error)
                         {
                             if (!this.FolioExists(1, VCHRNMBR))
                             {
@@ -593,7 +699,7 @@ namespace CE.Business
                             }
                         }
                     }
-
+                    return !error;
                 }
                 catch (Exception ex)
                 {
@@ -602,6 +708,7 @@ namespace CE.Business
                     args.Error = ex.Message + " - " + ex.StackTrace + " - " + ex.Source;
 
                     OnErrorImportarPM(args);
+                    return false;
                 }
                 finally
                 {
@@ -612,7 +719,7 @@ namespace CE.Business
 
         }
 
-        private string AveriguarElTipoDeCfdi(XDocument xdoc, XNamespace cfdi)
+        static public string AveriguarElTipoDeCfdi(XDocument xdoc, XNamespace cfdi)
         {
             var comprobantes = (from c in xdoc.Descendants(cfdi + "Comprobante")
                                 select new
