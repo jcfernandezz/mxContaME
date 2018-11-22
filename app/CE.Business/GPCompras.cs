@@ -672,10 +672,6 @@ namespace CE.Business
                             OnErrorImportarPM(args);
                         }
 
-                        //if (!error)
-                        //{
-                        //    CargaComprobanteCfdi();
-                        //}
                         if (!error)
                         {
                             if (!this.FolioExists(1, VCHRNMBR))
