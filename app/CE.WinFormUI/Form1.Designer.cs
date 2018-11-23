@@ -104,6 +104,7 @@
             this.bindingSource3 = new System.Windows.Forms.BindingSource(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.label11 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -518,6 +519,7 @@
             this.flowLayoutPanel1.Controls.Add(this.dataGridView6);
             this.flowLayoutPanel1.Controls.Add(this.label10);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView7);
+            this.flowLayoutPanel1.Controls.Add(this.label11);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView8);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView9);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -668,10 +670,11 @@
             // 
             this.dataGridView8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView8.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView8.Location = new System.Drawing.Point(3, 560);
+            this.dataGridView8.Location = new System.Drawing.Point(3, 573);
             this.dataGridView8.Name = "dataGridView8";
-            this.dataGridView8.Size = new System.Drawing.Size(555, 20);
+            this.dataGridView8.Size = new System.Drawing.Size(555, 58);
             this.dataGridView8.TabIndex = 7;
             // 
             // dataGridView9
@@ -679,7 +682,7 @@
             this.dataGridView9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView9.Location = new System.Drawing.Point(3, 586);
+            this.dataGridView9.Location = new System.Drawing.Point(3, 637);
             this.dataGridView9.Name = "dataGridView9";
             this.dataGridView9.Size = new System.Drawing.Size(555, 22);
             this.dataGridView9.TabIndex = 8;
@@ -911,6 +914,15 @@
             this.tsProgressBar.Name = "tsProgressBar";
             this.tsProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 557);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(135, 13);
+            this.label11.TabIndex = 16;
+            this.label11.Text = "Documentos Relacionados";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1053,6 +1065,7 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn TipoSolicitud;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumOrden;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumTramite;
+        private System.Windows.Forms.Label label11;
     }
 }
 

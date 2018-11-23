@@ -7,6 +7,8 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\Mi
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\Microsoft.Dynamics.GP.eConnect.MiscRoutines.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.econn10.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\bin\Debug\CE.Model.pdb
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.csprojResolveAssemblyReference.cache
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.pdb
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.csprojAssemblyReference.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.csproj.CoreCompileInputs.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Business\obj\Debug\CE.Business.csproj.CopyComplete

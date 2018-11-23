@@ -379,6 +379,7 @@ namespace CE.WinFormUI
                     string text = System.IO.File.ReadAllText(directorio + "\\" + archivo);
 
                     XNamespace cfdi = @"http://www.sat.gob.mx/cfd/3";
+                    XNamespace pago10 = @"http://www.sat.gob.mx/Pagos";
                     XNamespace tfd = @"http://www.sat.gob.mx/TimbreFiscalDigital";
 
                     try
@@ -472,62 +473,74 @@ namespace CE.WinFormUI
                                                    }).ToList();
 
 
-                                //emisor = (from c in xdoc.Descendants(cfdi + "Emisor")
-                                //              select new
-                                //              {
-                                //                  Rfc = c.Attribute("Rfc").Value,
-                                //                  Nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value,
-                                //                  Regimen = c.Attribute("RegimenFiscal") == null ? "" : c.Attribute("RegimenFiscal").Value,
-                                //              }).ToList();
+                                var emisorP = (from c in xdoc.Descendants(cfdi + "Emisor")
+                                          select new
+                                          {
+                                              Rfc = c.Attribute("Rfc").Value,
+                                              Nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value,
+                                              Regimen = c.Attribute("RegimenFiscal") == null ? "" : c.Attribute("RegimenFiscal").Value,
+                                          }).ToList();
 
-                                //receptor = (from c in xdoc.Descendants(cfdi + "Receptor")
-                                //                select new
-                                //                {
-                                //                    Rfc = c.Attribute("Rfc").Value,
-                                //                    Nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value
-                                //                }).ToList();
+                                var receptorP = (from c in xdoc.Descendants(cfdi + "Receptor")
+                                            select new
+                                            {
+                                                Rfc = c.Attribute("Rfc").Value,
+                                                Nombre = c.Attribute("Nombre") == null ? "" : c.Attribute("Nombre").Value,
+                                                UsoCFDI = c.Attribute("UsoCFDI") == null ? "" : c.Attribute("UsoCFDI").Value,
+                                            }).ToList();
 
-                                //concepto = (from c in xdoc.Descendants(cfdi + "Concepto")
-                                //                select new
-                                //                {
-                                //                    Cantidad = c.Attribute("Cantidad").Value,
-                                //                    Unidad = c.Attribute("ClaveUnidad").Value,
-                                //                    NoIdentificacion = c.Attribute("NoIdentificacion") == null ? "" : c.Attribute("NoIdentificacion").Value,
-                                //                    Descripcion = c.Attribute("Descripcion").Value,
-                                //                    ValorUnitario = c.Attribute("ValorUnitario").Value,
-                                //                    Importe = c.Attribute("Importe").Value
-                                //                }).ToList();
+                                var conceptoP = (from c in xdoc.Descendants(cfdi + "Concepto")
+                                            select new
+                                            {
+                                                Cantidad = c.Attribute("Cantidad").Value,
+                                                Unidad = c.Attribute("ClaveUnidad").Value,
+                                                Producto = c.Attribute("ClaveProdServ") == null ? "" : c.Attribute("ClaveProdServ").Value,
+                                                Descripcion = c.Attribute("Descripcion").Value,
+                                            }).ToList();
 
-                                //retenciones = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosRetenidos") != null).Descendants(cfdi + "Retencion")
-                                //                   select new
-                                //                   {
-                                //                       Impuesto = c.Attribute("Impuesto").Value,
-                                //                       Importe = c.Attribute("Importe").Value
-                                //                   }).ToList();
+                                var pagoP = (from c in xdoc.Descendants(pago10 + "Pago")
+                                            select new
+                                            {
+                                                CuentaDelBeneficiario = c.Attribute("CtaBeneficiario") == null ? "" : c.Attribute("CtaBeneficiario").Value,
+                                                RFCEmisorCuentaBeneficiario = c.Attribute("RfcEmisorCtaBen") == null ? "" : c.Attribute("RfcEmisorCtaBen").Value,
+                                                CuentaDelOrdenante = c.Attribute("CtaOrdenante") == null ? "" : c.Attribute("CtaOrdenante").Value,
+                                                RFCEmisorCuentaOrdenante = c.Attribute("RfcEmisorCtaOrd") == null ? "" : c.Attribute("RfcEmisorCtaOrd").Value,
+                                                NumeroDeOperacion = c.Attribute("NumOperacion") == null ? "" : c.Attribute("NumOperacion").Value,
+                                                Monto = c.Attribute("Monto").Value,
+                                                MonedaDelPago = c.Attribute("MonedaP").Value,
+                                                FormaDePagoP = c.Attribute("FormaDePagoP").Value,
+                                                FechaDelPago = c.Attribute("FechaPago").Value,
+                                            }).ToList();
 
-                                //traslado = (from c in xdoc.Descendants(cfdi + "Impuestos").Where(x => x.Attribute("TotalImpuestosTrasladados") != null).Descendants(cfdi + "Traslado")
-                                //                select new
-                                //                {
-                                //                    Impuesto = c.Attribute("Impuesto").Value,
-                                //                    TipoFactor = c.Attribute("TipoFactor").Value,
-                                //                    Tasa = c.Attribute("TasaOCuota").Value,
-                                //                    Importe = c.Attribute("Importe").Value
-                                //                }).ToList();
+                                var docRelacionadoP = (from c in xdoc.Descendants(pago10 + "DoctoRelacionado")
+                                    select new
+                                             {
+                                                Folio = c.Attribute("Folio") == null ? "" : c.Attribute("Folio").Value,
+                                                Serie = c.Attribute("Serie") == null ? "" : c.Attribute("Serie").Value,
+                                                SaldoInsoluto = c.Attribute("ImpSaldoInsoluto") == null ? "" : c.Attribute("ImpSaldoInsoluto").Value,
+                                                Pagado = c.Attribute("ImpPagado") == null ? "" : c.Attribute("ImpPagado").Value,
+                                                SaldoAnterior = c.Attribute("ImpSaldoAnt") == null ? "" : c.Attribute("ImpSaldoAnt").Value,
+                                                Parcialidad = c.Attribute("NumParcialidad").Value,
+                                                MetodoDePago = c.Attribute("MetodoDePagoDR").Value,
+                                                TipoDeCambio = c.Attribute("TipoCambioDR") == null ? "" : c.Attribute("TipoCambioDR").Value,
+                                                Moneda = c.Attribute("MonedaDR").Value,
+                                                UUID = c.Attribute("IdDocumento").Value,
+                                    }).ToList();
 
-                                //timbreDigital = (from c in xdoc.Descendants(tfd + "TimbreFiscalDigital")
-                                //                     select new
-                                //                     {
-                                //                         UUID = c.Attribute("UUID").Value
-                                //                     }).ToList();
+                                var timbreDigitalP = (from c in xdoc.Descendants(tfd + "TimbreFiscalDigital")
+                                                 select new
+                                                 {
+                                                     UUID = c.Attribute("UUID").Value
+                                                 }).ToList();
 
                                 dataGridView1.DataSource = comprobanteP;
-                                //dataGridView2.DataSource = emisor;
-                                //dataGridView3.DataSource = receptor;
-                                //dataGridView4.DataSource = concepto;
-                                //dataGridView5.DataSource = traslado;
+                                dataGridView2.DataSource = emisorP;
+                                dataGridView3.DataSource = receptorP;
+                                dataGridView4.DataSource = pagoP;
+                                //dataGridView5.DataSource = pagoP;
                                 //dataGridView6.DataSource = retenciones;
-                                //dataGridView7.DataSource = timbreDigital;
-                                ////dataGridView8.DataSource = ;
+                                dataGridView7.DataSource = timbreDigitalP;
+                                dataGridView8.DataSource = docRelacionadoP;
                                 ////dataGridView9.DataSource = ;
 
                                 break;
