@@ -460,7 +460,7 @@ namespace CE.WinFormUI
                                 dataGridView5.DataSource = traslado;
                                 dataGridView6.DataSource = retenciones;
                                 dataGridView7.DataSource = timbreDigital;
-                                //dataGridView8.DataSource = ;
+                                dataGridView8.DataSource = null;
                                 //dataGridView9.DataSource = ;
                                 break;
                             case "P":
@@ -515,8 +515,6 @@ namespace CE.WinFormUI
                                 var docRelacionadoP = (from c in xdoc.Descendants(pago10 + "DoctoRelacionado")
                                     select new
                                              {
-                                                Folio = c.Attribute("Folio") == null ? "" : c.Attribute("Folio").Value,
-                                                Serie = c.Attribute("Serie") == null ? "" : c.Attribute("Serie").Value,
                                                 SaldoInsoluto = c.Attribute("ImpSaldoInsoluto") == null ? "" : c.Attribute("ImpSaldoInsoluto").Value,
                                                 Pagado = c.Attribute("ImpPagado") == null ? "" : c.Attribute("ImpPagado").Value,
                                                 SaldoAnterior = c.Attribute("ImpSaldoAnt") == null ? "" : c.Attribute("ImpSaldoAnt").Value,
@@ -537,8 +535,8 @@ namespace CE.WinFormUI
                                 dataGridView2.DataSource = emisorP;
                                 dataGridView3.DataSource = receptorP;
                                 dataGridView4.DataSource = pagoP;
-                                //dataGridView5.DataSource = pagoP;
-                                //dataGridView6.DataSource = retenciones;
+                                dataGridView5.DataSource = null;
+                                dataGridView6.DataSource = null;
                                 dataGridView7.DataSource = timbreDigitalP;
                                 dataGridView8.DataSource = docRelacionadoP;
                                 ////dataGridView9.DataSource = ;
