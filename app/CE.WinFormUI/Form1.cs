@@ -131,7 +131,7 @@ namespace CE.WinFormUI
             gridVista.AutoGenerateColumns = false;
             gridVista.DataSource = bindingSource2;
             gridVista.ClearSelection();
-//            InicializaCheckBoxDelGrid(gridVista, 0, false);
+            //InicializaCheckBoxDelGrid(gridVista, 0, false);
 
             gridVista.AutoResizeColumns();
 //            gridVista.RowHeadersVisible = false;
@@ -182,7 +182,7 @@ namespace CE.WinFormUI
                     DcemVwContabilidad item = (DcemVwContabilidad)gridVista.SelectedRows[0].DataBoundItem;
                     if (item != null)
                         mostrarMensaje();
-                        //mostrarContenido(item.year1, item.periodid, item.tipodoc);
+                    //mostrarContenido(item.year1, item.periodid, item.tipodoc);
                 }
                 catch
                 {
@@ -230,9 +230,8 @@ namespace CE.WinFormUI
             {
                 DataGridViewCheckBoxCell marca = row.Cells[0] as DataGridViewCheckBoxCell;
                 
-                //if (row.Cells[0].Value != null && (bool)row.Cells[0].Value)
-                if (marca.Value != null && (bool)marca.Value)
-                {
+                if (marca.Value != null && (marca.Value.Equals(true) || marca.Value.ToString().Equals("1")))
+                    {
                     var item = (DcemVwContabilidad)row.DataBoundItem;
 
 
@@ -995,6 +994,12 @@ namespace CE.WinFormUI
 
                 }
             }
+
+        }
+
+        private void gridVista_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0) gridVista.EndEdit();
 
         }
     }
