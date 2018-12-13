@@ -3,3 +3,4 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\bin\Debug\CE.Mo
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Debug\CE.Model.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Debug\CE.Model.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Debug\CE.Model.csproj.CoreCompileInputs.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.Model\obj\Debug\CE.Model.csprojAssemblyReference.cache

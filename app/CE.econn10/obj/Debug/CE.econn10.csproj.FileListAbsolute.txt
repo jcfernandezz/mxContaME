@@ -7,3 +7,4 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.econn10\obj\Debug\CE.
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.econn10\obj\Debug\CE.econn10.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.econn10\obj\Debug\CE.econn10.csproj.CoreCompileInputs.cache
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.econn10\obj\Debug\CE.econn10.csproj.CopyComplete
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.econn10\obj\Debug\CE.econn10.csprojAssemblyReference.cache
