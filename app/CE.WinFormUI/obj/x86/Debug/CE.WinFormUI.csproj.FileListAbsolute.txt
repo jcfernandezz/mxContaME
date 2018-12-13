@@ -14,13 +14,11 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\M
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\CE.Business.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\CE.Model.pdb
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\CE.econn10.pdb
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csprojResolveAssemblyReference.cache
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.Form1.resources
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.Properties.Resources.resources
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csproj.GenerateResource.Cache
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.exe
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.pdb
-C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csproj.CE.WinFormUI.exe.config
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\Microsoft.Dynamics.GP.eConnect.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\Microsoft.Dynamics.GP.eConnect.Serialization.dll
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ClosedXML.dll
@@ -31,3 +29,7 @@ C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\C
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ClosedXML.xml
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\DocumentFormat.OpenXml.xml
 C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\bin\Debug\ExcelNumberFormat.xml
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csprojAssemblyReference.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.exe.config
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csproj.CoreCompileInputs.cache
+C:\jcTii\Desarrollo\MEX_ContaMediosElectr\mxContaME\app\CE.WinFormUI\obj\x86\Debug\CE.WinFormUI.csproj.CopyComplete

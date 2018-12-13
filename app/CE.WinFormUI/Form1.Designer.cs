@@ -41,13 +41,6 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.grid = new System.Windows.Forms.DataGridView();
             this.gridVista = new System.Windows.Forms.DataGridView();
-            this.Marcar = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TipoSolicitud = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.NumOrden = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NumTramite = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -79,6 +72,7 @@
             this.dataGridView6 = new System.Windows.Forms.DataGridView();
             this.label10 = new System.Windows.Forms.Label();
             this.dataGridView7 = new System.Windows.Forms.DataGridView();
+            this.label11 = new System.Windows.Forms.Label();
             this.dataGridView8 = new System.Windows.Forms.DataGridView();
             this.dataGridView9 = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -104,6 +98,13 @@
             this.bindingSource3 = new System.Windows.Forms.BindingSource(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.Marcar = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TipoSolicitud = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.NumOrden = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NumTramite = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -178,8 +179,8 @@
             // versión10ToolStripMenuItem
             // 
             this.versión10ToolStripMenuItem.Name = "versión10ToolStripMenuItem";
-            this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
-            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v4.2.2-beta1";
+            this.versión10ToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.versión10ToolStripMenuItem.Text = "Contabilidad Electrónica 1.3 v4.2.3-release";
             // 
             // tableLayoutPanel1
             // 
@@ -257,6 +258,8 @@
             this.gridVista.AllowUserToAddRows = false;
             this.gridVista.AllowUserToDeleteRows = false;
             this.gridVista.AllowUserToOrderColumns = true;
+            this.gridVista.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.gridVista.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.gridVista.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridVista.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Marcar,
@@ -269,59 +272,11 @@
             this.gridVista.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridVista.Location = new System.Drawing.Point(3, 3);
             this.gridVista.Name = "gridVista";
-            this.gridVista.ShowEditingIcon = false;
             this.gridVista.Size = new System.Drawing.Size(330, 312);
             this.gridVista.TabIndex = 14;
+            this.gridVista.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridVista_CellContentClick);
             this.gridVista.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridVista_CellFormatting);
             this.gridVista.SelectionChanged += new System.EventHandler(this.gridVista_SelectionChanged);
-            // 
-            // Marcar
-            // 
-            this.Marcar.HeaderText = "C";
-            this.Marcar.Name = "Marcar";
-            // 
-            // col2
-            // 
-            this.col2.DataPropertyName = "year1";
-            this.col2.HeaderText = "Año";
-            this.col2.Name = "col2";
-            this.col2.ReadOnly = true;
-            // 
-            // col3
-            // 
-            this.col3.DataPropertyName = "periodid";
-            this.col3.HeaderText = "Mes";
-            this.col3.Name = "col3";
-            this.col3.ReadOnly = true;
-            // 
-            // col4
-            // 
-            this.col4.DataPropertyName = "tipodoc";
-            this.col4.HeaderText = "Tipo";
-            this.col4.Name = "col4";
-            this.col4.ReadOnly = true;
-            // 
-            // TipoSolicitud
-            // 
-            this.TipoSolicitud.HeaderText = "Tipo Solicitud";
-            this.TipoSolicitud.Items.AddRange(new object[] {
-            "AF - Acto de Fiscalización",
-            "FC - Fiscalización Compulsa",
-            "DE - Devolución",
-            "CO - Compensación"});
-            this.TipoSolicitud.Name = "TipoSolicitud";
-            // 
-            // NumOrden
-            // 
-            this.NumOrden.HeaderText = "N. Orden";
-            this.NumOrden.MaxInputLength = 13;
-            this.NumOrden.Name = "NumOrden";
-            // 
-            // NumTramite
-            // 
-            this.NumTramite.HeaderText = "N. Trámite";
-            this.NumTramite.MaxInputLength = 14;
-            this.NumTramite.Name = "NumTramite";
             // 
             // panel5
             // 
@@ -518,6 +473,7 @@
             this.flowLayoutPanel1.Controls.Add(this.dataGridView6);
             this.flowLayoutPanel1.Controls.Add(this.label10);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView7);
+            this.flowLayoutPanel1.Controls.Add(this.label11);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView8);
             this.flowLayoutPanel1.Controls.Add(this.dataGridView9);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -664,14 +620,24 @@
             this.dataGridView7.Size = new System.Drawing.Size(555, 45);
             this.dataGridView7.TabIndex = 6;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 557);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(135, 13);
+            this.label11.TabIndex = 16;
+            this.label11.Text = "Documentos Relacionados";
+            // 
             // dataGridView8
             // 
             this.dataGridView8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView8.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView8.Location = new System.Drawing.Point(3, 560);
+            this.dataGridView8.Location = new System.Drawing.Point(3, 573);
             this.dataGridView8.Name = "dataGridView8";
-            this.dataGridView8.Size = new System.Drawing.Size(555, 20);
+            this.dataGridView8.Size = new System.Drawing.Size(555, 58);
             this.dataGridView8.TabIndex = 7;
             // 
             // dataGridView9
@@ -679,7 +645,7 @@
             this.dataGridView9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView9.Location = new System.Drawing.Point(3, 586);
+            this.dataGridView9.Location = new System.Drawing.Point(3, 637);
             this.dataGridView9.Name = "dataGridView9";
             this.dataGridView9.Size = new System.Drawing.Size(555, 22);
             this.dataGridView9.TabIndex = 8;
@@ -911,6 +877,58 @@
             this.tsProgressBar.Name = "tsProgressBar";
             this.tsProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
+            // Marcar
+            // 
+            this.Marcar.FalseValue = "0";
+            this.Marcar.Frozen = true;
+            this.Marcar.HeaderText = "C";
+            this.Marcar.IndeterminateValue = "-1";
+            this.Marcar.Name = "Marcar";
+            this.Marcar.TrueValue = "1";
+            // 
+            // col2
+            // 
+            this.col2.DataPropertyName = "year1";
+            this.col2.HeaderText = "Año";
+            this.col2.Name = "col2";
+            this.col2.ReadOnly = true;
+            // 
+            // col3
+            // 
+            this.col3.DataPropertyName = "periodid";
+            this.col3.HeaderText = "Mes";
+            this.col3.Name = "col3";
+            this.col3.ReadOnly = true;
+            // 
+            // col4
+            // 
+            this.col4.DataPropertyName = "tipodoc";
+            this.col4.HeaderText = "Tipo";
+            this.col4.Name = "col4";
+            this.col4.ReadOnly = true;
+            // 
+            // TipoSolicitud
+            // 
+            this.TipoSolicitud.HeaderText = "Tipo Solicitud";
+            this.TipoSolicitud.Items.AddRange(new object[] {
+            "AF - Acto de Fiscalización",
+            "FC - Fiscalización Compulsa",
+            "DE - Devolución",
+            "CO - Compensación"});
+            this.TipoSolicitud.Name = "TipoSolicitud";
+            // 
+            // NumOrden
+            // 
+            this.NumOrden.HeaderText = "N. Orden";
+            this.NumOrden.MaxInputLength = 13;
+            this.NumOrden.Name = "NumOrden";
+            // 
+            // NumTramite
+            // 
+            this.NumTramite.HeaderText = "N. Trámite";
+            this.NumTramite.MaxInputLength = 14;
+            this.NumTramite.Name = "NumTramite";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1046,6 +1064,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar tsProgressBar;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Marcar;
         private System.Windows.Forms.DataGridViewTextBoxColumn col2;
         private System.Windows.Forms.DataGridViewTextBoxColumn col3;

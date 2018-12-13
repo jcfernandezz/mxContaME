@@ -73,3 +73,5 @@ from dace.ComprobanteCFDI
 
 select *
 from dace.ComprobanteCFDIRelacionado
+
+
